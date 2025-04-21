@@ -684,6 +684,34 @@ body_theme4 @endif
         </script>
     @endif
 
+    <script>
+        $(function(){
+          // when you click a box, mark it selected and fire your existing change handler
+          $('.option-box').on('click', function(){
+            var $box = $(this),
+                $input = $box.find('input');
+      
+            // unselect siblings
+            $box
+              .siblings()
+              .removeClass('selected')
+              .find('input').prop('checked', false);
+      
+            // select this one
+            $box.addClass('selected');
+            $input.prop('checked', true).trigger('change');
+          });
+      
+          // if you already had a listener on .attribute_option select change,
+          // you can reuse it here by listening to the radio change event:
+          $('input[type=radio][name^="attribute_"]').on('change', function(){
+            var price = $(this).data('target'),
+                type  = $(this).data('type');
+            // your PriceHelper JS update logic here...
+          });
+        });
+      </script>      
+
 </body>
 
 </html>

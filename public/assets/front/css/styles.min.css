@@ -8042,3 +8042,36 @@ line-height: 16px;
   gap: 20px;
 }
 /* One page Checkout system end */
+
+/* custom css  */
+.attribute-options {
+  gap: 0.5rem;
+}
+
+.attribute-options label.option-box{
+  padding: 0.5rem 1rem;
+}
+
+.option-box {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ccc;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.option-box input {
+  display: none;
+}
+
+.option-box .box-label {
+  font-size: 0.95rem;
+}
+
+.option-box.selected {
+  border-color: #007bff;
+  background-color: #e9f5ff;
+}

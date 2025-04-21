@@ -130,23 +130,33 @@
 
                         <div class="row margin-top-1x">
                             @foreach ($attributes as $attribute)
-                                @if ($attribute->options->count() != 0)
-                                    <div class="col-sm-6">
-                                        <div class="form-group">
-                                            <label for="{{ $attribute->name }}">{{ $attribute->name }}</label>
-                                            <select class="form-control attribute_option" id="{{ $attribute->name }}">
-                                                @foreach ($attribute->options->where('stock', '!=', '0') as $option)
-                                                    <option value="{{ $option->name }}" data-type="{{ $attribute->id }}"
-                                                        data-href="{{ $option->id }}"
-                                                        data-target="{{ PriceHelper::setConvertPrice($option->price) }}">
-                                                        {{ $option->name }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
+                                @if ($attribute->options->count())
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                    <label>{{ $attribute->name }}</label>
+                            
+                                    <div class="attribute-options d-flex flex-wrap">
+                                        @foreach ($attribute->options->where('stock','!=','0') as $option)
+                                        <label class="option-box mr-2 mb-2">
+                                            <input 
+                                            type="radio" 
+                                            name="attribute_{{ $attribute->id }}" 
+                                            value="{{ $option->name }}"
+                                            data-type="{{ $attribute->id }}"
+                                            data-href="{{ $option->id }}"
+                                            data-target="{{ PriceHelper::setConvertPrice($option->price) }}"
+                                            >
+                                            <span class="box-label">{{ $option->name }}</span>
+                                        </label>
+                                        @endforeach
                                     </div>
+                            
+                                    </div>
+                                </div>
                                 @endif
                             @endforeach
                         </div>
+                                  
                         <div class="row align-items-end pb-4">
                             <div class="col-sm-12">
                                 @if ($item->item_type == 'normal')
