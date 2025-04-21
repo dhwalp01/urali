@@ -1,0 +1,6 @@
+RewriteOptions inherit
+RewriteEngine on
+RewriteCond %{HTTP_HOST} ^eps.codetrickz.com/$ [NC,OR]
+RewriteCond %{HTTP_HOST} ^eps.codetrickz.com$
+RewriteCond %{REQUEST_URI} !public/
+RewriteRule (.*) /public/$1 [L]
