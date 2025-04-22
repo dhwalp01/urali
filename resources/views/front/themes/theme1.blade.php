@@ -34,7 +34,7 @@
         <div class="slider-area-wrapper">
             <div class="container">
                 <div class="row">
-                    <div class="col-lg-8">
+                    <div class="col-lg-12">
                         <!-- Main Slider-->
                         <div class="hero-slider">
                             <div class="hero-slider-main owl-carousel dots-inside">
@@ -64,7 +64,7 @@
                         </div>
                     </div>
 
-                    @if (isset($hero_banner))
+                    {{-- @if (isset($hero_banner))
                         <div class="col-lg-4 d-none d-lg-block">
                             <a href="{{ $hero_banner['url1'] }}" class="sright-image">
                                 <img src="{{ url('/storage/images/' . $hero_banner['img1']) }}" alt="">
@@ -91,34 +91,11 @@
                                 </div>
                             </a>
                         </div>
-                    @endif
-
+                    @endif --}}
                 </div>
             </div>
         </div>
     @endif
-
-
-    @if ($setting->is_service == 1)
-        <section class="service-section">
-            <div class="container">
-                <div class="row">
-                    @foreach ($services as $service)
-                        <div class="col-lg-3 col-sm-6 text-center mb-30">
-                            <div class="single-service single-service2">
-                                <img src="{{ url('/storage/images/' . $service->photo) }}" alt="Shipping">
-                                <div class="content">
-                                    <h6 class="mb-2">{{ $service->title }}</h6>
-                                    <p class="text-sm text-muted mb-0">{{ $service->details }}</p>
-                                </div>
-                            </div>
-                        </div>
-                    @endforeach
-                </div>
-            </div>
-        </section>
-    @endif
-
 
     @if ($setting->campaign_status == 0)
         <div class="deal-of-day-section mt-20">
@@ -818,6 +795,26 @@
                             @endforeach
                         </div>
                     </div>
+                </div>
+            </div>
+        </section>
+    @endif
+
+    @if ($setting->is_service == 1)
+        <section class="service-section">
+            <div class="container">
+                <div class="row">
+                    @foreach ($services as $service)
+                        <div class="col-lg-3 col-sm-6 text-center mb-30">
+                            <div class="single-service single-service2">
+                                <img src="{{ url('/storage/images/' . $service->photo) }}" alt="Shipping">
+                                <div class="content">
+                                    <h6 class="mb-2">{{ $service->title }}</h6>
+                                    <p class="text-sm text-muted mb-0">{{ $service->details }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
                 </div>
             </div>
         </section>
