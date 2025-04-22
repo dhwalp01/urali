@@ -418,8 +418,10 @@ Route::group(['middleware' => 'maintainance'], function () {
 
         //------------ CATALOG ------------
         Route::get('/catalog', 'Front\CatalogController@index')->name('front.catalog');
+        Route::get('/category/{slug}', 'Front\CatalogController@category')->name('front.category');
         Route::get('/search/suggest', 'Front\CatalogController@suggestSearch')->name('front.search.suggest');
         Route::get('/catalog/view/{type}', 'Front\CatalogController@viewType')->name('front.catalog.view');
+        Route::get('/{slug}', 'Front\FrontendController@page')->name('front.page');
 
 
         //------------ CHECKOUT ------------

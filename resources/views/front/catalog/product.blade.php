@@ -88,7 +88,7 @@
             </div>
             <!-- Product Info-->
             <div class="col-xxl-7 col-lg-6 col-md-6">
-                <div class="details-page-top-right-content d-flex align-items-center">
+                <div class="details-page-top-right-content d-flex">
                     <div class="div w-100">
                         <input type="hidden" id="item_id" value="{{ $item->id }}">
                         <input type="hidden" id="demo_price"
@@ -200,7 +200,7 @@
 
                                 <div class="pt-1 mb-1"><span class="text-medium">{{ __('Categories') }}:</span>
                                     <a
-                                        href="{{ route('front.catalog') . '?category=' . $item->category->slug }}">{{ $item->category->name }}</a>
+                                        href="{{ route('front.category', $item->category->slug) }}">{{ $item->category->name }}</a>
                                     @if ($item->subcategory->name)
                                         /
                                     @endif
@@ -277,12 +277,12 @@
                 <div class="col-lg-12">
                     <ul class="nav nav-tabs" role="tablist">
                         <li class="nav-item" role="presentation">
-                            <a class="nav-link active" id="description-tab" data-bs-toggle="tab"
+                            <a class="nav-link rounded active" id="description-tab" data-bs-toggle="tab"
                                 data-bs-target="#description" type="button" role="tab" aria-controls="description"
                                 aria-selected="true">{{ __('Descriptions') }}</a>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <a class="nav-link" id="specification-tab" data-bs-toggle="tab"
+                            <a class="nav-link rounded" id="specification-tab" data-bs-toggle="tab"
                                 data-bs-target="#specification" type="button" role="tab"
                                 aria-controls="specification" aria-selected="false">{{ __('Specifications') }}</a>
                         </li>

@@ -220,4 +220,13 @@ class CatalogController extends Controller
         return view('includes.search_suggest',compact('items'));
     }
 
+    public function category($slug, Request $request)
+    {
+        // Inject the slug as `category` so index() picks it up
+        $request->merge(['category' => $slug]);
+
+        // Now run all the same filtering/pagination
+        return $this->index($request);
+    }
+
 }

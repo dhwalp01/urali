@@ -2654,7 +2654,7 @@ a.alert {
 }
 .nav-tabs {
   border-bottom: 0 !important;
-  text-align: center;
+  text-align: start;
   display: block;
 }
 .nav-tabs .nav-link {

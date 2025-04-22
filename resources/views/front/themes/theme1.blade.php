@@ -12,7 +12,7 @@
                     <div class="owl-carousel category-slider">
                         @foreach($categorySlider as $cat)
                         <div class="cat-slider p-2 item text-center">
-                            <a href="{{ route('front.popular.category', [$cat->slug, 'all_category', 'slider']) }}">
+                            <a href="{{ route('front.category', $cat->slug) }}">
                             <img 
                                 src="{{ asset('storage/images/'.$cat->photo) }}"  {{-- ← use photo --}}
                                 alt="{{ $cat->name }}" 
@@ -456,7 +456,7 @@
                                             <div class="product-card-inner">
                                                 <div class="product-card-body">
                                                     <div class="product-category"><a
-                                                            href="{{ route('front.catalog') . '?category=' . $item->category->slug }}">{{ $item->category->name }}</a>
+                                                            href="{{ route('front.category', $cat->slug) }}">{{ $item->category->name }}</a>
                                                     </div>
                                                     <h3 class="product-title"><a
                                                             href="{{ route('front.product', $item->slug) }}">
@@ -534,7 +534,7 @@
                                                     <div class="product-card-body">
 
                                                         <div class="product-category"><a
-                                                                href="{{ route('front.catalog') . '?category=' . $item->category->slug }}">{{ $item->category->name }}</a>
+                                                                href="{{ route('front.category', $cat->slug) }}">{{ $item->category->name }}</a>
                                                         </div>
                                                         <h3 class="product-title"><a
                                                                 href="{{ route('front.product', $item->slug) }}">

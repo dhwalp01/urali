@@ -121,7 +121,7 @@ body_theme4 @endif
                             </div> --}}
 
 
-                            <div class="t-h-dropdown ">
+                            {{-- <div class="t-h-dropdown ">
                                 <a class="main-link" href="#">{{ __('Currency') }}<i
                                         class="icon-chevron-down"></i></a>
                                 <div class="t-h-dropdown-menu">
@@ -131,7 +131,7 @@ body_theme4 @endif
                                                 class="icon-chevron-right pr-2"></i>{{ $currency->name }}</a>
                                     @endforeach
                                 </div>
-                            </div>
+                            </div> --}}
 
                             <div class="login-register ">
                                 @if (!Auth::user())
