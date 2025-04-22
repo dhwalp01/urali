@@ -462,8 +462,8 @@ body_theme4 @endif
                 <div class="col-lg-4">
                     <!-- Subscription-->
                     <section class="widget">
-                        <h3 class="widget-title">{{ __('Newsletter') }}</h3>
-                        <form class="row subscriber-form" action="{{ route('front.subscriber.submit') }}"
+                        <h3 class="widget-title">{{ __('Shop By Category') }}</h3>
+                        {{-- <form class="row subscriber-form" action="{{ route('front.subscriber.submit') }}"
                             method="post">
                             @csrf
                             <div class="col-sm-12">
@@ -489,7 +489,13 @@ body_theme4 @endif
                                     {{ __('Subscribe to our Newsletter to receive early discount offers, latest news, sales and promo information.') }}
                                 </p>
                             </div>
-                        </form>
+                        </form> --}}
+                        <div class="widget widget-links widget-light-skin">
+                            <ul>
+                                <li><a href="/category/cotton-night-gowns">Cotton Night Gowns</a></li>
+                                <li><a href="/category/kaftans">Kaftans</a></li>
+                            </ul>
+                        </div>
                         <div class="pt-3"><img class="d-block gateway_image"
                                 src="{{ $setting->footer_gateway_img ? url('/storage/images/' . $setting->footer_gateway_img) : asset('system/resources/assets/images/placeholder.png') }}">
 								
