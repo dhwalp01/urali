@@ -4,7 +4,7 @@
     @endphp
 
 
-    <div class="left-category-area">
+    {{-- <div class="left-category-area">
         <div class="category-header">
             <h4><i class="icon-align-justify"></i> {{ __('Categories') }}</h4>
         </div>
@@ -46,7 +46,7 @@
             <img class="lazy" data-src="{{ url('/storage/images/category.jpg') }}" alt="">
             <span class="text-gray-dark">{{ __('All Categories')}}</span>
         </a>
-    </div>
+    </div> --}}
 
 
     </div>

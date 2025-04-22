@@ -157,19 +157,21 @@
                                 @if ($item->is_type == 'feature')
                                     <div class="slider-item">
                                         <div class="product-card ">
-                                            <div class="product-thumb" >
-                                                @if (!$item->is_stock())
-                                                <div class="product-badge bg-secondary border-default text-body
-                                                ">{{__('out of stock')}}</div>
-                                                @endif
-                                                @if($item->previous_price && $item->previous_price !=0)
-                                                <div class="product-badge product-badge2 bg-info"> -{{PriceHelper::DiscountPercentage($item)}}</div>
-                                                @endif
-                                                <img class="lazy" data-src="{{url('/storage/images/'.$item->thumbnail)}}" alt="Product">
-                                                <div class="product-button-group"><a class="product-button wishlist_store" href="{{route('user.wishlist.store',$item->id)}}" title="{{__('Wishlist')}}"><i class="icon-heart"></i></a>
-                                                    <a data-target="{{route('fornt.compare.product',$item->id)}}" class="product-button product_compare" href="javascript:;" title="{{__('Compare')}}"><i class="icon-repeat"></i></a>
-                                                    @include('includes.item_footer',['sitem' => $item])
-                                                </div>
+                                            <div class="product-thumb">
+                                                <a href="{{route('front.product',$item->slug)}}">
+                                                    <div class="product-thumb-image-wrapper">
+                                                        <img
+                                                            class="lazy product-thumb-image"
+                                                            data-src="{{ url('/storage/images/'.$item->thumbnail) }}"
+                                                            alt="Product"
+                                                        >
+                                                    </div>
+                                                    <div class="product-button-group">
+                                                        <a class="product-button wishlist_store" href="{{route('user.wishlist.store',$item->id)}}" title="{{__('Wishlist')}}"><i class="icon-heart"></i></a>
+                                                        {{-- <a class="product-button product_compare" href="javascript:;" data-target="{{route('fornt.compare.product',$item->id)}}" title="{{__('Compare')}}"><i class="icon-repeat"></i></a> --}}
+                                                        @include('includes.item_footer',['sitem' => $item])
+                                                    </div>
+                                                </a>
                                             </div>
                                             <div class="product-card-inner">
                                             <div class="product-card-body">
@@ -221,18 +223,20 @@
                                     <div class="slider-item">
                                         <div class="product-card ">
                                             <div class="product-thumb">
-                                                @if (!$item->is_stock())
-                                                <div class="product-badge bg-secondary border-default text-body
-                                                ">{{__('out of stock')}}</div>
-                                                @endif
-                                                @if($item->previous_price && $item->previous_price !=0)
-                                                <div class="product-badge product-badge2 bg-info"> -{{PriceHelper::DiscountPercentage($item)}}</div>
-                                                @endif
-                                                <img class="lazy" data-src="{{url('/storage/images/'.$item->thumbnail)}}" alt="Product">
-                                                <div class="product-button-group"><a class="product-button wishlist_store" href="{{route('user.wishlist.store',$item->id)}}" title="{{__('Wishlist')}}"><i class="icon-heart"></i></a>
-                                                    <a data-target="{{route('fornt.compare.product',$item->id)}}" class="product-button product_compare" href="javascript:;" title="{{__('Compare')}}"><i class="icon-repeat"></i></a>
-                                                    @include('includes.item_footer',['sitem' => $item])
-                                                </div>
+                                                <a href="{{route('front.product',$item->slug)}}">
+                                                    <div class="product-thumb-image-wrapper">
+                                                        <img
+                                                            class="lazy product-thumb-image"
+                                                            data-src="{{ url('/storage/images/'.$item->thumbnail) }}"
+                                                            alt="Product"
+                                                        >
+                                                    </div>
+                                                    <div class="product-button-group">
+                                                        <a class="product-button wishlist_store" href="{{route('user.wishlist.store',$item->id)}}" title="{{__('Wishlist')}}"><i class="icon-heart"></i></a>
+                                                        {{-- <a class="product-button product_compare" href="javascript:;" data-target="{{route('fornt.compare.product',$item->id)}}" title="{{__('Compare')}}"><i class="icon-repeat"></i></a> --}}
+                                                        @include('includes.item_footer',['sitem' => $item])
+                                                    </div>
+                                                </a>
                                             </div>
                                             <div class="product-card-inner">
                                                 <div class="product-card-body">

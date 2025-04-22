@@ -92,12 +92,13 @@ $(function ($) {
     var $category_slider_main = $(".category-slider");
     $category_slider_main.owlCarousel({
       navText: [],
+      center: true,
       nav: true,
       dots: false,
       loop: true,
       margin: 15,
       autoplay: true,
-      autoplayTimeout: 5000,
+      autoplayTimeout: 4000,
       responsive: {
         0: { items: 2 },
         576: { items: 3 },
@@ -353,7 +354,8 @@ $(function ($) {
     $relatedproductsliderv.owlCarousel({
       nav: false,
       dots: true,
-      autoplayTimeout: 6000,
+      autoplay: true,
+      autoplayTimeout: 3000,
       smartSpeed: 1200,
       margin: 15,
       thumbs: false,

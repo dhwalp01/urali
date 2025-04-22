@@ -93,15 +93,15 @@ body_theme4 @endif
         <div class="menu-top-area">
             <div class="container">
                 <div class="row">
-                    <div class="col-md-4">
+                    <div class="col-6 col-md-4">
                         <div class="t-m-s-a">
                             <a class="track-order-link" href="{{ route('front.order.track') }}"><i
                                     class="icon-map-pin"></i>{{ __('Track Order') }}</a>
-                            <a class="track-order-link compare-mobile d-lg-none"
-                                href="{{ route('fornt.compare.index') }}">{{ __('Compare') }}</a>
+                            {{-- <a class="track-order-link compare-mobile d-lg-none"
+                                href="{{ route('fornt.compare.index') }}">{{ __('Compare') }}</a> --}}
                         </div>
                     </div>
-                    <div class="col-md-8">
+                    <div class="col-6 col-md-8">
                         <div class="right-area">
 
                             <a class="track-order-link wishlist-mobile d-inline-block d-lg-none"
@@ -260,19 +260,6 @@ body_theme4 @endif
                                         </a>
                                     </div>
                                 </div>
-                                <ul class="nav nav-tabs" role="tablist">
-                                    <li class="nav-item" role="presentation99">
-                                        <span class="active" id="mmenu-tab" data-bs-toggle="tab"
-                                            data-bs-target="#mmenu" role="tab" aria-controls="mmenu"
-                                            aria-selected="true">{{ __('Menu') }}</span>
-                                    </li>
-                                    <li class="nav-item" role="presentation99">
-                                        <span class="" id="mcat-tab" data-bs-toggle="tab"
-                                            data-bs-target="#mcat" role="tab" aria-controls="mcat"
-                                            aria-selected="false">{{ __('Category') }}</span>
-                                    </li>
-
-                                </ul>
                                 <div class="tab-content p-0">
                                     <div class="tab-pane fade show active" id="mmenu" role="tabpanel"
                                         aria-labelledby="mmenu-tab">

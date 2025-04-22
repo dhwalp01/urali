@@ -23,21 +23,6 @@
 
 @section('content')
     <div class="page-title">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <ul class="breadcrumbs">
-                        <li><a href="{{ route('front.index') }}">{{ __('Home') }}</a>
-                        </li>
-                        <li class="separator"></li>
-                        <li><a href="{{ route('front.catalog') }}">{{ __('Shop') }}</a>
-                        </li>
-                        <li class="separator"></li>
-                        <li>{{ $item->name }}</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
     </div>
     <!-- Page Content-->
     <div class="container padding-bottom-1x mb-1">
@@ -96,6 +81,15 @@
                         <input type="hidden" value="{{ PriceHelper::setCurrencySign() }}" id="set_currency">
                         <input type="hidden" value="{{ PriceHelper::setCurrencyValue() }}" id="set_currency_val">
                         <input type="hidden" value="{{ $setting->currency_direction }}" id="currency_direction">
+                        <ul class="breadcrumbs">
+                            <li><a href="{{ route('front.index') }}">{{ __('Home') }}</a>
+                            </li>
+                            <li class="separator"></li>
+                            <li><a href="{{ route('front.catalog') }}">{{ __('Shop') }}</a>
+                            </li>
+                            <li class="separator"></li>
+                            <li>{{ $item->name }}</li>
+                        </ul>
                         <h4 class="mb-2 p-title-main">{{ $item->name }}</h4>
                         <div class="mb-3">
                             <div class="rating-stars d-inline-block gmr-3">
@@ -124,9 +118,11 @@
                             @endif
                             <span id="main_price" class="main-price">{{ PriceHelper::grandCurrencyPrice($item) }}</span>
                         </span>
-
-                        <p class="text-muted">{{ $item->sort_details }} <a href="#details"
-                                class="scroll-to">{{ __('Read more') }}</a></p>
+                        <p class="text-muted">
+                            {!! $item->sort_details !!}
+                            <a href="#details"
+                                class="scroll-to">{{ __('Read more..') }}</a>
+                        </p>
 
                         <div class="row margin-top-1x">
                             @foreach ($attributes as $attribute)
@@ -198,7 +194,7 @@
                                     </div>
                                 @endif
 
-                                <div class="pt-1 mb-1"><span class="text-medium">{{ __('Categories') }}:</span>
+                                {{-- <div class="pt-1 mb-1"><span class="text-medium">{{ __('Categories') }}:</span>
                                     <a
                                         href="{{ route('front.category', $item->category->slug) }}">{{ $item->category->name }}</a>
                                     @if ($item->subcategory->name)
@@ -211,8 +207,8 @@
                                     @endif
                                     <a
                                         href="{{ route('front.catalog') . '?childcategory=' . $item->childcategory->slug }}">{{ $item->childcategory->name }}</a>
-                                </div>
-                                <div class="pt-1 mb-1"><span class="text-medium">{{ __('Tags') }}:</span>
+                                </div> --}}
+                                {{-- <div class="pt-1 mb-1"><span class="text-medium">{{ __('Tags') }}:</span>
                                     @if ($item->tags)
                                         @foreach (explode(',', $item->tags) as $tag)
                                             @if ($loop->last)
@@ -224,7 +220,7 @@
                                             @endif
                                         @endforeach
                                     @endif
-                                </div>
+                                </div> --}}
                                 @if ($item->item_type == 'normal')
                                     <div class="pt-1 mb-4"><span class="text-medium">{{ __('SKU') }}:</span>
                                         #{{ $item->sku }}</div>
@@ -244,9 +240,9 @@
                                             <span class="wishlist2 d-none">{{ __('Added To Wishlist') }}</span>
                                         @endif
                                     </a>
-                                    <button class="btn btn-primary btn-sm  product_compare"
+                                    {{-- <button class="btn btn-primary btn-sm  product_compare"
                                         data-target="{{ route('fornt.compare.product', $item->id) }}"><span><i
-                                                class="icon-repeat"></i>{{ __('Compare') }}</span></button>
+                                                class="icon-repeat"></i>{{ __('Compare') }}</span></button> --}}
                                 </div>
 
                                 <div class="d-flex align-items-center">
@@ -327,7 +323,7 @@
 
 
     <!-- Reviews-->
-    <div class="container  review-area">
+    {{-- <div class="container  review-area">
         <div class="row">
             <div class="col-lg-12">
                 <div class="section-title">
@@ -446,7 +442,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 
     @if (count($related_items) > 0)
         <div class="relatedproduct-section container padding-bottom-3x mb-1 s-pt-30">
@@ -499,9 +495,13 @@
                                             -{{ PriceHelper::DiscountPercentage($related) }}</div>
                                     @endif
                                     <div class="product-thumb">
-                                        <img class="lazy"
-                                            data-src="{{ url('/storage/images/' . $related->thumbnail) }}"
-                                            alt="Product">
+                                        <div class="product-thumb-image-wrapper">
+                                            <img
+                                                class="lazy product-thumb-image"
+                                                data-src="{{ url('/storage/images/' . $related->thumbnail) }}"
+                                                alt="Product"
+                                            >
+                                        </div>
                                         <div class="product-button-group">
                                             <a class="product-button wishlist_store"
                                                 href="{{ route('user.wishlist.store', $related->id) }}"
