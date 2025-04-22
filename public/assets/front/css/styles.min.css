@@ -5374,7 +5374,16 @@ video {
   height: 100%;
   overflow-y: auto;
   z-index: 999999;
+  transition: left 0.4s cubic-bezier(0.785, 0.135, 0.15, 0.86) 0.3s,
+              box-shadow 0.3s 0.3s;
+  box-shadow: none;
+  overflow-y: auto;
 }
+.mobile-menu.open {
+  left: 0; /* slide in */
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+}
+
 .mobile-menu .mobile-search {
   padding-right: 15px;
   padding-bottom: 15px;

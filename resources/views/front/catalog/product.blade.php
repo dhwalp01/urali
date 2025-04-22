@@ -156,11 +156,14 @@
                         <div class="row align-items-end pb-4">
                             <div class="col-sm-12">
                                 @if ($item->item_type == 'normal')
-                                    <div class="qtySelector product-quantity">
-                                        <span class="decreaseQty subclick"><i class="fas fa-minus "></i></span>
-                                        <input type="text" class="qtyValue cart-amount" value="1">
-                                        <span class="increaseQty addclick"><i class="fas fa-plus"></i></span>
-                                        <input type="hidden" value="3333" id="current_stock">
+                                    <div class="form-group product-quantity mb-3">
+                                        <label for="quantity" class="form-label d-block">{{ __('Quantity') }}</label>
+                                        <select class="form-select w-auto d-inline-block" id="quantity" name="quantity">
+                                            @for ($i = 1; $i <= min(10, $item->stock); $i++)
+                                                <option value="{{ $i }}">{{ $i }}</option>
+                                            @endfor
+                                        </select>
+                                        <input type="hidden" value="{{ $item->stock }}" id="current_stock">
                                     </div>
                                 @endif
                                 <div class="p-action-button">
