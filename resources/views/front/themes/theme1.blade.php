@@ -890,12 +890,12 @@
             <div class="container">
                 <div class="row">
                     @foreach ($services as $service)
-                        <div class="col-sm-6 col-md-3 text-center mb-30">
+                        <div class="col-6 col-md-3 text-center mb-30">
                             <div class="single-service single-service2">
                                 <img src="{{ url('/storage/images/' . $service->photo) }}" alt="Shipping">
                                 <div class="content">
                                     <h6 class="mb-2">{{ $service->title }}</h6>
-                                    <p class="text-sm text-muted mb-0">{{ $service->details }}</p>
+                                    {{-- <p class="text-sm text-muted mb-0">{{ $service->details }}</p> --}}
                                 </div>
                             </div>
                         </div>
