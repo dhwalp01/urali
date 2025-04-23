@@ -498,10 +498,6 @@ body_theme4 @endif
                                     src="{{ $setting->footer_gateway_img ? url('/storage/images/' . $setting->footer_gateway_img) : asset('system/resources/assets/images/placeholder.png') }}">
                                     
                             </div>
-                        <div class="pt-3"><img class="d-block gateway_image"
-                                src="{{ $setting->footer_gateway_img ? url('/storage/images/' . $setting->footer_gateway_img) : asset('system/resources/assets/images/placeholder.png') }}">
-								
-                        </div>
                     </section>
                 </div>
             </div>

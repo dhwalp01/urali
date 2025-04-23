@@ -139,9 +139,6 @@
                                             <div class="product-button-group"><a class="product-button wishlist_store"
                                                     href="{{ route('user.wishlist.store', $compaign_item->item->id) }}"
                                                     title="{{ __('Wishlist') }}"><i class="icon-heart"></i></a>
-                                                <a data-target="{{ route('fornt.compare.product', $compaign_item->item->id) }}"
-                                                    class="product-button product_compare" href="javascript:;"
-                                                    title="{{ __('Compare') }}"><i class="icon-repeat"></i></a>
                                                 @if ($compaign_item->item->is_stock())
                                                     <a class="product-button add_to_single_cart"
                                                         data-target="{{ $compaign_item->item->id }}" href="javascript:;"
@@ -286,9 +283,6 @@
                                                 <a class="product-button wishlist_store"
                                                     href="{{ route('user.wishlist.store', $popular_category_item->id) }}"
                                                     title="{{ __('Wishlist') }}"><i class="icon-heart"></i></a>
-                                                <a data-target="{{ route('fornt.compare.product', $popular_category_item->id) }}"
-                                                    class="product-button product_compare" href="javascript:;"
-                                                    title="{{ __('Compare') }}"><i class="icon-repeat"></i></a>
                                                 @include('includes.item_footer', [
                                                     'sitem' => $popular_category_item,
                                                 ])
@@ -419,9 +413,11 @@
                                                         -{{ PriceHelper::DiscountPercentage($item) }}</div>
                                                 @endif
                                                 <div class="product-thumb-image-wrapper">
-                                                    <img class="lazy"
-                                                        data-src="{{ url('/storage/images/' . $item->thumbnail) }}"
-                                                        alt="Product">
+                                                    <a href="{{ route('front.product', $item->slug) }}">
+                                                        <img class="lazy"
+                                                            data-src="{{ url('/storage/images/' . $item->thumbnail) }}"
+                                                            alt="Product">
+                                                    </a>
                                                 </div>
                                                 <div class="product-button-group"><a class="product-button wishlist_store"
                                                         href="{{ route('user.wishlist.store', $item->id) }}"
@@ -494,17 +490,14 @@
                                                             -{{ PriceHelper::DiscountPercentage($item) }}</div>
                                                     @endif
                                                     <div class="product-thumb-image-wrapper">
-                                                        <img class="lazy"
-                                                            data-src="{{ url('/storage/images/' . $item->thumbnail) }}"
-                                                            alt="Product">
+                                                        <a href="{{ route('front.product', $item->slug) }}">
+                                                            <img class="lazy" data-src="{{ url('/storage/images/' . $item->thumbnail) }}" alt="Product">
+                                                        </a>
                                                     </div>
                                                     <div class="product-button-group"><a
                                                             class="product-button wishlist_store"
                                                             href="{{ route('user.wishlist.store', $item->id) }}"
                                                             title="{{ __('Wishlist') }}"><i class="icon-heart"></i></a>
-                                                        <a data-target="{{ route('fornt.compare.product', $item->id) }}"
-                                                            class="product-button product_compare" href="javascript:;"
-                                                            title="{{ __('Compare') }}"><i class="icon-repeat"></i></a>
                                                         @include('includes.item_footer', [
                                                             'sitem' => $item,
                                                         ])
@@ -580,17 +573,14 @@
                                                             -{{ PriceHelper::DiscountPercentage($item) }}</div>
                                                     @endif
                                                     <div class="product-thumb-image-wrapper">
-                                                        <img class="lazy"
-                                                            data-src="{{ url('/storage/images/' . $item->thumbnail) }}"
-                                                            alt="Product">
+                                                        <a href="{{ route('front.product', $item->slug) }}">
+                                                            <img class="lazy" data-src="{{ url('/storage/images/' . $item->thumbnail) }}" alt="Product">
+                                                        </a>
                                                     </div>
                                                     <div class="product-button-group"><a
                                                             class="product-button wishlist_store"
                                                             href="{{ route('user.wishlist.store', $item->id) }}"
                                                             title="{{ __('Wishlist') }}"><i class="icon-heart"></i></a>
-                                                        <a data-target="{{ route('fornt.compare.product', $item->id) }}"
-                                                            class="product-button product_compare" href="javascript:;"
-                                                            title="{{ __('Compare') }}"><i class="icon-repeat"></i></a>
                                                         @include('includes.item_footer', [
                                                             'sitem' => $item,
                                                         ])
@@ -776,10 +766,6 @@
                                     <div class="product-button-group"><a class="product-button wishlist_store"
                                             href="{{ route('user.wishlist.store', $feature_category_item->id) }}"
                                             title="{{ __('Wishlist') }}"><i class="icon-heart"></i></a>
-                                        <a data-target="{{ route('fornt.compare.product', $feature_category_item->id) }}"
-                                            class="product-button product_compare" href="javascript:;"
-                                            title="{{ __('Compare') }}"><i class="icon-repeat"></i></a>
-
                                         @include('includes.item_footer', [
                                             'sitem' => $feature_category_item,
                                         ])
