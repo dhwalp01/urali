@@ -156,7 +156,7 @@
                         <div class="row align-items-end pb-4">
                             <div class="col-sm-12">
                                 @if ($item->item_type == 'normal')
-                                    <div class="form-group product-quantity mb-3">
+                                    <div class="form-group product-quantity mb-3 align-items-center gap-1">
                                         <label for="quantity" class="form-label d-block">{{ __('Quantity') }}</label>
                                         <select class="form-select w-auto d-inline-block" id="quantity" name="quantity">
                                             @for ($i = 1; $i <= min(10, $item->stock); $i++)
@@ -280,11 +280,11 @@
                                 data-bs-target="#description" type="button" role="tab" aria-controls="description"
                                 aria-selected="true">{{ __('Descriptions') }}</a>
                         </li>
-                        <li class="nav-item" role="presentation">
+                        {{-- <li class="nav-item" role="presentation">
                             <a class="nav-link rounded" id="specification-tab" data-bs-toggle="tab"
                                 data-bs-target="#specification" type="button" role="tab"
                                 aria-controls="specification" aria-selected="false">{{ __('Specifications') }}</a>
-                        </li>
+                        </li> --}}
                     </ul>
                     <div class="tab-content card">
                         <div class="tab-pane fade show active" id="description" role="tabpanel"
@@ -523,7 +523,7 @@
                                                 href="{{ route('front.product', $related->slug) }}">
                                                 {{ Str::limit($related->name, 35) }}
                                             </a></h3>
-                                        <h4 class="product-price">
+                                        <h4 class="product-price text-start">
                                             @if ($related->previous_price != 0)
                                                 <del>{{ PriceHelper::setPreviousPrice($related->previous_price) }}</del>
                                             @endif

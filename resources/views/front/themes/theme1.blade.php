@@ -166,7 +166,7 @@
                                             <div class="rating-stars">
                                                 {!! Helper::renderStarRating($compaign_item->item->reviews->avg('rating')) !!}
                                             </div>
-                                            <h4 class="product-price">
+                                            <h4 class="product-price text-start">
                                                 @if ($compaign_item->item->previous_price != 0)
                                                     <del>{{ PriceHelper::setPreviousPrice($compaign_item->item->previous_price) }}</del>
                                                 @endif
@@ -305,7 +305,7 @@
                                             <div class="rating-stars">
                                                 {!! Helper::renderStarRating($popular_category_item->reviews->avg('rating')) !!}
                                             </div>
-                                            <h4 class="product-price">
+                                            <h4 class="product-price text-start">
                                                 @if ($popular_category_item->previous_price != 0)
                                                     <del>{{ PriceHelper::setPreviousPrice($popular_category_item->previous_price) }}</del>
                                                 @endif
@@ -444,7 +444,7 @@
                                                     <div class="rating-stars">
                                                         {!! Helper::renderStarRating($item->reviews->avg('rating')) !!}
                                                     </div>
-                                                    <h4 class="product-price">
+                                                    <h4 class="product-price text-start">
                                                         @if ($item->previous_price != 0)
                                                             <del>{{ PriceHelper::setPreviousPrice($item->previous_price) }}</del>
                                                         @endif
@@ -493,9 +493,11 @@
                                                         <div class="product-badge product-badge2 bg-info">
                                                             -{{ PriceHelper::DiscountPercentage($item) }}</div>
                                                     @endif
-                                                    <img class="lazy"
-                                                        data-src="{{ url('/storage/images/' . $item->thumbnail) }}"
-                                                        alt="Product">
+                                                    <div class="product-thumb-image-wrapper">
+                                                        <img class="lazy"
+                                                            data-src="{{ url('/storage/images/' . $item->thumbnail) }}"
+                                                            alt="Product">
+                                                    </div>
                                                     <div class="product-button-group"><a
                                                             class="product-button wishlist_store"
                                                             href="{{ route('user.wishlist.store', $item->id) }}"
@@ -521,18 +523,18 @@
                                                         <div class="rating-stars">
                                                             {!! Helper::renderStarRating($item->reviews->avg('rating')) !!}
                                                         </div>
-                                                        <h4 class="product-price">
+                                                        <h4 class="product-price text-start">
                                                             @if ($item->previous_price != 0)
                                                                 <del>{{ PriceHelper::setPreviousPrice($item->previous_price) }}</del>
                                                             @endif
 
                                                             {{ PriceHelper::grandCurrencyPrice($item) }}
                                                         </h4>
-                                                        @if (date('d-m-y') != \Carbon\Carbon::parse($item->date)->format('d-m-y'))
+                                                        {{-- @if (date('d-m-y') != \Carbon\Carbon::parse($item->date)->format('d-m-y'))
                                                             <div class="countdown countdown-alt mb-3"
                                                                 data-date-time="{{ $item->date }}">
                                                             </div>
-                                                        @endif
+                                                        @endif --}}
                                                     </div>
 
                                                 </div>
@@ -577,9 +579,11 @@
                                                         <div class="product-badge product-badge2 bg-info">
                                                             -{{ PriceHelper::DiscountPercentage($item) }}</div>
                                                     @endif
-                                                    <img class="lazy"
-                                                        data-src="{{ url('/storage/images/' . $item->thumbnail) }}"
-                                                        alt="Product">
+                                                    <div class="product-thumb-image-wrapper">
+                                                        <img class="lazy"
+                                                            data-src="{{ url('/storage/images/' . $item->thumbnail) }}"
+                                                            alt="Product">
+                                                    </div>
                                                     <div class="product-button-group"><a
                                                             class="product-button wishlist_store"
                                                             href="{{ route('user.wishlist.store', $item->id) }}"
@@ -605,18 +609,18 @@
                                                         <div class="rating-stars">
                                                             {!! Helper::renderStarRating($item->reviews->avg('rating')) !!}
                                                         </div>
-                                                        <h4 class="product-price">
+                                                        <h4 class="product-price text-start">
                                                             @if ($item->previous_price != 0)
                                                                 <del>{{ PriceHelper::setPreviousPrice($item->previous_price) }}</del>
                                                             @endif
 
                                                             {{ PriceHelper::grandCurrencyPrice($item) }}
                                                         </h4>
-                                                        @if (date('d-m-y') != \Carbon\Carbon::parse($item->date)->format('d-m-y'))
+                                                        {{-- @if (date('d-m-y') != \Carbon\Carbon::parse($item->date)->format('d-m-y'))
                                                             <div class="countdown countdown-alt mb-3"
                                                                 data-date-time="{{ $item->date }}">
                                                             </div>
-                                                        @endif
+                                                        @endif --}}
                                                     </div>
 
                                                 </div>
@@ -668,7 +672,7 @@
                                                         <div class="rating-stars">
                                                             {!! Helper::renderStarRating($two_column_category_item->reviews->avg('rating')) !!}
                                                         </div>
-                                                        <h4 class="product-price">
+                                                        <h4 class="product-price text-start">
                                                             @if ($two_column_category_item->previous_price != 0)
                                                                 <del>{{ PriceHelper::setPreviousPrice($two_column_category_item->previous_price) }}</del>
                                                             @endif
@@ -793,7 +797,7 @@
                                     <div class="rating-stars">
                                         {!! Helper::renderStarRating($feature_category_item->reviews->avg('rating')) !!}
                                     </div>
-                                    <h4 class="product-price">
+                                    <h4 class="product-price text-start">
                                         @if ($feature_category_item->previous_price != 0)
                                             <del>{{ PriceHelper::setPreviousPrice($feature_category_item->previous_price) }}</del>
                                         @endif

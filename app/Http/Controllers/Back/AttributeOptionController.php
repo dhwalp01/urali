@@ -106,6 +106,7 @@ class AttributeOptionController extends Controller
         $input = $request->all();
         $curr = Currency::where('is_default',1)->first();
         $input['price'] = $request->price / $curr->value;
+        $input['sale_price'] = $request->sale_price / $curr->value;
         $option->update($input);
 
         return redirect()->route('back.option.index',$item->id)->withSuccess(__('Attribute Option Updated Successfully.'));

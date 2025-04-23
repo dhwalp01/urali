@@ -59,23 +59,46 @@
                                             </label>
 									</div>
 
-                                    <div class="form-group">
-                                        <label for="price">{{ __('Price') }} *</label>
-                                        <small>({{ __('Set 0 to make it free') }})</small>
-                                        <div class="input-group mb-3">
-                                            <div class="input-group-prepend">
-                                                <span
-                                                    class="input-group-text">{{ $curr->sign }}</span>
-                                            </div>
-                                            <input type="text" id="price"
-                                                name="price" class="form-control"
-                                                placeholder="{{ __('Enter Price') }}"
+                                    <div class="form-row">
+                                        {{-- Price --}}
+                                        <div class="form-group col-md-6">
+                                            <label for="price">{{ __('Price') }} *</label>
+                                            <small>({{ __('Set 0 to make it free') }})</small>
+                                            <div class="input-group mb-3">
+                                                <div class="input-group-prepend">
+                                                    <span
+                                                        class="input-group-text">{{ $curr->sign }}</span>
+                                                </div>
+                                                <input type="text" id="price"
+                                                    name="price" class="form-control"
+                                                    placeholder="{{ __('Enter Price') }}"
 
-                                                value="{{ PriceHelper::setPrice($option->price) }}" >
+                                                    value="{{ PriceHelper::setPrice($option->price) }}" >
+                                            </div>
+                                            <input type="hidden" id="attr_keyword" name="keyword" value="{{ $option->keyword }}">
+                                        </div>
+                                        {{-- Sale Price --}}
+                                        <div class="form-group col-md-6">
+                                            <label for="sale_price">{{ __('Sale Price') }}</label>
+                                            <small>({{ __('Leave zero to disable sale') }})</small>
+                                            <div class="input-group mb-3">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">{{ $curr->sign }}</span>
+                                                </div>
+                                                <input
+                                                    type="text"
+                                                    id="sale_price"
+                                                    name="sale_price"
+                                                    class="form-control"
+                                                    placeholder="{{ __('Enter Sale Price') }}"
+                                                    value="{{ PriceHelper::setPrice($option->sale_price) }}"
+                                                >
+                                            </div>
+                                            @error('sale_price')
+                                            <p class="text-danger">{{ $message }}</p>
+                                            @enderror
                                         </div>
                                     </div>
-
-                                    <input type="hidden" id="attr_keyword" name="keyword" value="{{ $option->keyword }}">
 
 									<div class="form-group">
 										<button type="submit" class="btn btn-secondary">{{ __('Submit') }}</button>

@@ -53,7 +53,7 @@
                     <div class="rating-stars">
                         {!! Helper::renderStarRating($item->reviews->avg('rating'))!!}
                     </div>
-                    <h4 class="product-price">
+                    <h4 class="product-price text-start">
                         @if ($item->previous_price !=0)
                         <del>{{PriceHelper::setPreviousPrice($item->previous_price)}}</del>
                         @endif
@@ -109,7 +109,7 @@
                                     <div class="rating-stars">
                                         {!! Helper::renderStarRating($item->reviews->avg('rating')) !!}
                                     </div>
-                                    <h4 class="product-price">
+                                    <h4 class="product-price text-start">
                                         @if ($item->previous_price !=0)
                                         <del>{{PriceHelper::setPreviousPrice($item->previous_price)}}</del>
                                         @endif

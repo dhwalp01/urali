@@ -74,6 +74,44 @@
                                         </div>
                                     </div>
 
+                                    <div class="form-group">
+                                        <label for="price">{{ __('+ Price') }} *</label>
+                                        <small>({{ __('Set 0 to make it free') }})</small>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">{{ $curr->sign }}</span>
+                                            </div>
+                                            <input
+                                                type="text"
+                                                id="price"
+                                                name="price"
+                                                class="form-control"
+                                                placeholder="{{ __('Enter Price') }}"
+                                                value="{{ old('price') }}"
+                                            >
+                                        </div>
+                                        @error('price') <p class="text-danger">{{ $message }}</p> @enderror
+                                    </div>
+                                
+                                    {{-- Sale Price --}}
+                                    <div class="form-group">
+                                        <label for="sale_price">{{ __('Sale Price') }}</label>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">{{ $curr->sign }}</span>
+                                            </div>
+                                            <input
+                                                type="text"
+                                                id="sale_price"
+                                                name="sale_price"
+                                                class="form-control"
+                                                placeholder="{{ __('Enter Sale Price') }}"
+                                                value="{{ old('sale_price', 0) }}"
+                                            >
+                                        </div>
+                                        @error('sale_price') <p class="text-danger">{{ $message }}</p> @enderror
+                                    </div>
+
                                     <input type="hidden" id="attr_keyword" name="keyword" value="{{ old('keyword') }}">
 
 									<div class="form-group">

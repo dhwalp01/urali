@@ -199,62 +199,60 @@ body_theme4 @endif
                                 <span class="d-block d-lg-none close-m-serch"><i class="icon-x"></i></span>
                             </div>
                             <!-- Toolbar-->
-                            <div class="toolbar d-flex align-items-center justify-content-start px-2 py-1 border-bottom bg-white">
+                            <div class="toolbar d-flex">
 
-                                {{-- Search (Mobile only) --}}
-                                <div class="toolbar-item d-sm-none me-2">
-                                    <a href="#" class="text-dark">
-                                        <i class="icon-search fs-5"></i>
+                                <div class="toolbar-item close-m-serch visible-on-mobile"><a href="#">
+                                        <div>
+                                            <i class="icon-search"></i>
+                                        </div>
                                     </a>
                                 </div>
-                            
-                                {{-- Mobile Menu --}}
-                                <div class="toolbar-item d-sm-none me-2">
-                                    <a href="#" class="text-dark">
-                                        <i class="icon-menu fs-5"></i>
-                                        <span class="text-label small">{{ __('Menu') }}</span>
+                                <div class="toolbar-item visible-on-mobile mobile-menu-toggle"><a href="#">
+                                        <div><i class="icon-menu"></i><span
+                                                class="text-label">{{ __('Menu') }}</span></div>
                                     </a>
                                 </div>
-                            
-                                {{-- Compare --}}
-                                {{-- <div class="toolbar-item d-none d-sm-block me-2">
-                                    <a href="{{ route('fornt.compare.index') }}" class="position-relative text-dark">
-                                        <i class="icon-repeat fs-5"></i>
-                                        <span class="badge bg-danger rounded-pill position-absolute top-0 start-100 translate-middle compare_count">
-                                            {{ Session::has('compare') ? count(Session::get('compare')) : '0' }}
-                                        </span>
-                                    </a>
-                                </div> --}}
-                            
-                                {{-- Wishlist --}}
-                                <div class="toolbar-item d-none d-sm-block me-2">
-                                    <a href="{{ route('user.wishlist.index') }}" class="position-relative text-dark">
-                                        <i class="icon-heart fs-5"></i>
-                                        @if(Auth::check())
-                                            <span class="badge bg-danger rounded-pill position-absolute top-0 start-100 translate-middle wishlist_count">
-                                                {{ Auth::user()->wishlists->count() }}
-                                            </span>
-                                        @endif
+
+                                <div class="toolbar-item hidden-on-mobile"><a
+                                        href="{{ route('fornt.compare.index') }}">
+                                        <div><span class="compare-icon"><i class="icon-repeat"></i><span
+                                                    class="count-label compare_count">{{ Session::has('compare') ? count(Session::get('compare')) : '0' }}</span></span>
+                                                    {{-- <span class="text-label">{{ __('Compare') }}</span> --}}
+                                        </div>
                                     </a>
                                 </div>
-                            
-                                {{-- Cart --}}
-                                <div class="toolbar-item position-relative me-2">
-                                    <a href="{{ route('front.cart') }}" class="text-dark position-relative">
-                                        <i class="icon-shopping-cart fs-5"></i>
-                                        <span class="badge bg-primary rounded-pill position-absolute top-0 start-100 translate-middle cart_count">
-                                            {{ Session::has('cart') ? count(Session::get('cart')) : '0' }}
-                                        </span>
+                                @if (Auth::check())
+                                    <div class="toolbar-item hidden-on-mobile"><a
+                                            href="{{ route('user.wishlist.index') }}">
+                                            <div><span class="compare-icon"><i class="icon-heart"></i><span
+                                                        class="count-label wishlist_count">{{ Auth::user()->wishlists->count() }}</span></span>
+                                                        {{-- <span
+                                                    class="text-label">{{ __('Wishlist') }}</span> --}}
+                                                </div>
+                                        </a>
+                                    </div>
+                                @else
+                                    <div class="toolbar-item hidden-on-mobile"><a
+                                            href="{{ route('user.wishlist.index') }}">
+                                            <div><span class="compare-icon"><i class="icon-heart"></i></span>
+                                                {{-- <span class="text-label">{{ __('Wishlist') }}</span> --}}
+                                            </div>
+                                        </a>
+                                    </div>
+                                @endif
+                                <div class="toolbar-item"><a href="{{ route('front.cart') }}">
+                                        <div><span class="cart-icon"><i class="icon-shopping-cart"></i><span
+                                                    class="count-label cart_count">{{ Session::has('cart') ? count(Session::get('cart')) : '0' }}
+                                                </span></span>
+                                                {{-- <span class="text-label">{{ __('Cart') }}</span> --}}
+                                        </div>
                                     </a>
-                            
-                                    {{-- Cart Dropdown --}}
-                                    <div class="toolbar-dropdown cart-dropdown widget-cart cart_view_header mt-2"
-                                         id="header_cart_load"
-                                         data-target="{{ route('front.header.cart') }}">
+                                    <div class="toolbar-dropdown cart-dropdown widget-cart  cart_view_header"
+                                        id="header_cart_load" data-target="{{ route('front.header.cart') }}">
                                         @include('includes.header_cart')
                                     </div>
                                 </div>
-                            </div>                            
+                            </div>
 
                             <!-- Mobile Menu-->
                             <div class="mobile-menu">
@@ -462,7 +460,7 @@ body_theme4 @endif
                 <div class="col-lg-4">
                     <!-- Subscription-->
                     <section class="widget">
-                        <h3 class="widget-title">{{ __('Shop By Category') }}</h3>
+                        <h3 class="widget-title">{{ __('Newsletter') }}</h3>
                         {{-- <form class="row subscriber-form" action="{{ route('front.subscriber.submit') }}"
                             method="post">
                             @csrf
@@ -495,7 +493,11 @@ body_theme4 @endif
                                 <li><a href="/category/cotton-night-gowns">Cotton Night Gowns</a></li>
                                 <li><a href="/category/kaftans">Kaftans</a></li>
                             </ul>
-                        </div>
+                            </div>
+                            <div class="pt-3"><img class="d-block gateway_image"
+                                    src="{{ $setting->footer_gateway_img ? url('/storage/images/' . $setting->footer_gateway_img) : asset('system/resources/assets/images/placeholder.png') }}">
+                                    
+                            </div>
                         <div class="pt-3"><img class="d-block gateway_image"
                                 src="{{ $setting->footer_gateway_img ? url('/storage/images/' . $setting->footer_gateway_img) : asset('system/resources/assets/images/placeholder.png') }}">
 								

@@ -179,7 +179,8 @@ $(function ($) {
       navText: [],
       nav: true,
       dots: false,
-      autoplayTimeout: 6000,
+      autoplay: true,
+      autoplayTimeout: 3000,
       smartSpeed: 1200,
       margin: 15,
       thumbs: false,
@@ -193,17 +194,17 @@ $(function ($) {
           margin: 0,
         },
         768: {
-          items: 1,
+          items: 2,
           margin: 0,
         },
         992: {
-          items: 2,
+          items: 3,
         },
         1200: {
-          items: 2,
+          items: 5,
         },
         1400: {
-          items: 2,
+          items: 5,
         },
       },
     });
