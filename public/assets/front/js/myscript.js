@@ -624,7 +624,6 @@ $(function ($) {
     });
 
     // product quintity select js Start
-
     $(document).on("click", ".addclick", function () {
       let current_stock = parseInt($("#current_stock").val());
       let current_qty = parseInt($(".cart-amount").val());
@@ -990,18 +989,18 @@ $(function ($) {
 
       let totalOptionPrice = parseFloat(optionPriceSum(options_prices));
 
-      let attribute_ids = $(".attribute_option :selected")
-        .map(function (i, el) {
-          return $(el).attr("data-type");
+      let attribute_ids = $('input[type=radio][name^="attribute_"]:checked')
+        .map(function () {
+          return $(this).data("type");
         })
         .get();
 
       if (optionIds != null) {
         var options_ids = optionIds;
       } else {
-        var options_ids = $(".attribute_option :selected")
-          .map(function (i, el) {
-            return $(el).attr("data-href");
+        var options_ids = $('input[type=radio][name^="attribute_"]:checked')
+          .map(function () {
+            return $(this).data("href");
           })
           .get();
       }
@@ -1021,8 +1020,16 @@ $(function ($) {
 
       let currency_direction = $("#currency_direction").val();
 
+      let hasAttributes = $(".attribute_option").length > 0;
       let demoPrice = parseFloat($("#demo_price").val());
-      let subPrice = parseFloat(demoPrice + totalOptionPrice);
+      let subPrice;
+
+      if (hasAttributes) {
+        subPrice = totalOptionPrice; // Use only selected options price
+      } else {
+        subPrice = demoPrice; // Use base product price
+      }
+
       let mainPrice = subPrice * quantity;
 
       mainPrice = number_format(
@@ -1032,11 +1039,21 @@ $(function ($) {
         thousand_separator
       );
 
-      if (currency_direction == 0) {
-        $("#main_price").html(mainPrice + setCurrency);
-      } else {
-        $("#main_price").html(setCurrency + mainPrice);
-      }
+      // if (currency_direction == 0) {
+      //   $("#main_price").html(mainPrice + setCurrency);
+      // } else {
+      //   $("#main_price").html(setCurrency + mainPrice);
+      // }
+
+      // console.log("🛒 Debug Info:");
+      // console.log("Item ID:", itemId);
+      // console.log("Option IDs:", options_ids);
+      // console.log("Attribute IDs:", attribute_ids);
+      // console.log("Quantity:", quantity);
+      // console.log("Main Price (demoPrice):", demoPrice);
+      // console.log("Total Option Price:", totalOptionPrice);
+      // console.log("Final Sub Price:", subPrice);
+      // console.log("Total Price x Qty:", mainPrice);
 
       if (status == 1) {
         let addToCartUrl = `${mainurl}/product/add/cart?item_id=${itemId}&options_ids=${options_ids}&attribute_ids=${attribute_ids}&quantity=${quantity}&type=${type}&item_key=${item_key}&add_type=${add_type}`;
@@ -1073,18 +1090,17 @@ $(function ($) {
     }
 
     function optionPrice() {
-      let option_prices = $(".attribute_option :selected")
-        .map(function (i, el) {
-          return $(el).attr("data-target");
+      let options_prices = $('input[type=radio][name^="attribute_"]:checked')
+        .map(function () {
+          return $(this).data("target");
         })
         .get();
 
-      return option_prices;
+      return options_prices;
     }
 
     function getQuantity() {
-      let quantity = $(".qtyValue").val();
-      return parseInt(quantity);
+      return parseInt($("#quantity").val()); // since your select has id="quantity"
     }
 
     function optionPriceSum(options_prices) {
@@ -1108,7 +1124,7 @@ $(function ($) {
         success: function (data) {
           if (data.status == true) {
             successNotification(data.message);
-            $("#view_cart_load").load($("#cart_view_load").attr("data-target"));
+            $("#cart_view_load").load($("#cart_view_load").attr("data-target"));
           } else {
             dangerNotification(data.message);
           }

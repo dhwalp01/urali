@@ -76,8 +76,23 @@
                 <div class="details-page-top-right-content d-flex">
                     <div class="div w-100">
                         <input type="hidden" id="item_id" value="{{ $item->id }}">
-                        <input type="hidden" id="demo_price"
-                            value="{{ PriceHelper::setConvertPrice($item->discount_price) }}">
+                        @php
+                            $initialPrice = 0;
+
+                            if (count($item->attributes)) {
+                                foreach ($item->attributes as $attribute) {
+                                    foreach ($attribute->options as $option) {
+                                        if ($option->stock != 0 && $option->price > 0) {
+                                            $initialPrice = $option->price;
+                                            break 2; // exit both loops when first in-stock price is found
+                                        }
+                                    }
+                                }
+                            } else {
+                                $initialPrice = $item->discount_price;
+                            }
+                        @endphp
+                        <input type="hidden" id="demo_price" value="{{ count($item->attributes) > 0 ? PriceHelper::setConvertPrice($item->attributes->first()->options->first()->price ?? 0) : PriceHelper::setConvertPrice($item->discount_price) }}">
                         <input type="hidden" value="{{ PriceHelper::setCurrencySign() }}" id="set_currency">
                         <input type="hidden" value="{{ PriceHelper::setCurrencyValue() }}" id="set_currency_val">
                         <input type="hidden" value="{{ $setting->currency_direction }}" id="currency_direction">
@@ -95,12 +110,7 @@
                             <div class="rating-stars d-inline-block gmr-3">
                                 {!! Helper::renderStarRating($item->reviews->avg('rating')) !!}
                             </div>
-                            @if ($item->is_stock())
-                                <span class="text-success  d-inline-block">{{ __('In Stock') }} <b>({{ $item->stock }}
-                                        @lang('items'))</b></span>
-                            @else
-                                <span class="text-danger  d-inline-block">{{ __('Out of stock') }}</span>
-                            @endif
+                            <span id="dynamic_stock"></span>
                         </div>
 
 
@@ -132,18 +142,20 @@
                                     <label>{{ $attribute->name }}</label>
                             
                                     <div class="attribute-options d-flex flex-wrap">
-                                        @foreach ($attribute->options->where('stock','!=','0') as $option)
-                                        <label class="option-box mr-2 mb-2">
-                                            <input 
-                                            type="radio" 
-                                            name="attribute_{{ $attribute->id }}" 
-                                            value="{{ $option->name }}"
-                                            data-type="{{ $attribute->id }}"
-                                            data-href="{{ $option->id }}"
-                                            data-target="{{ PriceHelper::setConvertPrice($option->price) }}"
-                                            >
-                                            <span class="box-label">{{ $option->name }}</span>
-                                        </label>
+                                        @foreach ($attribute->options as $index => $option)
+                                            <label class="option-box mr-2 mb-2">
+                                                <input 
+                                                    type="radio" 
+                                                    name="attribute_{{ $attribute->id }}" 
+                                                    value="{{ $option->name }}"
+                                                    data-type="{{ $attribute->id }}"
+                                                    data-href="{{ $option->id }}"
+                                                    data-target="{{ PriceHelper::setConvertPrice($option->price) }}"
+                                                    data-stock="{{ $option->stock }}"
+                                                    @if ($index === 0) checked @endif
+                                                >
+                                                <span class="box-label">{{ $option->name }}</span>
+                                            </label>
                                         @endforeach
                                     </div>
                             
@@ -499,19 +511,22 @@
                                     @endif
                                     <div class="product-thumb">
                                         <div class="product-thumb-image-wrapper">
-                                            <img
-                                                class="lazy product-thumb-image"
-                                                data-src="{{ url('/storage/images/' . $related->thumbnail) }}"
-                                                alt="Product"
-                                            >
+                                            <a
+                                                href="{{ route('front.catalog') . '?category=' . $related->category->slug }}">
+                                                <img
+                                                    class="lazy product-thumb-image"
+                                                    data-src="{{ url('/storage/images/' . $related->thumbnail) }}"
+                                                    alt="Product"
+                                                >
+                                            </a>
                                         </div>
                                         <div class="product-button-group">
                                             <a class="product-button wishlist_store"
                                                 href="{{ route('user.wishlist.store', $related->id) }}"
                                                 title="{{ __('Wishlist') }}"><i class="icon-heart"></i></a>
-                                            <a class="product-button product_compare" href="javascript:;"
+                                            {{-- <a class="product-button product_compare" href="javascript:;"
                                                 data-target="{{ route('fornt.compare.product', $related->id) }}"
-                                                title="{{ __('Compare') }}"><i class="icon-repeat"></i></a>
+                                                title="{{ __('Compare') }}"><i class="icon-repeat"></i></a> --}}
                                             @include('includes.item_footer', ['sitem' => $related])
                                         </div>
                                     </div>

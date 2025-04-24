@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Item extends Model
 {
 
-    protected $fillable = ['category_id','subcategory_id','childcategory_id','brand_id','name','slug','sku','tags','video','sort_details','specification_name','specification_description','is_specification','details','photo','thumbnail','discount_price','previous_price','stock','meta_keywords','meta_description','status','is_type','tax_id','date','item_type','file','link','file_type','license_name','license_key','affiliate_link',"seller_id"];
+    protected $fillable = ['category_id','subcategory_id','childcategory_id','brand_id','name','slug','sku','tags','video','sort_details','specification_name','specification_description','is_specification','details','photo','thumbnail','discount_price','previous_price','stock','product_type','meta_keywords','meta_description','status','is_type','tax_id','date','item_type','file','link','file_type','license_name','license_key','affiliate_link',"seller_id"];
 
     public function category()
     {
@@ -55,17 +55,17 @@ class Item extends Model
         return $this->hasMany('App\Models\Review');
     }
 
-    public static function taxCalculate($item)
+    public static function taxCalculate($item, $price = null)
     {
-        if($item->tax){
-            $price = $item->discount_price;
+        if ($item->tax) {
+            $finalPrice = $price ?? $item->discount_price;
+            // dd($finalPrice);
             $percentage = $item->tax->value;
-            $tax = ($price * $percentage) / 100;
+            $tax = ($finalPrice * $percentage) / 100;
             return $tax;
-        }else{
-            return 0;
         }
-        
+
+        return 0;
     }
 
 

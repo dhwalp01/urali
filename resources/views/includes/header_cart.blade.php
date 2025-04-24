@@ -6,7 +6,10 @@
 @if (Session::has('cart'))
 @foreach (Session::get('cart') as $key => $cart)
 @php
-    $grandSubtotal = ($cart['main_price'] + $grandSubtotal + $cart['attribute_price']) * $cart['qty'];
+    $itemPrice = isset($cart['attribute_price']) && $cart['attribute_price'] > 0 
+        ? $cart['attribute_price'] 
+        : $cart['main_price'];
+    $grandSubtotal += $itemPrice * $cart['qty'];
 @endphp
 <div class="entry">
   <div class="entry-thumb"><a href="{{route('front.product',$cart['slug'])}}"><img src="{{url('/storage/images/'.$cart['photo'])}}" alt="Product"></a></div>
@@ -14,7 +17,13 @@
     <h4 class="entry-title"><a href="{{route('front.product',$cart['slug'])}}">
         {{ Str::limit($cart['name'], 45) }}
     </a></h4>
-    <span class="entry-meta">{{$cart['qty']}} x {{PriceHelper::setCurrencyPrice($cart['main_price'])}}</span>
+    @php
+      $hasAttributes = isset($cart['attribute']) && !empty($cart['attribute']['option_price']);
+      $unitPrice = $hasAttributes
+          ? array_sum($cart['attribute']['option_price'])
+          : $cart['main_price'];
+    @endphp
+    <span class="entry-meta">{{ $cart['qty'] }} x {{ PriceHelper::setCurrencyPrice($unitPrice) }}</span>
     @foreach ($cart['attribute']['option_name'] as $optionkey => $option_name)
     <span class="att"><em>{{$cart['attribute']['names'][$optionkey]}}:</em> {{$option_name}} ({{PriceHelper::setCurrencyPrice($cart['attribute']['option_price'][$optionkey])}})</span>
     @endforeach

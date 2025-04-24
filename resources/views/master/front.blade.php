@@ -460,7 +460,7 @@ body_theme4 @endif
                 <div class="col-lg-4">
                     <!-- Subscription-->
                     <section class="widget">
-                        <h3 class="widget-title">{{ __('Newsletter') }}</h3>
+                        <h3 class="widget-title">{{ __('Shop By Category') }}</h3>
                         {{-- <form class="row subscriber-form" action="{{ route('front.subscriber.submit') }}"
                             method="post">
                             @csrf
@@ -684,31 +684,38 @@ body_theme4 @endif
 
     <script>
         $(function(){
-          // when you click a box, mark it selected and fire your existing change handler
-          $('.option-box').on('click', function(){
-            var $box = $(this),
-                $input = $box.find('input');
-      
-            // unselect siblings
-            $box
-              .siblings()
-              .removeClass('selected')
-              .find('input').prop('checked', false);
-      
-            // select this one
-            $box.addClass('selected');
-            $input.prop('checked', true).trigger('change');
-          });
-      
-          // if you already had a listener on .attribute_option select change,
-          // you can reuse it here by listening to the radio change event:
-          $('input[type=radio][name^="attribute_"]').on('change', function(){
-            var price = $(this).data('target'),
-                type  = $(this).data('type');
-            // your PriceHelper JS update logic here...
-          });
+            // Attribute selection visuals
+            $('.option-box').on('click', function(){
+                const $box = $(this);
+                const $input = $box.find('input');
+
+                $box
+                    .siblings()
+                    .removeClass('selected')
+                    .find('input').prop('checked', false);
+
+                $box.addClass('selected');
+                $input.prop('checked', true);
+            });
+
+            // Auto-select first option on load
+            $('input[type=radio][name^="attribute_"]').each(function () {
+                const group = $(this).attr('name');
+                if (!$('input[name="' + group + '"]:checked').length) {
+                    $('input[name="' + group + '"]').first().prop('checked', true);
+                    $('input[name="' + group + '"]').first().closest('.option-box').addClass('selected');
+                }
+            });
+
+            // Trigger price + stock update via getData()
+            $('input[type=radio][name^="attribute_"]').on('change', function(){
+                getData();
+            });
+
+            // Also trigger once initially
+            getData();
         });
-      </script>      
+    </script>      
 
 </body>
 

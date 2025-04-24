@@ -69,11 +69,18 @@ class CheckoutController extends Controller
         $total = 0;
 
         foreach ($cart as $key => $item) {
-            $total += ($item['main_price'] + $item['attribute_price']) * $item['qty'];
+            $price = (isset($item['attribute_price']) && $item['attribute_price'] > 0)
+                ? $item['attribute_price']
+                : $item['main_price'];
+        
+            $item_total = $price * $item['qty'];
+            $total += $item_total;
             $cart_total = $total;
-            $item = Item::findOrFail($key);
-            if ($item->tax) {
-                $total_tax += $item::taxCalculate($item);
+        
+            $product = \App\Models\Item::findOrFail(\App\Helpers\PriceHelper::GetItemId($key));
+            if ($product->tax) {
+                // Apply tax on item subtotal
+                $total_tax += ($product->tax / 100) * $item_total;
             }
         }
 
@@ -133,11 +140,16 @@ class CheckoutController extends Controller
 
         foreach ($cart as $key => $item) {
 
-            $total += ($item['main_price'] + $item['attribute_price']) * $item['qty'];
+            $price = isset($item['attribute_price']) && $item['attribute_price'] > 0
+                ? $item['attribute_price']
+                : $item['main_price'];
+
+            $total += $price * $item['qty'];
+
             $cart_total = $total;
             $item = Item::findOrFail($key);
             if ($item->tax) {
-                $total_tax += $item::taxCalculate($item);
+                $total_tax += $item::taxCalculate($item, $price);
             }
         }
         $shipping = [];
@@ -230,7 +242,12 @@ class CheckoutController extends Controller
 
         foreach ($cart as $key => $item) {
 
-            $total += ($item['main_price'] + $item['attribute_price']) * $item['qty'];
+            $price = isset($item['attribute_price']) && $item['attribute_price'] > 0
+                ? $item['attribute_price']
+                : $item['main_price'];
+
+            $total += $price * $item['qty'];
+
             $cart_total = $total;
             $item = Item::findOrFail($key);
             if ($item->tax) {
@@ -296,7 +313,12 @@ class CheckoutController extends Controller
 
         foreach ($cart as $key => $item) {
 
-            $total += ($item['main_price'] + $item['attribute_price']) * $item['qty'];
+            $price = isset($item['attribute_price']) && $item['attribute_price'] > 0
+                ? $item['attribute_price']
+                : $item['main_price'];
+
+            $total += $price * $item['qty'];
+
             $cart_total = $total;
             $item = Item::findOrFail($key);
             if ($item->tax) {
@@ -670,7 +692,12 @@ class CheckoutController extends Controller
         $total = 0;
         foreach ($cart as $key => $item) {
 
-            $total += ($item['main_price'] + $item['attribute_price']) * $item['qty'];
+            $price = isset($item['attribute_price']) && $item['attribute_price'] > 0
+                ? $item['attribute_price']
+                : $item['main_price'];
+
+            $total += $price * $item['qty'];
+
             $cart_total = $total;
             $item = Item::findOrFail($key);
             if ($item->tax) {
@@ -736,7 +763,11 @@ class CheckoutController extends Controller
         $total = 0;
         foreach ($cart as $key => $item) {
 
-            $total += ($item['main_price'] + $item['attribute_price']) * $item['qty'];
+            $price = isset($item['attribute_price']) && $item['attribute_price'] > 0
+                ? $item['attribute_price']
+                : $item['main_price'];
+
+            $total += $price * $item['qty'];
             $cart_total = $total;
             $item = Item::findOrFail($key);
             if ($item->tax) {

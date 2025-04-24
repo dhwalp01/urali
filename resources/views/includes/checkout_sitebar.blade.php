@@ -17,6 +17,14 @@
         @endif
 
         <table class="table">
+            @php
+                $cart_total = 0;
+                foreach ($cart as $item) {
+                    $hasAttributes = isset($item['attribute']) && !empty($item['attribute']['option_price']);
+                    $unitPrice = $hasAttributes ? array_sum($item['attribute']['option_price']) : $item['main_price'];
+                    $cart_total += $unitPrice * $item['qty'];
+                }
+            @endphp
             <tr>
                 <td>{{ __('Cart subtotal') }}:</td>
                 <td class="text-gray-dark">{{ PriceHelper::setCurrencyPrice($cart_total) }}</td>
@@ -74,8 +82,11 @@
                             {{ Str::limit($item['name'], 45) }}
 
                         </a></h4>
-                    <span class="entry-meta">{{ $item['qty'] }} x
-                        {{ PriceHelper::setCurrencyPrice($item['main_price']) }}.</span>
+                        @php
+                            $hasAttributes = isset($item['attribute']) && !empty($item['attribute']['option_price']);
+                            $unitPrice = $hasAttributes ? array_sum($item['attribute']['option_price']) : $item['main_price'];
+                        @endphp
+                        <span class="entry-meta">{{ $item['qty'] }} x {{ PriceHelper::setCurrencyPrice($unitPrice) }}</span>
 
                     @foreach ($item['attribute']['option_name'] as $optionkey => $option_name)
                         <span class="entry-meta"><b>{{ $option_name }}</b> :

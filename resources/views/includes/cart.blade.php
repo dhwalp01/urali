@@ -1,9 +1,6 @@
 @php
     $cart = Session::has('cart') ? Session::get('cart') : [];
-    $total = 0;
-    $option_price = 0;
     $cartTotal = 0;
-    
 @endphp
 
 <div class="card border-0">
@@ -26,8 +23,13 @@
 
                     @foreach ($cart as $key => $item)
                         @php
-                            
-                            $cartTotal += ($item['main_price'] + $total + $item['attribute_price']) * $item['qty'];
+                            $hasAttributes = isset($item['attribute']) && !empty($item['attribute']['option_price']);
+                            $itemPrice = $hasAttributes
+                                ? array_sum($item['attribute']['option_price']) // use only variant price
+                                : $item['main_price']; // fallback to base price
+                        
+                            $subtotal = $itemPrice * $item['qty'];
+                            $cartTotal += $subtotal;
                         @endphp
                         <tr>
                             <td>
@@ -48,12 +50,12 @@
                                     </div>
                                 </div>
                             </td>
-                            <td class="text-center text-lg">{{ PriceHelper::setCurrencyPrice($item['main_price']) }}
+                            <td class="text-center text-lg">
+                                {{ PriceHelper::setCurrencyPrice($itemPrice) }}
                             </td>
-
                             <td class="text-center">
                                 @if ($item['item_type'] == 'normal')
-                                    <div class="qtySelector product-quantity">
+                                    <div class="qtySelector justify-content-center product-quantity" style="float: none;">
                                         <span class="decreaseQtycart cartsubclick" data-id="{{ $key }}"
                                             data-target="{{ PriceHelper::GetItemId($key) }}"><i
                                                 class="fas fa-minus"></i></span>
@@ -66,17 +68,15 @@
                                         <input type="hidden" value="3333" id="current_stock">
                                     </div>
                                 @endif
-
                             </td>
                             <td class="text-center text-lg">
-                                {{ PriceHelper::setCurrencyPrice($item['main_price'] * $item['qty']) }}</td>
-
+                                {{ PriceHelper::setCurrencyPrice($subtotal) }}
+                            </td>
                             <td class="text-center"><a class="remove-from-cart"
                                     href="{{ route('front.cart.destroy', $key) }}" data-toggle="tooltip"
                                     title="Remove item"><i class="icon-x"></i></a></td>
                         </tr>
                     @endforeach
-
                 </tbody>
             </table>
         </div>
@@ -106,8 +106,11 @@
                                     title="Remove item"><i class="icon-x"></i></a>
             </div>
 
-            <div class="text-right column text-lg"><span class="text-muted">{{ __('Subtotal') }}: </span><span
-                    class="text-gray-dark">{{ PriceHelper::setCurrencyPrice($cartTotal - (Session::has('coupon') ? Session::get('coupon')['discount'] : 0)) }}</span>
+            <div class="text-right column text-lg">
+                <span class="text-muted">{{ __('Subtotal') }}: </span>
+                <span class="text-gray-dark">
+                    {{ PriceHelper::setCurrencyPrice($cartTotal - (Session::has('coupon') ? Session::get('coupon')['discount'] : 0)) }}
+                </span>
             </div>
 
 
