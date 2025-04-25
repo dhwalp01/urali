@@ -460,7 +460,7 @@ body_theme4 @endif
                 <div class="col-lg-4">
                     <!-- Subscription-->
                     <section class="widget">
-                        <h3 class="widget-title">{{ __('Newsletter') }}</h3>
+                        <h3 class="widget-title">{{ __('Shop By Category') }}</h3>
                         {{-- <form class="row subscriber-form" action="{{ route('front.subscriber.submit') }}"
                             method="post">
                             @csrf
