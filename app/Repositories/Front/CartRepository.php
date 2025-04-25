@@ -63,9 +63,19 @@ class CartRepository
         $item = Item::where('id', $input['item_id'])->select('id', 'name', 'photo', 'discount_price', 'previous_price', 'slug', 'item_type', 'license_name', 'license_key', 'stock')->first();
 
         if ($item->item_type == 'normal') {
-            if ($item->stock < $request->quantity) {
-                $data = ['message' => 'Product Out Of Stock', 'status' => 'outStock'];
-                return $data;
+            // If attribute options are selected, validate against their stock
+            if (!empty($input['options_ids'])) {
+                foreach (explode(',', $input['options_ids']) as $optionId) {
+                    $option = AttributeOption::findOrFail($optionId);
+                    if ($option->stock != 'unlimited' && $qty > (int) $option->stock) {
+                        return ['message' => 'Product Out Of Stock', 'status' => 'outStock'];
+                    }
+                }
+            } else {
+                // Otherwise fall back to product base stock
+                if ($item->stock < $qty) {
+                    return ['message' => 'Product Out Of Stock', 'status' => 'outStock'];
+                }
             }
         }
 

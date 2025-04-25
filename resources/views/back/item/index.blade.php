@@ -14,9 +14,6 @@
             <div class="d-sm-flex align-items-center justify-content-between">
                 <h3 class="mb-0 bc-title"><b>{{ __('All Products') }}</b></h3>
                     <div class="right">
-                        <a href="{{ route('back.item.woo.preview') }}" class="btn btn-info btn-sm">
-                            Preview WooCommerce Products
-                        </a>
                         <a href="{{route('back.csv.export')}}" class="btn btn-info btn-sm d-inline-block">{{__('CSV Export')}}</a>
                         <form class="d-inline-block" action="{{route('back.bulk.delete')}}" method="get">
                             <input type="hidden" value="" name="ids[]" id="bulk_delete">

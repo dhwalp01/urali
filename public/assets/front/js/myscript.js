@@ -819,19 +819,6 @@ $(function ($) {
       }
     );
 
-    $(document).on("click", ".option", function () {
-      let option = [];
-      $(this).parent().addClass("active");
-      $("input.option").each(function (index) {
-        if ($(this).is(":checked")) {
-          option.push($(this).val());
-        }
-      });
-      removePage();
-      $("#search_form #option").val(option);
-      $("#search_button").click();
-    });
-
     $(document).on("submit", "#search_form", function (e) {
       e.preventDefault();
 
@@ -917,11 +904,6 @@ $(function ($) {
     });
     // compare script end
 
-    // cart script start
-    $(document).on("change", ".attribute_option", function () {
-      getData();
-    });
-
     $(document).on("keyup", ".cart-amount", function () {
       getData();
     });
@@ -1005,13 +987,18 @@ $(function ($) {
           .get();
       }
 
-      let quantity;
-
-      quantity = parseInt(getQuantity());
+      let quantity = parseInt(getQuantity());
 
       if (isNaN(quantity)) {
         quantity = 1;
       }
+      let selectedStock = null;
+      $('input[type=radio][name^="attribute_"]:checked').each(function () {
+        const stock = parseInt($(this).data("stock"));
+        if (selectedStock === null || stock < selectedStock) {
+          selectedStock = stock;
+        }
+      });
       if (qty != 0) {
         quantity = qty;
       }
@@ -1054,6 +1041,34 @@ $(function ($) {
       // console.log("Total Option Price:", totalOptionPrice);
       // console.log("Final Sub Price:", subPrice);
       // console.log("Total Price x Qty:", mainPrice);
+
+      // ✅ Update stock & quantity dropdown
+      let stock = 0;
+
+      // Collect stock and price data
+      $('input[type=radio][name^="attribute_"]:checked').each(function () {
+        const attrStock = parseInt($(this).data("stock"));
+        if (stock === 0 || attrStock < stock) {
+          stock = attrStock;
+        }
+      });
+
+      // Update dynamic stock label
+      $("#dynamic_stock").html(
+        stock > 0
+          ? `<span class="text-success d-inline-block">In Stock <b>(${stock} items)</b></span>`
+          : `<span class="text-danger d-inline-block">Out of Stock</span>`
+      );
+
+      // Update current_stock hidden input
+      $("#current_stock").val(stock);
+
+      // Regenerate quantity dropdown
+      const $quantitySelect = $("#quantity");
+      $quantitySelect.empty();
+      for (let i = 1; i <= Math.min(stock, 10); i++) {
+        $quantitySelect.append(`<option value="${i}">${i}</option>`);
+      }
 
       if (status == 1) {
         let addToCartUrl = `${mainurl}/product/add/cart?item_id=${itemId}&options_ids=${options_ids}&attribute_ids=${attribute_ids}&quantity=${quantity}&type=${type}&item_key=${item_key}&add_type=${add_type}`;

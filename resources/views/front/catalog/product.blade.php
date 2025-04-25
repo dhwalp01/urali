@@ -110,7 +110,15 @@
                             <div class="rating-stars d-inline-block gmr-3">
                                 {!! Helper::renderStarRating($item->reviews->avg('rating')) !!}
                             </div>
-                            <span id="dynamic_stock"></span>
+                            <span id="dynamic_stock">
+                                @if ($item->is_stock())
+                                    <span class="text-success d-inline-block">
+                                        {{ __('In Stock') }} <b>({{ $item->stock }} @lang('items'))</b>
+                                    </span>
+                                @else
+                                    <span class="text-danger d-inline-block">{{ __('Out of stock') }}</span>
+                                @endif
+                            </span>
                         </div>
 
 
@@ -139,26 +147,24 @@
                                 @if ($attribute->options->count())
                                 <div class="col-sm-6">
                                     <div class="form-group">
-                                    <label>{{ $attribute->name }}</label>
-                            
-                                    <div class="attribute-options d-flex flex-wrap">
-                                        @foreach ($attribute->options as $index => $option)
-                                            <label class="option-box mr-2 mb-2">
-                                                <input 
-                                                    type="radio" 
-                                                    name="attribute_{{ $attribute->id }}" 
-                                                    value="{{ $option->name }}"
-                                                    data-type="{{ $attribute->id }}"
-                                                    data-href="{{ $option->id }}"
-                                                    data-target="{{ PriceHelper::setConvertPrice($option->price) }}"
-                                                    data-stock="{{ $option->stock }}"
-                                                    @if ($index === 0) checked @endif
-                                                >
-                                                <span class="box-label">{{ $option->name }}</span>
-                                            </label>
-                                        @endforeach
-                                    </div>
-                            
+                                        <label>{{ $attribute->name }}</label>
+                                        <div class="attribute-options d-flex flex-wrap">
+                                            @foreach ($attribute->options as $index => $option)
+                                                <label class="option-box mr-2 mb-2 {{ $index === 0 ? 'selected' : '' }}">
+                                                    <input 
+                                                        type="radio" 
+                                                        name="attribute_{{ $attribute->id }}" 
+                                                        value="{{ $option->name }}"
+                                                        data-type="{{ $attribute->id }}"
+                                                        data-href="{{ $option->id }}"
+                                                        data-target="{{ PriceHelper::setConvertPrice($option->price) }}"
+                                                        data-stock="{{ $option->stock }}"
+                                                        @if ($index === 0) checked @endif
+                                                    >
+                                                    <span class="box-label">{{ $option->name }}</span>
+                                                </label>
+                                            @endforeach
+                                        </div>                                                                               
                                     </div>
                                 </div>
                                 @endif
@@ -180,23 +186,36 @@
                                 @endif
                                 <div class="p-action-button">
                                     @if ($item->item_type != 'affiliate')
-                                        @if ($item->is_stock())
-                                            <button class="btn btn-primary m-0 a-t-c-mr" id="add_to_cart"><i
-                                                    class="icon-bag"></i><span>{{ __('Add to Cart') }}</span></button>
-                                            <button class="btn btn-primary m-0" id="but_to_cart"><i
-                                                    class="icon-bag"></i><span>{{ __('Buy Now') }}</span></button>
+                                        @php
+                                            // Determine initial stock: either from first attribute option or fallback to product stock
+                                            $hasAttributes = count($item->attributes) > 0;
+                                            $firstOptionStock = 0;
+                                
+                                            if ($hasAttributes) {
+                                                foreach ($item->attributes as $attribute) {
+                                                    if ($attribute->options->count()) {
+                                                        $firstOptionStock = (int) $attribute->options->first()->stock;
+                                                        break; // Check only first attribute with options
+                                                    }
+                                                }
+                                            }
+                                        @endphp
+                                
+                                        @if (!$hasAttributes && $item->is_stock() || $hasAttributes && $firstOptionStock > 0)
+                                            <button class="btn btn-primary m-0 a-t-c-mr" id="add_to_cart"><i class="icon-bag"></i>
+                                                <span>{{ __('Add to Cart') }}</span></button>
+                                            <button class="btn btn-primary m-0" id="but_to_cart"><i class="icon-bag"></i>
+                                                <span>{{ __('Buy Now') }}</span></button>
                                         @else
-                                            <button class="btn btn-primary m-0"><i
-                                                    class="icon-bag"></i><span>{{ __('Out of stock') }}</span></button>
+                                            <button class="btn btn-primary m-0" disabled><i class="icon-bag"></i>
+                                                <span>{{ __('Out of stock') }}</span></button>
                                         @endif
+                                
                                     @else
-                                        <a href="{{ $item->affiliate_link }}" target="_blank"
-                                            class="btn btn-primary m-0"><span><i
-                                                    class="icon-bag"></i>{{ __('Buy Now') }}</span></a>
+                                        <a href="{{ $item->affiliate_link }}" target="_blank" class="btn btn-primary m-0">
+                                            <span><i class="icon-bag"></i>{{ __('Buy Now') }}</span></a>
                                     @endif
-
-                                </div>
-
+                                </div>                                
                             </div>
                         </div>
 
@@ -524,9 +543,9 @@
                                             <a class="product-button wishlist_store"
                                                 href="{{ route('user.wishlist.store', $related->id) }}"
                                                 title="{{ __('Wishlist') }}"><i class="icon-heart"></i></a>
-                                            {{-- <a class="product-button product_compare" href="javascript:;"
-                                                data-target="{{ route('fornt.compare.product', $related->id) }}"
-                                                title="{{ __('Compare') }}"><i class="icon-repeat"></i></a> --}}
+                                                {{-- <a class="product-button product_compare" href="javascript:;"
+                                                    data-target="{{ route('fornt.compare.product', $related->id) }}"
+                                                    title="{{ __('Compare') }}"><i class="icon-repeat"></i></a> --}}
                                             @include('includes.item_footer', ['sitem' => $related])
                                         </div>
                                     </div>
@@ -622,5 +641,68 @@
             </div>
         </form>
     @endauth
+
+@endsection
+@section('script')
+<script>
+    $(function () {
+        function updatePriceAndStock() {
+            let total = 0;
+            let stock = null;
+
+            $('input[type=radio][name^="attribute_"]:checked').each(function () {
+                const $input = $(this);
+                total += parseFloat($input.data('target')) || 0;
+                const currentStock = parseInt($input.data('stock'));
+                if (stock === null || currentStock < stock) {
+                    stock = currentStock;
+                }
+            });
+
+            // Currency
+            const currency = $('#set_currency').val();
+            const direction = $('#currency_direction').val();
+
+            if (direction === '1') {
+                $('#main_price').text(currency + total.toFixed(2));
+            } else {
+                $('#main_price').text(total.toFixed(2) + currency);
+            }
+
+            // Update stock display
+            $('#dynamic_stock').html(
+                stock > 0
+                    ? `<span class="text-success d-inline-block">In Stock <b>(${stock} items)</b></span>`
+                    : `<span class="text-danger d-inline-block">Out of Stock</span>`
+            );
+
+            // Update quantity dropdown
+            const $quantitySelect = $('#quantity');
+            $quantitySelect.empty();
+            const maxQty = Math.min(stock, 10);
+            for (let i = 1; i <= maxQty; i++) {
+                $quantitySelect.append(`<option value="${i}">${i}</option>`);
+            }
+
+            // Also update hidden stock field
+            $('#current_stock').val(stock);
+        }
+
+        // Handle selection class and trigger update
+        $('.option-box input[type=radio]').on('change', function () {
+            const $box = $(this).closest('.option-box');
+            const name = $(this).attr('name');
+
+            // Remove selected from all in this group
+            $(`input[name="${name}"]`).closest('.option-box').removeClass('selected');
+            $box.addClass('selected');
+
+            updatePriceAndStock();
+        });
+
+        // Initial trigger
+        updatePriceAndStock();
+    });
+</script>
 
 @endsection

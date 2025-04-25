@@ -40,13 +40,13 @@
         </a>
         <div class="collapse" id="items">
             <ul class="nav nav-collapse">
-                <li>
+                {{-- <li>
                     <a class="sub-link" href="{{ route('back.brand.index') }}">
                         <span class="sub-item">{{ __('Brands') }}</span>
                     </a>
-                </li>
+                </li> --}}
                 <li>
-                    <a class="sub-link" href="{{ route('back.item.add') }}">
+                    <a class="sub-link" href="{{ route('back.item.create') }}">
                         <span class="sub-item">{{ __('Add Product') }}</span>
                     </a>
                 </li>

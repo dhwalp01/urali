@@ -460,7 +460,7 @@ body_theme4 @endif
                 <div class="col-lg-4">
                     <!-- Subscription-->
                     <section class="widget">
-                        <h3 class="widget-title">{{ __('Shop By Category') }}</h3>
+                        <h3 class="widget-title">{{ __('Newsletter') }}</h3>
                         {{-- <form class="row subscriber-form" action="{{ route('front.subscriber.submit') }}"
                             method="post">
                             @csrf
@@ -683,39 +683,17 @@ body_theme4 @endif
     @endif
 
     <script>
-        $(function(){
-            // Attribute selection visuals
-            $('.option-box').on('click', function(){
-                const $box = $(this);
-                const $input = $box.find('input');
-
-                $box
-                    .siblings()
-                    .removeClass('selected')
-                    .find('input').prop('checked', false);
-
-                $box.addClass('selected');
-                $input.prop('checked', true);
-            });
-
-            // Auto-select first option on load
+        $(document).ready(function () {
+            // Pre-select first attribute in each group
             $('input[type=radio][name^="attribute_"]').each(function () {
                 const group = $(this).attr('name');
                 if (!$('input[name="' + group + '"]:checked').length) {
-                    $('input[name="' + group + '"]').first().prop('checked', true);
+                    $('input[name="' + group + '"]').first().prop('checked', true).trigger('change');
                     $('input[name="' + group + '"]').first().closest('.option-box').addClass('selected');
                 }
             });
-
-            // Trigger price + stock update via getData()
-            $('input[type=radio][name^="attribute_"]').on('change', function(){
-                getData();
-            });
-
-            // Also trigger once initially
-            getData();
         });
-    </script>      
+    </script> 
 
 </body>
 
