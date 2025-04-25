@@ -229,10 +229,10 @@
 
                                                     {{PriceHelper::grandCurrencyPrice($item)}}
                                                     </h4>
-                                                    @if (date('d-m-y') != \Carbon\Carbon::parse($item->date)->format('d-m-y'))
+                                                    {{-- @if (date('d-m-y') != \Carbon\Carbon::parse($item->date)->format('d-m-y'))
                                                     <div class="countdown countdown-alt mb-3" data-date-time="{{ $item->date }}">
                                                     </div>
-                                                    @endif
+                                                    @endif --}}
                                                 </div>
 
                                             </div>
@@ -317,7 +317,11 @@
                                         <div class="slider-item">
                                             <div class="product-card ">
                                                 <div class="product-thumb" >
-                                                    @if ($item->is_stock())
+                                                    @if (
+                                                        count($item->attributes) > 0
+                                                            ? $item->attributes->flatMap->options->pluck('stock')->filter(fn($stock) => $stock > 0)->count() > 0
+                                                            : $item->is_stock()
+                                                    )
                                                     @if($item->is_type == 'new')
                                                     @else
                                                         <div class="product-badge

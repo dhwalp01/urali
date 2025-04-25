@@ -179,11 +179,11 @@
 
                                                             {{ PriceHelper::grandCurrencyPrice($item) }}
                                                         </h4>
-                                                        @if (date('d-m-y') != \Carbon\Carbon::parse($item->date)->format('d-m-y'))
+                                                        {{-- @if (date('d-m-y') != \Carbon\Carbon::parse($item->date)->format('d-m-y'))
                                                             <div class="countdown countdown-alt mb-3"
                                                                 data-date-time="{{ $item->date }}">
                                                             </div>
-                                                        @endif
+                                                        @endif --}}
                                                     </div>
 
                                                 </div>

@@ -479,11 +479,15 @@
                                         <div class="slider-item">
                                             <div class="product-card ">
                                                 <div class="product-thumb">
-                                                    @if (!$item->is_stock())
-                                                        <div
-                                                            class="product-badge bg-secondary border-default text-body
-                                            ">
-                                                            {{ __('out of stock') }}</div>
+                                                    @php
+                                                        $hasAttributeStock = $item->attributes->flatMap->options->pluck('stock')->filter(fn($stock) => $stock > 0)->count() > 0;
+                                                        $isInStock = count($item->attributes) > 0 ? $hasAttributeStock : $item->is_stock();
+                                                    @endphp
+
+                                                    @if (!$isInStock)
+                                                        <div class="product-badge bg-secondary border-default text-body">
+                                                            {{ __('out of stock') }}
+                                                        </div>
                                                     @endif
                                                     @if ($item->previous_price && $item->previous_price != 0)
                                                         <div class="product-badge product-badge2 bg-info">
@@ -562,11 +566,15 @@
                                         <div class="slider-item">
                                             <div class="product-card ">
                                                 <div class="product-thumb">
-                                                    @if (!$item->is_stock())
-                                                        <div
-                                                            class="product-badge bg-secondary border-default text-body
-                                            ">
-                                                            {{ __('out of stock') }}</div>
+                                                    @php
+                                                        $hasAttributeStock = $item->attributes->flatMap->options->pluck('stock')->filter(fn($stock) => $stock > 0)->count() > 0;
+                                                        $isInStock = count($item->attributes) > 0 ? $hasAttributeStock : $item->is_stock();
+                                                    @endphp
+
+                                                    @if (!$isInStock)
+                                                        <div class="product-badge bg-secondary border-default text-body">
+                                                            {{ __('out of stock') }}
+                                                        </div>
                                                     @endif
                                                     @if ($item->previous_price && $item->previous_price != 0)
                                                         <div class="product-badge product-badge2 bg-info">

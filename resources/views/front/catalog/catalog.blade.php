@@ -4,7 +4,11 @@
             @foreach ($items as $item)
             <div class="col-xxl-3 col-md-4 col-6">
                 <div class="product-card ">
-                    @if ($item->is_stock())
+                    @if (
+                        count($item->attributes) > 0
+                            ? $item->attributes->flatMap->options->pluck('stock')->filter(fn($stock) => $stock > 0)->count() > 0
+                            : $item->is_stock()
+                    )
                         <div class="product-badge
                             @if($item->is_type == 'feature')
                             bg-warning
@@ -69,7 +73,11 @@
                 <div class="col-lg-12">
                     <div class="product-card product-list">
                         <div class="product-thumb" >
-                        @if ($item->is_stock())
+                            @if (
+                                count($item->attributes) > 0
+                                    ? $item->attributes->flatMap->options->pluck('stock')->filter(fn($stock) => $stock > 0)->count() > 0
+                                    : $item->is_stock()
+                            )
 
                             <div class="product-badge
                                 @if($item->is_type == 'feature')
