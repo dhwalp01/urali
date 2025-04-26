@@ -138,32 +138,31 @@ class PriceHelper
 
     public static function grandCurrencyPrice($item)
     {
-        $option_price = 0;
+        // For products with attributes, calculate from first option
         if (count($item->attributes) > 0) {
+            $optionPrice = 0;
             foreach ($item->attributes as $attr) {
-                if (isset($attr->options[0])) {
-                    $option_price += $attr->options[0]->price;
+                if ($attr->options->isNotEmpty()) {
+                    $optionPrice += $attr->options[0]->price;
                 }
             }
+            $price = $optionPrice ?: $item->price;
+        } 
+        // For products without attributes
+        else {
+            $price = $item->discount_price ?: $item->price;
         }
 
-        if (Session::has('currency')) {
-            $curr = Currency::findOrFail(Session::get('currency'));
-        } else {
-            $curr = Currency::where('is_default', 1)->first();
-        }
-        $price = (count($item->attributes) > 0) ? $option_price : $item->discount_price;
+        // Format with currency
+        $curr = Session::has('currency') 
+            ? Currency::find(Session::get('currency'))
+            : Currency::where('is_default', 1)->first();
 
-        $setting = Setting::first();
-
-        $price = self::testPrice(round($price * $curr->value, 2));
-
-        if ($setting->currency_direction == 1) {
-            return $curr->sign . $price;
-        } else {
-            return $price . $curr->sign;
-        }
-
+        $formatted = self::testPrice(round($price * $curr->value, 2));
+        
+        return Setting::first()->currency_direction == 1
+            ? $curr->sign . $formatted
+            : $formatted . $curr->sign;
     }
 
     public static function grandPrice($item)
@@ -508,6 +507,16 @@ class PriceHelper
             ];
         }
         Session::put('shipping_address', $shipping);
+    }
+    
+    public static function calculateDiscountPercentage($originalPrice, $salePrice)
+    {
+        if ($originalPrice <= 0 || $salePrice <= 0) {
+            return 0;
+        }
+        
+        $discount = (($originalPrice - $salePrice) / $originalPrice) * 100;
+        return round($discount);
     }
 
 }

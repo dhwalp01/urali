@@ -49,8 +49,26 @@
             @else
             <span class="product-badge bg-secondary border-default text-body">{{ __('out of stock') }}</span>
             @endif
-            @if ($item->previous_price && $item->previous_price != 0)
-            <div class="product-badge bg-goldenrod  ppp-t"> -{{ PriceHelper::DiscountPercentage($item) }}</div>
+            @php
+               // Calculate discount percentage based on whether product has attributes
+               $discountPercentage = 0;
+               if (count($item->attributes) > 0) {
+                  // For products with attributes, find the first option with sale price
+                  foreach ($item->attributes as $attribute) {
+                        foreach ($attribute->options as $option) {
+                           if ($option->sale_price && $option->sale_price < $option->price) {
+                              $discountPercentage = PriceHelper::calculateDiscountPercentage($option->price, $option->sale_price);
+                              break 2;
+                           }
+                        }
+                  }
+               } elseif ($item->previous_price && $item->previous_price != 0) {
+                  // For regular products - use the existing DiscountPercentage method
+                  $discountPercentage = str_replace('%', '', PriceHelper::DiscountPercentage($item));
+               }
+            @endphp
+            @if ($discountPercentage > 0)
+               <div class="product-badge bg-goldenrod ppp-t"> -{{ $discountPercentage }}%</div>
             @endif
             <div class="product-thumbnails insize">
                <div class="product-details-slider owl-carousel">
@@ -120,12 +138,24 @@
                @endif --}}
                @endif
                <span class="h3 d-block price-area">
-               @if ($item->previous_price != 0)
-               <small
-                  class="d-inline-block"><del>{{ PriceHelper::setPreviousPrice($item->previous_price) }}</del></small>
-               @endif
-               <span id="main_price" class="main-price">{{ PriceHelper::grandCurrencyPrice($item) }}</span>
-               </span>
+                  @php
+                      // Calculate initial prices
+                      $initialPrice = $item->price;
+                      $initialDiscountPrice = $item->discount_price ?: $item->price;
+                      $hasDiscount = $item->previous_price && $item->previous_price > $initialDiscountPrice;
+                  @endphp
+                  
+                  @if ($hasDiscount)
+                      <small class="d-inline-block"><del>{{ PriceHelper::setPreviousPrice($item->previous_price) }}</del></small>
+                  @endif
+                  
+                  <span id="main_price" class="main-price" 
+                        data-base-price="{{ $initialPrice }}"
+                        data-discount-price="{{ $initialDiscountPrice }}"
+                        data-has-attributes="{{ count($item->attributes) > 0 ? 'true' : 'false' }}">
+                     {{ PriceHelper::grandCurrencyPrice($item) }}
+                  </span>
+              </span>              
                <p class="text-muted">
                   {!! $item->sort_details !!}
                   <a href="#details"
@@ -133,32 +163,36 @@
                </p>
                <div class="row margin-top-1x">
                   @foreach ($attributes as $attribute)
-                  @if ($attribute->options->count())
-                  <div class="col-sm-6">
-                     <div class="form-group">
-                        <label>{{ $attribute->name }}</label>
-                        <div class="attribute-options d-flex flex-wrap">
-                           @foreach ($attribute->options as $index => $option)
-                           <label class="option-box mr-2 mb-2 {{ $index === 0 ? 'selected' : '' }}">
-                           <input 
-                           type="radio" 
-                           name="attribute_{{ $attribute->id }}" 
-                           value="{{ $option->name }}"
-                           data-type="{{ $attribute->id }}"
-                           data-href="{{ $option->id }}"
-                           data-target="{{ PriceHelper::setConvertPrice($option->price) }}"
-                           data-stock="{{ $option->stock }}"
-                           @if ($index === 0) checked @endif
-                           >
-                           <span class="box-label">{{ $option->name }}</span>
-                           </label>
-                           @endforeach
-                        </div>
-                     </div>
-                  </div>
-                  @endif
+                      @if ($attribute->options->count())
+                          <div class="col-sm-6">
+                              <div class="form-group">
+                                  <label>{{ $attribute->name }}</label>
+                                  <div class="attribute-options d-flex flex-wrap">
+                                      @foreach ($attribute->options as $index => $option)
+                                          <label class="option-box mr-2 mb-2 {{ $index === 0 ? 'selected' : '' }}">
+                                              <input 
+                                                  type="radio" 
+                                                  name="attribute_{{ $attribute->id }}" 
+                                                  value="{{ $option->name }}"
+                                                  data-type="{{ $attribute->id }}"
+                                                  data-href="{{ $option->id }}"
+                                                  data-target="{{ PriceHelper::setConvertPrice($option->price) }}"
+                                                  @if($option->sale_price)
+                                                      data-sale-price="{{ PriceHelper::setConvertPrice($option->sale_price) }}"
+                                                  @endif
+                                                  data-stock="{{ $option->stock }}"
+                                                  data-sku="{{ $option->sku ?: $item->sku }}"
+                                                  @if ($index === 0) checked @endif
+                                              >
+                                              <span class="box-label">{{ $option->name }}</span>
+                                          </label>
+                                      @endforeach
+                                  </div>
+                              </div>
+                          </div>
+                      @endif
                   @endforeach
-               </div>
+              </div>
                <div class="row align-items-end pb-4">
                   <div class="col-sm-12">
                      @if ($item->item_type == 'normal')
@@ -243,9 +277,9 @@
                      </div>
                      --}}
                      @if ($item->item_type == 'normal')
-                     <div class="pt-1 mb-4"><span class="text-medium">{{ __('SKU') }}:</span>
-                        #{{ $item->sku }}
-                     </div>
+                        <div class="pt-1 mb-4"><span class="text-medium">{{ __('SKU') }}:</span>
+                           <span class="sku-display">#{{ $item->sku }}</span>
+                        </div>
                      @endif
                   </div>
                   <div class="mt-4 p-d-f-area">
@@ -625,62 +659,126 @@
 @section('script')
 <script>
    $(function () {
-       function updatePriceAndStock() {
-           let total = 0;
-           let stock = null;
-   
-           $('input[type=radio][name^="attribute_"]:checked').each(function () {
-               const $input = $(this);
-               total += parseFloat($input.data('target')) || 0;
-               const currentStock = parseInt($input.data('stock'));
-               if (stock === null || currentStock < stock) {
-                   stock = currentStock;
-               }
-           });
-   
-           // Currency
-           const currency = $('#set_currency').val();
-           const direction = $('#currency_direction').val();
-   
-           if (direction === '1') {
-               $('#main_price').text(currency + total.toFixed(2));
-           } else {
-               $('#main_price').text(total.toFixed(2) + currency);
-           }
-   
-           // Update stock display
-           $('#dynamic_stock').html(
-               stock > 0
-                   ? `<span class="text-success d-inline-block">In Stock <b>(${stock} items)</b></span>`
-                   : `<span class="text-danger d-inline-block">Out of Stock</span>`
-           );
-   
-           // Update quantity dropdown
-           const $quantitySelect = $('#quantity');
-           $quantitySelect.empty();
-           const maxQty = parseInt(stock); // now it's based only on available stock
-           for (let i = 1; i <= maxQty; i++) {
-               $quantitySelect.append(`<option value="${i}">${i}</option>`);
-           }
-   
-           // Also update hidden stock field
-           $('#current_stock').val(stock);
-       }
-   
-       // Handle selection class and trigger update
-       $('.option-box input[type=radio]').on('change', function () {
-           const $box = $(this).closest('.option-box');
-           const name = $(this).attr('name');
-   
-           // Remove selected from all in this group
-           $(`input[name="${name}"]`).closest('.option-box').removeClass('selected');
-           $box.addClass('selected');
-   
-           updatePriceAndStock();
-       });
-   
-       // Initial trigger
-       updatePriceAndStock();
-   });
+      function updatePriceAndStock() {
+         let total = 0;
+         let saleTotal = 0;
+         let stock = null;
+         let hasSale = false;
+         let discountPercentage = 0;
+         let hasAttributes = $('input[type=radio][name^="attribute_"]').length > 0;
+
+         if (hasAttributes) {
+            // For products with attributes
+            $('input[type=radio][name^="attribute_"]:checked').each(function () {
+                  const $input = $(this);
+                  const price = parseFloat($input.data('target')) || 0;
+                  const salePrice = $input.data('sale-price') ? parseFloat($input.data('sale-price')) : price;
+                  
+                  total += price;
+                  saleTotal += salePrice;
+                  
+                  if (salePrice < price) {
+                     hasSale = true;
+                     const optionDiscount = Math.round(((price - salePrice) / price) * 100);
+                     if (optionDiscount > discountPercentage) {
+                        discountPercentage = optionDiscount;
+                     }
+                  }
+                  
+                  const currentStock = parseInt($input.data('stock'));
+                  if (stock === null || currentStock < stock) {
+                     stock = currentStock;
+                  }
+            });
+         } else {
+            // For products without attributes - use the data attributes
+            const $mainPrice = $('#main_price');
+            const basePrice = parseFloat($mainPrice.data('base-price')) || 0;
+            const discountPrice = parseFloat($mainPrice.data('discount-price')) || basePrice;
+            stock = parseInt("{{ $item->stock }}") || 0;
+            
+            total = basePrice;
+            saleTotal = discountPrice;
+            
+            if (discountPrice < basePrice && basePrice > 0) {
+                  hasSale = true;
+                  discountPercentage = Math.round(((basePrice - discountPrice) / basePrice) * 100);
+            }
+         }
+
+        // Update discount badge
+        const $discountBadge = $('.product-badge.bg-goldenrod.ppp-t');
+        if (hasSale) {
+            if ($discountBadge.length) {
+                $discountBadge.text('-' + discountPercentage + '%');
+            } else {
+                $('.product-gallery').append('<div class="product-badge bg-goldenrod ppp-t">-' + discountPercentage + '%</div>');
+            }
+        } else if ($discountBadge.length) {
+            $discountBadge.remove();
+        }
+
+        // Currency
+        const currency = $('#set_currency').val();
+        const direction = $('#currency_direction').val();
+        const currencyValue = parseFloat($('#set_currency_val').val()) || 1;
+
+        // Calculate final prices
+        const finalTotal = total * currencyValue;
+        const finalSaleTotal = saleTotal * currencyValue;
+
+        let priceHtml = '';
+        if (hasSale) {
+            if (direction === '1') {
+                priceHtml = `<small class="d-inline-block"><del>${currency}${finalTotal.toFixed(2)}</del></small>
+                             <span class="main-price">${currency}${finalSaleTotal.toFixed(2)}</span>`;
+            } else {
+                priceHtml = `<small class="d-inline-block"><del>${finalTotal.toFixed(2)}${currency}</del></small>
+                             <span class="main-price">${finalSaleTotal.toFixed(2)}${currency}</span>`;
+            }
+        } else {
+            if (direction === '1') {
+                priceHtml = `<span class="main-price">${currency}${finalTotal.toFixed(2)}</span>`;
+            } else {
+                priceHtml = `<span class="main-price">${finalTotal.toFixed(2)}${currency}</span>`;
+            }
+        }
+
+        $('.price-area').html(priceHtml);
+
+        // Update stock display
+        $('#dynamic_stock').html(
+            stock > 0
+                ? `<span class="text-success d-inline-block">In Stock <b>(${stock} items)</b></span>`
+                : `<span class="text-danger d-inline-block">Out of Stock</span>`
+        );
+
+        // Update quantity dropdown
+        const $quantitySelect = $('#quantity');
+        $quantitySelect.empty();
+        const maxQty = Math.min(10, stock); // Limit to 10 or available stock
+        for (let i = 1; i <= maxQty; i++) {
+            $quantitySelect.append(`<option value="${i}">${i}</option>`);
+        }
+
+        // Update hidden stock field
+        $('#current_stock').val(stock);
+    }
+
+    // Handle selection class and trigger update
+    $('.option-box input[type=radio]').on('change', function () {
+        const $box = $(this).closest('.option-box');
+        const name = $(this).attr('name');
+
+        // Remove selected from all in this group
+        $(`input[name="${name}"]`).closest('.option-box').removeClass('selected');
+        $box.addClass('selected');
+
+        updatePriceAndStock();
+    });
+
+    // Initial trigger
+    updatePriceAndStock();
+});
 </script>
 @endsection
