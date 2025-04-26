@@ -12,9 +12,8 @@ class AttributeOption extends Model
       'keyword',
       'price',
       'stock',
-
-      // newly added:
       'sale_price',
+      'sku',
   ];
 
   protected $casts = [

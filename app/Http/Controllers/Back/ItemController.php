@@ -455,8 +455,7 @@ class ItemController extends Controller
             if (!empty($product->variations) && is_array($product->variations)) {
                 foreach ($product->variations as $variationId) {
                     $variation = $woocommerce->get("products/{$product->id}/variations/{$variationId}");
-                    // Log::info("Fetched variation", json_decode(json_encode($variation), true));
-
+                    
                     // Update the corresponding attribute options based on this variation
                     foreach ($variation->attributes as $vAttr) {
                         $attrName = $vAttr->name;
@@ -467,27 +466,25 @@ class ItemController extends Controller
                             $existingOption = $attribute->options()->where('name', $optionValue)->first();
                             if ($existingOption) {
                                 $existingOption->update([
-                                    'price' => $variation->price ?? $existingOption->price,
+                                    'price' => $variation->regular_price ?? $variation->price ?? $existingOption->price,
+                                    'sale_price' => ($variation->sale_price && $variation->sale_price > 0) 
+                                                    ? $variation->sale_price 
+                                                    : null,
                                     'stock' => $variation->stock_quantity ?? $existingOption->stock,
+                                    'sku' => $variation->sku ?? null,
                                 ]);
-                                // Log::info("Updated attribute option", [
-                                //     'attribute' => $attrName,
-                                //     'option'    => $optionValue,
-                                //     'price'     => $variation->price,
-                                //     'stock'     => $variation->stock_quantity,
-                                // ]);
                             } else {
                                 // Create new option if not found
                                 $attribute->options()->create([
                                     'name'    => $optionValue,
                                     'keyword' => Str::slug($optionValue),
-                                    'price'   => $variation->price ?? 0,
+                                    'price'   => $variation->regular_price ?? $variation->price ?? 0,
+                                    'sale_price' => ($variation->sale_price && $variation->sale_price > 0) 
+                                                    ? $variation->sale_price 
+                                                    : null,
                                     'stock'   => $variation->stock_quantity ?? 0,
+                                    'sku'     => $variation->sku ?? null,
                                 ]);
-                                // Log::info("Created new attribute option", [
-                                //     'attribute' => $attrName,
-                                //     'option'    => $optionValue,
-                                // ]);
                             }
                         }
                     }

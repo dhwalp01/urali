@@ -20,9 +20,46 @@
             @php
                 $cart_total = 0;
                 foreach ($cart as $item) {
-                    $hasAttributes = isset($item['attribute']) && !empty($item['attribute']['option_price']);
-                    $unitPrice = $hasAttributes ? array_sum($item['attribute']['option_price']) : $item['main_price'];
+                    // Determine the unit price based on available price options
+                    if (isset($item['attribute']) && !empty($item['attribute']['option_sale_price']) && array_sum($item['attribute']['option_sale_price']) > 0) {
+                        // Use sale price if available for attributed products
+                        $unitPrice = array_sum($item['attribute']['option_sale_price']);
+                    } elseif (isset($item['attribute']) && !empty($item['attribute']['option_price'])) {
+                        // Use regular attribute price as fallback
+                        $unitPrice = array_sum($item['attribute']['option_price']);
+                    } elseif (isset($item['discount_price']) && $item['discount_price'] > 0) {
+                        // For regular products with discount
+                        $unitPrice = $item['discount_price'];
+                    } else {
+                        // Default to main price
+                        $unitPrice = $item['main_price'];
+                    }
+                    
                     $cart_total += $unitPrice * $item['qty'];
+                }
+                
+                // Calculate grand total
+                $grand_total = $cart_total;
+                
+                // Add tax if applicable
+                if (isset($tax) && $tax != 0) {
+                    $grand_total += $tax;
+                }
+                
+                // Add state tax if applicable
+                if (DB::table('states')->count() > 0 && Auth::check() && Auth::user()->state_id) {
+                    $state_tax = ($cart_total * Auth::user()->state->price) / 100;
+                    $grand_total += $state_tax;
+                }
+                
+                // Subtract discount if applicable
+                if (isset($discount) && $discount) {
+                    $grand_total -= $discount['discount'];
+                }
+                
+                // Add shipping if applicable
+                if (isset($shipping) && $shipping) {
+                    $grand_total += $shipping->price;
                 }
             @endphp
             <tr>
@@ -63,8 +100,7 @@
             @endif
             <tr>
                 <td class="text-lg text-primary">{{ __('Order total') }}</td>
-                <td class="text-lg text-primary grand_total_set">{{ PriceHelper::setCurrencyPrice($grand_total) }}
-                </td>
+                <td class="text-lg text-primary grand_total_set">{{ PriceHelper::setCurrencyPrice($grand_total) }}</td>
             </tr>
         </table>
     </section>
@@ -83,15 +119,36 @@
 
                         </a></h4>
                         @php
-                            $hasAttributes = isset($item['attribute']) && !empty($item['attribute']['option_price']);
-                            $unitPrice = $hasAttributes ? array_sum($item['attribute']['option_price']) : $item['main_price'];
+                            // Determine the unit price based on available price options
+                            if (isset($item['attribute']) && !empty($item['attribute']['option_sale_price']) && array_sum($item['attribute']['option_sale_price']) > 0) {
+                                // Use sale price if available
+                                $unitPrice = array_sum($item['attribute']['option_sale_price']);
+                            } elseif (isset($item['attribute']) && !empty($item['attribute']['option_price'])) {
+                                // Use regular attribute price as fallback
+                                $unitPrice = array_sum($item['attribute']['option_price']);
+                            } elseif (isset($item['discount_price']) && $item['discount_price'] > 0) {
+                                // For regular products with discount
+                                $unitPrice = $item['discount_price'];
+                            } else {
+                                // Default to main price
+                                $unitPrice = $item['main_price'];
+                            }
                         @endphp
                         <span class="entry-meta">{{ $item['qty'] }} x {{ PriceHelper::setCurrencyPrice($unitPrice) }}</span>
 
-                    @foreach ($item['attribute']['option_name'] as $optionkey => $option_name)
-                        <span class="entry-meta"><b>{{ $option_name }}</b> :
-                            {{ PriceHelper::setCurrencySign() }}{{ $item['attribute']['option_price'][$optionkey] }}</span>
-                    @endforeach
+                        @if(isset($item['attribute']['option_name']))
+                            @foreach ($item['attribute']['option_name'] as $optionkey => $option_name)
+                                <span class="entry-meta"><b>{{ $option_name }}</b> :
+                                    @php
+                                        $optionPrice = isset($item['attribute']['option_sale_price'][$optionkey]) && 
+                                                    $item['attribute']['option_sale_price'][$optionkey] > 0 
+                                                    ? $item['attribute']['option_sale_price'][$optionkey] 
+                                                    : $item['attribute']['option_price'][$optionkey];
+                                    @endphp
+                                    {{ PriceHelper::setCurrencySign() }}{{ $optionPrice }}
+                                </span>
+                            @endforeach
+                        @endif
                 </div>
             </div>
         @endforeach

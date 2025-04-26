@@ -441,10 +441,40 @@
                                                         {!! Helper::renderStarRating($item->reviews->avg('rating')) !!}
                                                     </div>
                                                     <h4 class="product-price text-start">
-                                                        @if ($item->previous_price != 0)
-                                                            <del>{{ PriceHelper::setPreviousPrice($item->previous_price) }}</del>
+                                                        @php
+                                                            $hasAttributesWithStock = count($item->attributes) > 0 && 
+                                                                $item->attributes->flatMap->options->where('stock', '>', 0)->count() > 0;
+                                                                
+                                                            // Get lowest option price for products with attributes
+                                                            $minPrice = null;
+                                                            $minSalePrice = null;
+                                                            
+                                                            if ($hasAttributesWithStock) {
+                                                                $options = $item->attributes->flatMap->options->where('stock', '>', 0);
+                                                                if ($options->count() > 0) {
+                                                                    // Find lowest regular price
+                                                                    $minPrice = $options->pluck('price')->min();
+                                                                    
+                                                                    // Find lowest sale price (if available)
+                                                                    $salesPrices = $options->pluck('sale_price')->filter()->values();
+                                                                    $minSalePrice = $salesPrices->count() > 0 ? $salesPrices->min() : null;
+                                                                }
+                                                            }
+                                                        @endphp
+                                                        
+                                                        @if ($hasAttributesWithStock)
+                                                            @if ($minSalePrice)
+                                                                <del>{{PriceHelper::setCurrencyPrice($minPrice)}}</del>
+                                                                {{PriceHelper::setCurrencyPrice($minSalePrice)}}
+                                                            @else
+                                                                {{PriceHelper::setCurrencyPrice($minPrice)}}
+                                                            @endif
+                                                        @else
+                                                            @if ($item->previous_price != 0)
+                                                                <del>{{PriceHelper::setPreviousPrice($item->previous_price)}}</del>
+                                                            @endif
+                                                            {{PriceHelper::grandCurrencyPrice($item)}}
                                                         @endif
-                                                        {{ PriceHelper::grandCurrencyPrice($item) }}
                                                     </h4>
                                                 </div>
 
@@ -521,11 +551,40 @@
                                                             {!! Helper::renderStarRating($item->reviews->avg('rating')) !!}
                                                         </div>
                                                         <h4 class="product-price text-start">
-                                                            @if ($item->previous_price != 0)
-                                                                <del>{{ PriceHelper::setPreviousPrice($item->previous_price) }}</del>
+                                                            @php
+                                                                $hasAttributesWithStock = count($item->attributes) > 0 && 
+                                                                    $item->attributes->flatMap->options->where('stock', '>', 0)->count() > 0;
+                                                                    
+                                                                // Get lowest option price for products with attributes
+                                                                $minPrice = null;
+                                                                $minSalePrice = null;
+                                                                
+                                                                if ($hasAttributesWithStock) {
+                                                                    $options = $item->attributes->flatMap->options->where('stock', '>', 0);
+                                                                    if ($options->count() > 0) {
+                                                                        // Find lowest regular price
+                                                                        $minPrice = $options->pluck('price')->min();
+                                                                        
+                                                                        // Find lowest sale price (if available)
+                                                                        $salesPrices = $options->pluck('sale_price')->filter()->values();
+                                                                        $minSalePrice = $salesPrices->count() > 0 ? $salesPrices->min() : null;
+                                                                    }
+                                                                }
+                                                            @endphp
+                                                            
+                                                            @if ($hasAttributesWithStock)
+                                                                @if ($minSalePrice)
+                                                                    <del>{{PriceHelper::setCurrencyPrice($minPrice)}}</del>
+                                                                    {{PriceHelper::setCurrencyPrice($minSalePrice)}}
+                                                                @else
+                                                                    {{PriceHelper::setCurrencyPrice($minPrice)}}
+                                                                @endif
+                                                            @else
+                                                                @if ($item->previous_price != 0)
+                                                                    <del>{{PriceHelper::setPreviousPrice($item->previous_price)}}</del>
+                                                                @endif
+                                                                {{PriceHelper::grandCurrencyPrice($item)}}
                                                             @endif
-
-                                                            {{ PriceHelper::grandCurrencyPrice($item) }}
                                                         </h4>
                                                         {{-- @if (date('d-m-y') != \Carbon\Carbon::parse($item->date)->format('d-m-y'))
                                                             <div class="countdown countdown-alt mb-3"
@@ -608,11 +667,40 @@
                                                             {!! Helper::renderStarRating($item->reviews->avg('rating')) !!}
                                                         </div>
                                                         <h4 class="product-price text-start">
-                                                            @if ($item->previous_price != 0)
-                                                                <del>{{ PriceHelper::setPreviousPrice($item->previous_price) }}</del>
+                                                            @php
+                                                                $hasAttributesWithStock = count($item->attributes) > 0 && 
+                                                                    $item->attributes->flatMap->options->where('stock', '>', 0)->count() > 0;
+                                                                    
+                                                                // Get lowest option price for products with attributes
+                                                                $minPrice = null;
+                                                                $minSalePrice = null;
+                                                                
+                                                                if ($hasAttributesWithStock) {
+                                                                    $options = $item->attributes->flatMap->options->where('stock', '>', 0);
+                                                                    if ($options->count() > 0) {
+                                                                        // Find lowest regular price
+                                                                        $minPrice = $options->pluck('price')->min();
+                                                                        
+                                                                        // Find lowest sale price (if available)
+                                                                        $salesPrices = $options->pluck('sale_price')->filter()->values();
+                                                                        $minSalePrice = $salesPrices->count() > 0 ? $salesPrices->min() : null;
+                                                                    }
+                                                                }
+                                                            @endphp
+                                                            
+                                                            @if ($hasAttributesWithStock)
+                                                                @if ($minSalePrice)
+                                                                    <del>{{PriceHelper::setCurrencyPrice($minPrice)}}</del>
+                                                                    {{PriceHelper::setCurrencyPrice($minSalePrice)}}
+                                                                @else
+                                                                    {{PriceHelper::setCurrencyPrice($minPrice)}}
+                                                                @endif
+                                                            @else
+                                                                @if ($item->previous_price != 0)
+                                                                    <del>{{PriceHelper::setPreviousPrice($item->previous_price)}}</del>
+                                                                @endif
+                                                                {{PriceHelper::grandCurrencyPrice($item)}}
                                                             @endif
-
-                                                            {{ PriceHelper::grandCurrencyPrice($item) }}
                                                         </h4>
                                                         {{-- @if (date('d-m-y') != \Carbon\Carbon::parse($item->date)->format('d-m-y'))
                                                             <div class="countdown countdown-alt mb-3"

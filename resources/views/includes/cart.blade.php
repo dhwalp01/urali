@@ -1,13 +1,29 @@
+
 @php
     $cart = Session::has('cart') ? Session::get('cart') : [];
     $cartTotal = 0;
+    
+    foreach ($cart as $item) {
+        // Use the same price calculation logic everywhere
+        if (!empty($item['attribute']['option_sale_price']) && array_sum($item['attribute']['option_sale_price']) > 0) {
+            $itemPrice = array_sum($item['attribute']['option_sale_price']);
+        } elseif (!empty($item['attribute']['option_price']) && array_sum($item['attribute']['option_price']) > 0) {
+            $itemPrice = array_sum($item['attribute']['option_price']);
+        } elseif (isset($item['discount_price']) && $item['discount_price'] > 0) {
+            $itemPrice = $item['discount_price'];
+        } else {
+            $itemPrice = $item['main_price'];
+        }
+
+        $subtotal = $itemPrice * $item['qty'];
+        $cartTotal += $subtotal;
+    }
 @endphp
 
 <div class="card border-0">
     <div class="card-body">
         <div class="table-responsive shopping-cart">
             <table class="table table-bordered">
-
                 <thead>
                     <tr>
                         <th>{{ __('Product Name') }}</th>
@@ -20,39 +36,78 @@
                 </thead>
 
                 <tbody id="cart_view_load" data-target="{{ route('cart.get.load') }}">
-
                     @foreach ($cart as $key => $item)
                         @php
-                            $hasAttributes = isset($item['attribute']) && !empty($item['attribute']['option_price']);
-                            $itemPrice = $hasAttributes
-                                ? array_sum($item['attribute']['option_price']) // use only variant price
-                                : $item['main_price']; // fallback to base price
-                        
+                            // Calculate base price (either from attributes or main price)
+                            $basePrice = $item['main_price'];
+                            
+                            // If product has attributes, sum all option prices
+                            if (isset($item['attribute']['option_price']) && !empty($item['attribute']['option_price'])) {
+                                $attributePrice = array_sum($item['attribute']['option_price']);
+                                $itemPrice = $attributePrice;
+                            } else {
+                                $itemPrice = $basePrice;
+                            }
+                            
                             $subtotal = $itemPrice * $item['qty'];
-                            $cartTotal += $subtotal;
                         @endphp
                         <tr>
                             <td>
-                                <div class="product-item"><a class="product-thumb"
-                                        href="{{ route('front.product', $item['slug']) }}"><img
-                                            src="{{ url('/storage/images/' . $item['photo']) }}" alt="Product"></a>
+                                <div class="product-item">
+                                    <a class="product-thumb" href="{{ route('front.product', $item['slug']) }}">
+                                        <img src="{{ url('/storage/images/' . $item['photo']) }}" alt="Product">
+                                    </a>
                                     <div class="product-info">
-                                        <h4 class="product-title"><a href="{{ route('front.product', $item['slug']) }}">
+                                        <h4 class="product-title">
+                                            <a href="{{ route('front.product', $item['slug']) }}">
                                                 {{ Str::limit($item['name'], 45) }}
-
-                                            </a></h4>
-
-                                        @foreach ($item['attribute']['option_name'] as $optionkey => $option_name)
-                                            <span><em>{{ $item['attribute']['names'][$optionkey] }}:</em>
-                                                {{ $option_name }}
-                                                ({{ PriceHelper::setCurrencyPrice($item['attribute']['option_price'][$optionkey]) }})</span>
-                                        @endforeach
+                                            </a>
+                                        </h4>
+                                        @if(isset($item['attribute']['option_name']))
+                                            @foreach ($item['attribute']['option_name'] as $optionkey => $option_name)
+                                                <span>
+                                                    <em>{{ $item['attribute']['names'][$optionkey] }}:</em>
+                                                    {{ $option_name }}
+                                                    @php
+                                                        // Check if sale price exists and is greater than 0
+                                                        $displayPrice = isset($item['attribute']['option_sale_price'][$optionkey]) && 
+                                                                        $item['attribute']['option_sale_price'][$optionkey] > 0 
+                                                                        ? $item['attribute']['option_sale_price'][$optionkey] 
+                                                                        : $item['attribute']['option_price'][$optionkey];
+                                                    @endphp
+                                                    ({{ PriceHelper::setCurrencyPrice($displayPrice) }})
+                                                </span>
+                                            @endforeach
+                                        @endif
                                     </div>
                                 </div>
                             </td>
                             <td class="text-center text-lg">
+                                @php
+                                    // Calculate base price (either from attributes or main price)
+                                    $basePrice = $item['main_price'];
+                                    
+                                    // If product has attributes, check for sale prices first
+                                    if (isset($item['attribute']['option_sale_price']) && !empty($item['attribute']['option_sale_price'])) {
+                                        $attributePrice = array_sum($item['attribute']['option_sale_price']);
+                                        $itemPrice = $attributePrice;
+                                    } 
+                                    // If no sale price but has regular attribute prices
+                                    elseif (isset($item['attribute']['option_price']) && !empty($item['attribute']['option_price'])) {
+                                        $attributePrice = array_sum($item['attribute']['option_price']);
+                                        $itemPrice = $attributePrice;
+                                    } 
+                                    // For products without attributes, use discount price if available
+                                    elseif (isset($item['discount_price']) && $item['discount_price'] > 0) {
+                                        $itemPrice = $item['discount_price'];
+                                    } 
+                                    // Fallback to main price
+                                    else {
+                                        $itemPrice = $basePrice;
+                                    }
+                                @endphp
                                 {{ PriceHelper::setCurrencyPrice($itemPrice) }}
-                            </td>
+                            </td>                            
                             <td class="text-center">
                                 @if ($item['item_type'] == 'normal')
                                     <div class="qtySelector justify-content-center product-quantity" style="float: none;">
@@ -65,16 +120,22 @@
                                             data-target="{{ PriceHelper::GetItemId($key) }}"
                                             data-item="{{ implode(',', $item['options_id']) }}"><i
                                                 class="fas fa-plus"></i></span>
-                                        <input type="hidden" value="3333" id="current_stock">
+                                        <input type="hidden" value="{{ $item['qty'] }}" id="current_stock">
                                     </div>
                                 @endif
                             </td>
                             <td class="text-center text-lg">
+                                @php
+                                    $itemPrice = PriceHelper::getCartItemPrice($item);
+                                    $subtotal = $itemPrice * $item['qty'];
+                                @endphp
                                 {{ PriceHelper::setCurrencyPrice($subtotal) }}
-                            </td>
-                            <td class="text-center"><a class="remove-from-cart"
+                            </td>                            
+                            <td class="text-center">
+                                <a class="remove-from-cart"
                                     href="{{ route('front.cart.destroy', $key) }}" data-toggle="tooltip"
-                                    title="Remove item"><i class="icon-x"></i></a></td>
+                                    title="Remove item"><i class="icon-x"></i></a>
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>
@@ -82,7 +143,6 @@
         </div>
     </div>
 </div>
-
 
 <div class="card border-0 mt-4">
     <div class="card-body">
@@ -107,7 +167,7 @@
             </div>
 
             <div class="text-right column text-lg">
-                <span class="text-muted">{{ __('Subtotal') }}: </span>
+                <span class="text-muted">{{ __('Subtotal') }}:</span>
                 <span class="text-gray-dark">
                     {{ PriceHelper::setCurrencyPrice($cartTotal - (Session::has('coupon') ? Session::get('coupon')['discount'] : 0)) }}
                 </span>

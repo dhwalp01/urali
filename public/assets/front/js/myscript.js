@@ -1064,11 +1064,11 @@ $(function ($) {
       $("#current_stock").val(stock);
 
       // Regenerate quantity dropdown
-      // const $quantitySelect = $("#quantity");
-      // $quantitySelect.empty();
-      // for (let i = 1; i <= stock; i++) {
-      //   $quantitySelect.append(`<option value="${i}">${i}</option>`);
-      // }
+      const $quantitySelect = $("#quantity");
+      $quantitySelect.empty();
+      for (let i = 1; i <= stock; i++) {
+        $quantitySelect.append(`<option value="${i}">${i}</option>`);
+      }
 
       if (status == 1) {
         let addToCartUrl = `${mainurl}/product/add/cart?item_id=${itemId}&options_ids=${options_ids}&attribute_ids=${attribute_ids}&quantity=${quantity}&type=${type}&item_key=${item_key}&add_type=${add_type}`;

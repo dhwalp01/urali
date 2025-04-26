@@ -138,7 +138,7 @@ class PriceHelper
 
     public static function grandCurrencyPrice($item)
     {
-        // For products with attributes, calculate from first option
+        // If product has attributes, calculate from first option
         if (count($item->attributes) > 0) {
             $optionPrice = 0;
             foreach ($item->attributes as $attr) {
@@ -173,9 +173,7 @@ class PriceHelper
                 if (isset($attr->options[0])) {
                     $option_price += PriceHelper::convertPrice($attr->options[0]->price);
                 }
-
             }
-
         }
 
         if (Session::has('currency')) {
@@ -183,10 +181,8 @@ class PriceHelper
         } else {
             $curr = Currency::where('is_default', 1)->first();
         }
-        $price = (count($item->attributes) > 0) ? $option_price : $item->discount_price;
-
-        return $price;
-
+        
+        return count($item->attributes) > 0 ? $option_price : $item->discount_price;
     }
 
     public static function Discount($discount)
@@ -517,6 +513,26 @@ class PriceHelper
         
         $discount = (($originalPrice - $salePrice) / $originalPrice) * 100;
         return round($discount);
+    }
+
+    public static function getCartItemPrice($item)
+    {
+        $basePrice = $item['main_price'];
+        
+        // Check for attribute sale prices first
+        if (isset($item['attribute']['option_sale_price']) && !empty($item['attribute']['option_sale_price'])) {
+            return array_sum($item['attribute']['option_sale_price']);
+        } 
+        // Then check regular attribute prices
+        elseif (isset($item['attribute']['option_price']) && !empty($item['attribute']['option_price'])) {
+            return array_sum($item['attribute']['option_price']);
+        } 
+        // Check for product discount price
+        elseif (isset($item['discount_price']) && $item['discount_price'] > 0) {
+            return $item['discount_price'];
+        }
+        // Fallback to base price
+        return $basePrice;
     }
 
 }
