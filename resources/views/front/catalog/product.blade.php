@@ -199,7 +199,7 @@
                      <div class="form-group product-quantity mb-3 align-items-center gap-1">
                         <label for="quantity" class="form-label d-block">{{ __('Quantity') }}</label>
                         <select class="form-select w-auto d-inline-block" id="quantity" name="quantity">
-                           @for ($i = 1; $i <= min(10, $item->stock); $i++)
+                           @for ($i = 1; $i <= $item->stock; $i++)
                            <option value="{{ $i }}">{{ $i }}</option>
                            @endfor
                         </select>
@@ -659,126 +659,99 @@
 @section('script')
 <script>
    $(function () {
-      function updatePriceAndStock() {
-         let total = 0;
-         let saleTotal = 0;
-         let stock = null;
-         let hasSale = false;
-         let discountPercentage = 0;
-         let hasAttributes = $('input[type=radio][name^="attribute_"]').length > 0;
+    // Only initialize price updates for products WITH attributes
+    if ($('input[type=radio][name^="attribute_"]').length > 0) {
+        function updatePriceAndStock() {
+            let total = 0;
+            let saleTotal = 0;
+            let stock = null;
+            let hasSale = false;
+            let discountPercentage = 0;
 
-         if (hasAttributes) {
-            // For products with attributes
             $('input[type=radio][name^="attribute_"]:checked').each(function () {
-                  const $input = $(this);
-                  const price = parseFloat($input.data('target')) || 0;
-                  const salePrice = $input.data('sale-price') ? parseFloat($input.data('sale-price')) : price;
-                  
-                  total += price;
-                  saleTotal += salePrice;
-                  
-                  if (salePrice < price) {
-                     hasSale = true;
-                     const optionDiscount = Math.round(((price - salePrice) / price) * 100);
-                     if (optionDiscount > discountPercentage) {
+                const $input = $(this);
+                const price = parseFloat($input.data('target')) || 0;
+                const salePrice = $input.data('sale-price') ? parseFloat($input.data('sale-price')) : price;
+                
+                total += price;
+                saleTotal += salePrice;
+                
+                if (salePrice < price) {
+                    hasSale = true;
+                    const optionDiscount = Math.round(((price - salePrice) / price) * 100);
+                    if (optionDiscount > discountPercentage) {
                         discountPercentage = optionDiscount;
-                     }
-                  }
-                  
-                  const currentStock = parseInt($input.data('stock'));
-                  if (stock === null || currentStock < stock) {
-                     stock = currentStock;
-                  }
+                    }
+                }
+                
+                const currentStock = parseInt($input.data('stock'));
+                if (stock === null || currentStock < stock) {
+                    stock = currentStock;
+                }
             });
-         } else {
-            // For products without attributes - use the data attributes
-            const $mainPrice = $('#main_price');
-            const basePrice = parseFloat($mainPrice.data('base-price')) || 0;
-            const discountPrice = parseFloat($mainPrice.data('discount-price')) || basePrice;
-            stock = parseInt("{{ $item->stock }}") || 0;
-            
-            total = basePrice;
-            saleTotal = discountPrice;
-            
-            if (discountPrice < basePrice && basePrice > 0) {
-                  hasSale = true;
-                  discountPercentage = Math.round(((basePrice - discountPrice) / basePrice) * 100);
-            }
-         }
 
-        // Update discount badge
-        const $discountBadge = $('.product-badge.bg-goldenrod.ppp-t');
-        if (hasSale) {
-            if ($discountBadge.length) {
-                $discountBadge.text('-' + discountPercentage + '%');
+            // Update display
+            const currency = $('#set_currency').val();
+            const direction = $('#currency_direction').val();
+            const currencyValue = parseFloat($('#set_currency_val').val()) || 1;
+
+            // Calculate final prices
+            const finalTotal = total * currencyValue;
+            const finalSaleTotal = saleTotal * currencyValue;
+
+            let priceHtml = '';
+            if (hasSale) {
+                if (direction === '1') {
+                    priceHtml = `<small class="d-inline-block"><del>${currency}${finalTotal.toFixed(2)}</del></small>
+                                <span class="main-price">${currency}${finalSaleTotal.toFixed(2)}</span>`;
+                } else {
+                    priceHtml = `<small class="d-inline-block"><del>${finalTotal.toFixed(2)}${currency}</del></small>
+                                <span class="main-price">${finalSaleTotal.toFixed(2)}${currency}</span>`;
+                }
             } else {
-                $('.product-gallery').append('<div class="product-badge bg-goldenrod ppp-t">-' + discountPercentage + '%</div>');
+                if (direction === '1') {
+                    priceHtml = `<span class="main-price">${currency}${finalTotal.toFixed(2)}</span>`;
+                } else {
+                    priceHtml = `<span class="main-price">${finalTotal.toFixed(2)}${currency}</span>`;
+                }
             }
-        } else if ($discountBadge.length) {
-            $discountBadge.remove();
+
+            $('.price-area').html(priceHtml);
+
+            // Update stock display
+            $('#dynamic_stock').html(
+                stock > 0
+                    ? `<span class="text-success d-inline-block">In Stock <b>(${stock} items)</b></span>`
+                    : `<span class="text-danger d-inline-block">Out of Stock</span>`
+            );
+
+            // Update quantity dropdown
+            const $quantitySelect = $('#quantity');
+            $quantitySelect.empty();
+            const maxQty = stock;
+            for (let i = 1; i <= maxQty; i++) {
+                $quantitySelect.append(`<option value="${i}">${i}</option>`);
+            }
+
+            // Update hidden stock field
+            $('#current_stock').val(stock);
         }
 
-        // Currency
-        const currency = $('#set_currency').val();
-        const direction = $('#currency_direction').val();
-        const currencyValue = parseFloat($('#set_currency_val').val()) || 1;
+        // Set up event handlers only for products with attributes
+        $('.option-box input[type=radio]').on('change', function () {
+            const $box = $(this).closest('.option-box');
+            const name = $(this).attr('name');
 
-        // Calculate final prices
-        const finalTotal = total * currencyValue;
-        const finalSaleTotal = saleTotal * currencyValue;
+            // Remove selected from all in this group
+            $(`input[name="${name}"]`).closest('.option-box').removeClass('selected');
+            $box.addClass('selected');
 
-        let priceHtml = '';
-        if (hasSale) {
-            if (direction === '1') {
-                priceHtml = `<small class="d-inline-block"><del>${currency}${finalTotal.toFixed(2)}</del></small>
-                             <span class="main-price">${currency}${finalSaleTotal.toFixed(2)}</span>`;
-            } else {
-                priceHtml = `<small class="d-inline-block"><del>${finalTotal.toFixed(2)}${currency}</del></small>
-                             <span class="main-price">${finalSaleTotal.toFixed(2)}${currency}</span>`;
-            }
-        } else {
-            if (direction === '1') {
-                priceHtml = `<span class="main-price">${currency}${finalTotal.toFixed(2)}</span>`;
-            } else {
-                priceHtml = `<span class="main-price">${finalTotal.toFixed(2)}${currency}</span>`;
-            }
-        }
+            updatePriceAndStock();
+        });
 
-        $('.price-area').html(priceHtml);
-
-        // Update stock display
-        $('#dynamic_stock').html(
-            stock > 0
-                ? `<span class="text-success d-inline-block">In Stock <b>(${stock} items)</b></span>`
-                : `<span class="text-danger d-inline-block">Out of Stock</span>`
-        );
-
-        // Update quantity dropdown
-        const $quantitySelect = $('#quantity');
-        $quantitySelect.empty();
-        const maxQty = Math.min(10, stock); // Limit to 10 or available stock
-        for (let i = 1; i <= maxQty; i++) {
-            $quantitySelect.append(`<option value="${i}">${i}</option>`);
-        }
-
-        // Update hidden stock field
-        $('#current_stock').val(stock);
-    }
-
-    // Handle selection class and trigger update
-    $('.option-box input[type=radio]').on('change', function () {
-        const $box = $(this).closest('.option-box');
-        const name = $(this).attr('name');
-
-        // Remove selected from all in this group
-        $(`input[name="${name}"]`).closest('.option-box').removeClass('selected');
-        $box.addClass('selected');
-
+        // Initial trigger
         updatePriceAndStock();
-    });
-
-    // Initial trigger
-    updatePriceAndStock();
+    }
 });
 </script>
 @endsection
