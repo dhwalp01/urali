@@ -5433,6 +5433,7 @@ video {
 .mobile-menu.open {
   left: 0; /* slide in */
   box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+  background-color: #fff;
 }
 
 .mobile-menu .mobile-search {

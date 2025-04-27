@@ -29,26 +29,131 @@
                 <div class="shop-top-filter-wrapper">
                     <div class="row">
                         <div class="col-md-10 gd-text-sm-center">
-                            <div class="sptfl">
-                                <div class="quickFilter">
-                                    <h4 class="quickFilter-title"><i class="fas fa-filter"></i>{{__('Quick filter')}}</h4>
-                                    <ul id="quick_filter">
-                                        <li><a datahref=""><i class="icon-chevron-right pr-2"></i>{{__('All products')}} </a></li>
-                                        <li class=""><a href="javascript:;" data-href="feature"><i class="icon-chevron-right pr-2"></i>{{__('Featured products')}} </a></li>
-                                        <li class=""><a href="javascript:;" data-href="best"><i class="icon-chevron-right pr-2"></i>{{__('Best sellers')}} </a></li>
-                                        <li class=""><a href="javascript:;" data-href="top"><i class="icon-chevron-right pr-2"></i>{{__('Top rated')}} </a></li>
-                                        <li class=""><a href="javascript:;" data-href="new"><i class="icon-chevron-right pr-2"></i>{{__('New Arrival')}} </a></li>
-                                    </ul>
+                          <div class="sptfl">
+                            <!-- Mobile Filter Button (Visible only on mobile) -->
+                            <button class="mobile-filter-toggle d-lg-none btn btn-primary btn-sm mb-3">
+                                <i class="fas fa-filter"></i> {{__('Filters & Sorting')}}
+                            </button>
+                        
+                            <div class="filter-container">
+                                <!-- Mobile/Responsive Filter Section -->
+                                <div class="mobile-filter-section d-lg-none">
+                                    <!-- Quick Filter Section -->
+                                    <div class="quickFilter">
+                                        <h4 class="quickFilter-title">
+                                            <i class="fas fa-filter"></i>{{__('Quick filter')}}
+                                            <span class="mobile-close-filter d-lg-none"><i class="icon-x"></i></span>
+                                        </h4>
+                                        <ul id="quick_filter">
+                                            <li><a href="javascript:;" data-href=""><i class="icon-chevron-right pr-2"></i>{{__('All products')}}</a></li>
+                                            <li><a href="javascript:;" data-href="feature"><i class="icon-chevron-right pr-2"></i>{{__('Featured products')}}</a></li>
+                                            <li><a href="javascript:;" data-href="best"><i class="icon-chevron-right pr-2"></i>{{__('Best sellers')}}</a></li>
+                                            <li><a href="javascript:;" data-href="top"><i class="icon-chevron-right pr-2"></i>{{__('Top rated')}}</a></li>
+                                            <li><a href="javascript:;" data-href="new"><i class="icon-chevron-right pr-2"></i>{{__('New Arrival')}}</a></li>
+                                        </ul>
+                                    </div>
+                        
+                                    <!-- Shop Sorting Section -->
+                                    <div class="shop-sorting">
+                                        <h4 class="quickFilter-title d-lg-none">
+                                            <i class="fas fa-sort-amount-down"></i>{{__('Sorting')}}
+                                            <span class="mobile-close-filter"><i class="icon-x"></i></span>
+                                        </h4>
+                                        <div class="sorting-options">
+                                            <div class="form-group">
+                                                <label for="sorting">{{__('Sort by')}}:</label>
+                                                <select class="form-control" id="sorting">
+                                                    <option value="">{{__('All Products')}}</option>
+                                                    <option value="low_to_high" {{request()->input('low_to_high') ? 'selected' : ''}}>{{__('Low - High Price')}}</option>
+                                                    <option value="high_to_low" {{request()->input('high_to_low') ? 'selected' : ''}}>{{__('High - Low Price')}}</option>
+                                                </select>
+                                            </div>
+                                            <div class="showing-count">
+                                                <span class="text-muted">{{__('Showing')}}:</span>
+                                                <span>1 - {{$setting->view_product}} {{__('items')}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="shop-sorting">
-                                    <label for="sorting">{{__('Sort by')}}:</label>
-                                    <select class="form-control" id="sorting">
-                                    <option value="">{{__('All Products')}}</option>
-                                    <option value="low_to_high" {{request()->input('low_to_high') ? 'selected' : ''}}>{{__('Low - High Price')}}</option>
-                                    <option value="high_to_low" {{request()->input('high_to_low') ? 'selected' : ''}}>{{__('High - Low Price')}}</option>
-                                    </select><span class="text-muted">{{__('Showing')}}:</span><span>1 - {{$setting->view_product}} {{__('items')}}</span>
-                                </div>
+                        
+                                <!-- Desktop Filter Section -->
+                                <div class="sptfl d-sm-none desktop-filter-section">
+                                  <div class="quickFilter">
+                                      <h4 class="quickFilter-title"><i class="fas fa-filter"></i>{{('Quick filter')}}</h4>
+                                      <ul id="quick_filter">
+                                          <li><a datahref=""><i class="icon-chevron-right pr-2"></i>{{('All products')}} </a></li>
+                                          <li class=""><a href="javascript:;" data-href="feature"><i class="icon-chevron-right pr-2"></i>{{('Featured products')}} </a></li>
+                                          <li class=""><a href="javascript:;" data-href="best"><i class="icon-chevron-right pr-2"></i>{{('Best sellers')}} </a></li>
+                                          <li class=""><a href="javascript:;" data-href="top"><i class="icon-chevron-right pr-2"></i>{{('Top rated')}} </a></li>
+                                          <li class=""><a href="javascript:;" data-href="new"><i class="icon-chevron-right pr-2"></i>{{('New Arrival')}} </a></li>
+                                      </ul>
+                                  </div>
+                                  <div class="shop-sorting">
+                                      <label for="sorting">{{('Sort by')}}:</label>
+                                      <select class="form-control" id="sorting">
+                                      <option value="">{{('All Products')}}</option>
+                                      <option value="low_to_high" {{request()->input('low_to_high') ? 'selected' : ''}}>{{('Low - High Price')}}</option>
+                                      <option value="high_to_low" {{request()->input('high_to_low') ? 'selected' : ''}}>{{('High - Low Price')}}</option>
+                                      </select><span class="text-muted">{{('Showing')}}:</span><span>1 - {{$setting->view_product}} {{('items')}}</span>
+                                  </div>
+                              </div>
                             </div>
+                        </div>
+                        <style>
+                            
+                            /* Mobile-specific styles */
+                            @media (max-width: 991px) {
+                                .mobile-filter-toggle {
+                                    width: 100%;
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
+                                }
+                                
+                                .mobile-filter-toggle i {
+                                    margin-right: 8px;
+                                }
+                                
+                                .filter-container {
+                                    display: none;
+                                    position: fixed;
+                                    top: 0;
+                                    left: 0;
+                                    right: 0;
+                                    bottom: 0;
+                                    background: rgba(0,0,0,0.5);
+                                    z-index: 1000;
+                                    padding: 20px;
+                                    overflow-y: auto;
+                                }
+                                
+                                .filter-container.active {
+                                    display: block;
+                                }
+                                
+                                .mobile-filter-section .quickFilter, 
+                                .mobile-filter-section .shop-sorting {
+                                    background: white;
+                                    margin: 10px 0;
+                                    position: relative;
+                                }
+                                
+                                .mobile-close-filter {
+                                    cursor: pointer;
+                                    color: #666;
+                                }
+                                
+                                .mobile-filter-section .shop-sorting .sorting-options {
+                                    background: #f8f9fa;
+                                    padding: 15px;
+                                    border-radius: 8px;
+                                }
+                                
+                                .desktop-filter-section {
+                                    display: none !important;
+                                }
+                            }
+                        </style>
                         </div>
                         <div class="col-12 text-end col-md-2 gd-text-sm-center">
                             <div class="shop-view"><a class="list-view {{Session::has('view_catalog') && Session::get('view_catalog') == 'grid' ? 'active' : ''}} " data-step="grid" href="javascript:;" data-href="{{route('front.catalog').'?view_check=grid'}}"><i class="fas fa-th-large"></i></a>
@@ -200,4 +305,38 @@
 
         <button type="submit" id="search_button" class="d-none"></button>
     </form>
+@endsection
+@section('script')
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+      // Only apply mobile filter logic on mobile screens
+      if (window.innerWidth <= 991) {
+          const filterToggle = document.querySelector('.mobile-filter-toggle');
+          const filterContainer = document.querySelector('.filter-container');
+          const closeButtons = document.querySelectorAll('.mobile-close-filter');
+          
+          if (filterToggle && filterContainer) {
+              filterToggle.addEventListener('click', function() {
+                  filterContainer.classList.add('active');
+                  document.body.style.overflow = 'hidden';
+              });
+              
+              closeButtons.forEach(button => {
+                  button.addEventListener('click', function() {
+                      filterContainer.classList.remove('active');
+                      document.body.style.overflow = '';
+                  });
+              });
+              
+              // Close when clicking outside on mobile
+              filterContainer.addEventListener('click', function(e) {
+                  if (e.target === filterContainer) {
+                      filterContainer.classList.remove('active');
+                      document.body.style.overflow = '';
+                  }
+              });
+          }
+      }
+  });
+</script>
 @endsection
