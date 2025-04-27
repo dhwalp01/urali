@@ -568,8 +568,8 @@
                      </div>
                   </div>
                   <div class="product-card-body">
-                     <div class="product-category"><a
-                        href="{{ route('front.catalog') . '?category=' . $related->category->slug }}">{{ $related->category->name }}</a>
+                     <div class="product-category">
+                        <a href="{{route('front.category', $item->category->slug)}}">{{$item->category->name}}</a>
                      </div>
                      <h3 class="product-title"><a
                         href="{{ route('front.product', $related->slug) }}">

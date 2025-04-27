@@ -187,9 +187,22 @@ class CatalogController extends Controller
             'childcategory' => $childcategory,
             'checkType'  => $checkType,
             'brands' => Brand::withCount('items')->whereStatus(1)->get(),
-            'categories' => Category::whereStatus(1)->orderby('serial','asc')->withCount(['items' => function($query) {
-                $query->where('status',1);
-            }])->get(),
+            'categories' => Category::whereStatus(1)
+                ->orderby('serial','asc')
+                ->withCount(['items' => function($query) {
+                    $query->where('status',1);
+                }])
+                ->with(['subcategory' => function($query) {
+                    $query->withCount(['items' => function($query) {
+                        $query->where('status',1);
+                    }])
+                    ->with(['childcategory' => function($query) {
+                        $query->withCount(['items' => function($query) {
+                            $query->where('status',1);
+                        }]);
+                    }]);
+                }])
+            ->get(),
         ]);
 	}
 

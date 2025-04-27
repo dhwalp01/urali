@@ -1090,7 +1090,7 @@ select.form-control {
     text-align: center;
   }
   .menu-top-area .right-area {
-    text-align: center !important;
+    text-align: end !important;
   }
   #details .comparison-table,
   .u-table-res {
@@ -5357,8 +5357,26 @@ video {
 .mobile-menu,
 .page-title,
 .site-footer {
-  background-color: #fff;
+  background-color: #30231b;
+  color: #fff;
 }
+
+.site-footer .widget-title {
+  color: #fff;
+}
+
+.site-footer .widget-title::after{
+  background-color: rgb(225 145 56) !important;
+}
+
+.site-footer .widget-categories ul > li > a, .widget-links ul > li > a {
+  color: #fff;
+}
+
+.site-footer .widget-links ul > li > a:hover{
+  color: rgb(225 145 56) !important;
+}
+
 .mm-heading-area h4 {
   font-size: 18px;
   font-weight: 400;
@@ -5379,6 +5397,39 @@ video {
   box-shadow: none;
   overflow-y: auto;
 }
+
+/* CSS-only solution for mobile menu animation */
+
+/* Animation for the mobile menu */
+.mobile-menu {
+  transform: translateX(-100%) !important;
+  transition: transform 0.3s ease-out !important;
+}
+
+.mobile-menu.open {
+  transform: translateX(0) !important;
+}
+
+/* Make sure the menu is visible when animating */
+.mobile-menu {
+  display: block !important;
+}
+
+/* Hide it when closed and not animating */
+.mobile-menu:not(.open) {
+  visibility: hidden;
+}
+
+.mobile-menu.closing {
+  visibility: visible;
+  transform: translateX(-100%) !important;
+}
+
+
+.mobile-menu.open {
+  visibility: visible;
+}
+
 .mobile-menu.open {
   left: 0; /* slide in */
   box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
@@ -5459,7 +5510,7 @@ video {
 .breadcrumbs > li {
   display: inline-block;
   padding: 5px 0;
-  color: #888;
+  color: #fff;
   font-size: 13px;
   cursor: default;
   vertical-align: middle;
@@ -5467,14 +5518,14 @@ video {
 .breadcrumbs > li.separator {
   margin-top: 2px;
   margin-left: 3px;
-  color: #505050;
+  color: #fff;
   font-family: feather;
   font-size: 14px;
 }
 .breadcrumbs > li > a,
 .post-meta > li > a {
   transition: color 0.25s;
-  color: #505050;
+  color: #fff;
   text-decoration: none;
 }
 .breadcrumbs > li:first-child > a::before {
@@ -5546,12 +5597,13 @@ video {
   margin: 0;
   padding-top: 15px;
   padding-bottom: 15px;
-  color: rgb(0 0 0 / 64%);
+  color: #fff;
   font-size: 15px;
   font-weight: 500;
   text-align: center;
   border-top: 1px solid rgb(229 229 229);
 }
+
 .footer-copyright > a {
   transition: color 0.25s;
   color: rgba(255, 255, 255, 0.5);

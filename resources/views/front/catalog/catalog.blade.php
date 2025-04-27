@@ -28,8 +28,41 @@
                     ">{{__('out of stock')}}</div>
                     @endif
 
-                @if($item->previous_price && $item->previous_price !=0)
-                <div class="product-badge product-badge2 bg-info"> -{{PriceHelper::DiscountPercentage($item)}}</div>
+                    @php
+                    $discountPercentage = null;
+                    
+                    // Check if this is a product with attributes
+                    $hasAttributesWithStock = count($item->attributes) > 0 && 
+                        $item->attributes->flatMap->options->where('stock', '>', 0)->count() > 0;
+                        
+                    if ($hasAttributesWithStock) {
+                        // For products with attributes, find options with sale prices
+                        $options = $item->attributes->flatMap->options->where('stock', '>', 0);
+                        
+                        // Get options that have both regular price and sale price
+                        $optionsWithSale = $options->filter(function($option) {
+                            return $option->sale_price && $option->sale_price > 0 && $option->sale_price < $option->price;
+                        });
+                        
+                        if ($optionsWithSale->count() > 0) {
+                            // Calculate highest discount percentage among options
+                            $highestDiscount = 0;
+                            foreach ($optionsWithSale as $option) {
+                                $discount = (($option->price - $option->sale_price) / $option->price) * 100;
+                                $highestDiscount = max($highestDiscount, $discount);
+                            }
+                            $discountPercentage = round($highestDiscount);
+                        }
+                    } else {
+                        // For regular products, use existing logic
+                        if($item->previous_price && $item->previous_price != 0) {
+                            $discountPercentage = PriceHelper::DiscountPercentage($item);
+                        }
+                    }
+                @endphp
+            
+                @if($discountPercentage)
+                    <div class="product-badge product-badge2 bg-info">-{{$discountPercentage}}%</div>
                 @endif
                 <div class="product-thumb">
                     <a href="{{route('front.product',$item->slug)}}">
@@ -49,8 +82,8 @@
                 </div>
                 <div class="product-card-body">
                     <div class="product-category">
-                        <a href="{{route('front.catalog').'?category='.$item->category->slug}}">{{$item->category->name}}</a>
-                    </div>
+                        <a href="{{route('front.category', $item->category->slug)}}">{{$item->category->name}}</a>
+                    </div>                    
                     <h3 class="product-title"><a href="{{route('front.product',$item->slug)}}">
                         {{ Str::limit($item->name, 38) }}
                     </a></h3>
@@ -140,7 +173,9 @@
                         </div>
                             <div class="product-card-inner">
                                 <div class="product-card-body">
-                                    <div class="product-category"><a href="{{route('front.catalog').'?category='.$item->category->slug}}">{{$item->category->name}}</a></div>
+                                    <div class="product-category">
+                                        <a href="{{route('front.category', $item->category->slug)}}">{{$item->category->name}}</a>
+                                    </div>
                                     <h3 class="product-title"><a href="{{route('front.product',$item->slug)}}">
                                         {{ Str::limit($item->name, 52) }}
                                     </a></h3>

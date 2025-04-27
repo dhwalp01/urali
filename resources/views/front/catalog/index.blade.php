@@ -75,17 +75,27 @@
                 <ul id="category_list" class="category-scroll">
                     @foreach ($categories as $getcategory)
                     <li class="has-children  {{isset($category) && $category->id == $getcategory->id ? 'expanded active' : ''}} ">
-                      <a class="category_search" href="javascript:;"  data-href="{{$getcategory->slug}}">{{$getcategory->name}}</a>
+                      <a class="category_search" href="javascript:;"  data-href="{{$getcategory->slug}}">
+                        {{$getcategory->name}}
+                        <span class="count">({{ $getcategory->items_count }})</span>
+                      </a>
 
                         <ul id="subcategory_list">
                             @foreach ($getcategory->subcategory as $getsubcategory)
                             <li class="{{isset($subcategory) && $subcategory->id == $getsubcategory->id ? 'active' : ''}}">
-                              <a class="subcategory" href="javascript:;" data-href="{{$getsubcategory->slug}}">{{$getsubcategory->name}}</a>
+                              <a class="subcategory" href="javascript:;" data-href="{{$getsubcategory->slug}}">
+                                {{$getsubcategory->name}}
+                                <span class="count">({{ $getsubcategory->items_count }})</span>
+                              </a>
+                              
 
                               <ul id="childcategory_list">
                                 @foreach ($getsubcategory->childcategory as $getchildcategory)
                                 <li class="{{isset($childcategory) && $getchildcategory->id == $getchildcategory->id ? 'active' : ''}}">
-                                  <a class="childcategory" href="javascript:;" data-href="{{$getchildcategory->slug}}">{{$getchildcategory->name}}</a>
+                                  <a class="childcategory" href="javascript:;" data-href="{{$getchildcategory->slug}}">
+                                    {{$getchildcategory->name}}
+                                    <span class="count">({{ $getchildcategory->items_count }})</span>
+                                  </a>
 
                                 </li>
                                 @endforeach
@@ -124,24 +134,32 @@
               @endif
 
               @if ($setting->is_attribute_search == 1)
-              @foreach ($attrubutes as $attrubute)
-              
-              <section class="widget widget-categories card rounded p-4">
-                <h3 class="widget-title">{{ __('Filter by') }} {{$attrubute->name}}</h3>
-                @foreach ($options as $option)
-                @if ($attrubute->keyword == $option->attribute->keyword)
-                <div class="custom-control custom-checkbox">
-                  <input class="custom-control-input option" {{isset($subcategory) && $subcategory->id == $option->id ? 'checked' : ''}}   type="checkbox" value="{{$option->name}}" id="{{$attrubute->id}}{{$option->name}}">
-                  <label class="custom-control-label" for="{{$attrubute->id}}{{$option->name}}">{{$option->name}}<span class="text-muted"></span></label>
-              </div>  
-                @endif
-                @endforeach
-              </section>
-              @endforeach
+                  @foreach ($attrubutes as $attrubute)
+                  <section class="widget widget-categories card rounded p-4">
+                      <h3 class="widget-title">{{ __('Filter by') }} {{$attrubute->name}}</h3>
+                      @foreach ($options as $option)
+                          @if ($attrubute->keyword == $option->attribute->keyword)
+                              <div class="custom-control custom-checkbox">
+                                  <input class="custom-control-input attribute-option" 
+                                        name="options[]" 
+                                        type="checkbox" 
+                                        data-attribute="{{$attrubute->keyword}}"
+                                        value="{{$option->name}}" 
+                                        id="{{$attrubute->id}}{{$option->name}}"
+                                        {{request()->input('option') && in_array($option->name, explode(',', request()->input('option'))) ? 'checked' : ''}}>
+                                  <label class="custom-control-label" for="{{$attrubute->id}}{{$option->name}}">
+                                      {{$option->name}}
+                                      <span class="text-muted">({{$option->items_count ?? 0}})</span>
+                                  </label>
+                              </div>  
+                          @endif
+                      @endforeach
+                  </section>
+                  @endforeach
               @endif
 
               <!-- Widget Brand Filter-->
-              <section class="widget widget-categories card rounded p-4">
+              {{-- <section class="widget widget-categories card rounded p-4">
                 <h3 class="widget-title">{{__('Filter by Brand')}}</h3>
                 <div class="custom-control custom-checkbox">
                   <input class="custom-control-input brand-select" type="checkbox" value="" id="all-brand">
@@ -153,7 +171,7 @@
                     <label class="custom-control-label" for="{{$getbrand->slug}}">{{$getbrand->name}}</label>
                   </div>
                 @endforeach
-              </section>
+              </section> --}}
 
 
             </aside>
@@ -183,4 +201,3 @@
         <button type="submit" id="search_button" class="d-none"></button>
     </form>
 @endsection
-

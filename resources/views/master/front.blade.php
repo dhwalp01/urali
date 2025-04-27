@@ -136,7 +136,8 @@ body_theme4 @endif
                             <div class="login-register ">
                                 @if (!Auth::user())
                                     <a class="track-order-link mr-0" href="{{ route('user.login') }}">
-                                        {{ __('Login') }}
+                                        <i
+                                    class="icon-user"></i>{{ __('Login') }}
                                     </a>
                                 @else
                                     <div class="t-h-dropdown">
@@ -213,14 +214,6 @@ body_theme4 @endif
                                     </a>
                                 </div>
 
-                                <div class="toolbar-item hidden-on-mobile"><a
-                                        href="{{ route('fornt.compare.index') }}">
-                                        <div><span class="compare-icon"><i class="icon-repeat"></i><span
-                                                    class="count-label compare_count">{{ Session::has('compare') ? count(Session::get('compare')) : '0' }}</span></span>
-                                                    {{-- <span class="text-label">{{ __('Compare') }}</span> --}}
-                                        </div>
-                                    </a>
-                                </div>
                                 @if (Auth::check())
                                     <div class="toolbar-item hidden-on-mobile"><a
                                             href="{{ route('user.wishlist.index') }}">
@@ -424,7 +417,7 @@ body_theme4 @endif
                         <p class="mb-1"><strong>{{ __('Phone') }}: </strong> {{ $setting->footer_phone }}</p>
                         <p class="mb-1"><strong>{{ __('Email') }}: </strong> {{ $setting->footer_email }}</p>
                         <ul class="list-unstyled text-sm">
-                            <li><span class=""><strong>{{ $setting->working_days_from_to }}:
+                            <li><span class=""><strong>{{ $setting->working_days_from_to }}
                                     </strong></span>{{ $setting->friday_start }} - {{ $setting->friday_end }}</li>
                         </ul>
                         @php
@@ -693,8 +686,7 @@ body_theme4 @endif
                 }
             });
         });
-    </script> 
-
+    </script>
 </body>
 
 </html>

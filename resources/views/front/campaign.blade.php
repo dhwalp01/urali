@@ -67,7 +67,7 @@
                             @endif
 
                             @if($compaign_item->previous_price && $compaign_item->previous_price !=0)
-                            <div class="product-badge product-badge2 bg-info"> -{{PriceHelper::DiscountPercentage($compaign_item->item)}}</div>
+                                <div class="product-badge product-badge2 bg-info"> -{{PriceHelper::DiscountPercentage($compaign_item->item)}}</div>
                             @endif
 
                         <img src="{{url('/storage/images/'.$compaign_item->item->thumbnail)}}" alt="Product">
