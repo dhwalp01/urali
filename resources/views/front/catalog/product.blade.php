@@ -536,15 +536,30 @@
                         {{ __('out of stock') }}
                     </div>
                 @endif
-                  @if ($related->previous_price && $related->previous_price != 0)
-                  <div class="product-badge product-badge2 bg-info">
-                     -{{ PriceHelper::DiscountPercentage($related) }}
-                  </div>
-                  @endif
-                  @if ($related->previous_price && $related->previous_price != 0)
-                  <div class="product-badge product-badge2 bg-info">
-                     -{{ PriceHelper::DiscountPercentage($related) }}
-                  </div>
+                  @php
+                     // Calculate discount percentage based on whether product has attributes
+                     $relatedDiscountPercentage = 0;
+                     
+                     if (count($related->attributes) > 0) {
+                        // For products with attributes, find the highest discount percentage among options
+                        foreach ($related->attributes as $attribute) {
+                              foreach ($attribute->options as $option) {
+                                 if ($option->sale_price && $option->sale_price < $option->price) {
+                                    $optionDiscount = round((($option->price - $option->sale_price) / $option->price) * 100);
+                                    if ($optionDiscount > $relatedDiscountPercentage) {
+                                          $relatedDiscountPercentage = $optionDiscount;
+                                    }
+                                 }
+                              }
+                        }
+                     } elseif ($related->previous_price && $related->previous_price != 0) {
+                        // For regular products - use the existing DiscountPercentage method
+                        $relatedDiscountPercentage = str_replace('%', '', PriceHelper::DiscountPercentage($related));
+                     }
+                  @endphp
+
+                  @if ($relatedDiscountPercentage > 0)
+                     <div class="product-badge product-badge2 bg-info">-{{ $relatedDiscountPercentage }}%</div>
                   @endif
                   <div class="product-thumb">
                      <div class="product-thumb-image-wrapper">

@@ -13,18 +13,19 @@
                         @foreach($categorySlider as $cat)
                         <div class="cat-slider p-2 item text-center">
                             <a href="{{ route('front.category', $cat->slug) }}">
-                            <img 
-                                src="{{ asset('storage/images/'.$cat->photo) }}"  {{-- ← use photo --}}
-                                alt="{{ $cat->name }}" 
-                                class="w-100 rounded img-fluid mb-2" 
-                            >
-                            <div class="category-title text-dark fw-bold">{{ $cat->name }}</div>
+                                <div class="img-container" style="height: 200px; overflow: hidden;">
+                                    <img 
+                                        src="{{ asset('storage/images/'.$cat->photo) }}"
+                                        alt="{{ $cat->name }}" 
+                                        class="w-100 rounded h-100"
+                                        style="object-fit: cover; object-position: top center;"
+                                    >
+                                </div>
+                                <div class="category-title text-dark fw-bold mt-2">{{ $cat->name }}</div>
                             </a>
                         </div>
                         @endforeach
                     </div>                          
-                </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -514,14 +515,30 @@
                                                         $isInStock = count($item->attributes) > 0 ? $hasAttributeStock : $item->is_stock();
                                                     @endphp
 
-                                                    @if (!$isInStock)
-                                                        <div class="product-badge bg-secondary border-default text-body">
-                                                            {{ __('out of stock') }}
-                                                        </div>
-                                                    @endif
-                                                    @if ($item->previous_price && $item->previous_price != 0)
-                                                        <div class="product-badge product-badge2 bg-info">
-                                                            -{{ PriceHelper::DiscountPercentage($item) }}</div>
+                                                    @php
+                                                        // Calculate discount percentage based on whether product has attributes
+                                                        $discountPercentage = 0;
+                                                        
+                                                        if (count($item->attributes) > 0) {
+                                                            // For products with attributes, find the highest discount percentage among options
+                                                            foreach ($item->attributes as $attribute) {
+                                                                foreach ($attribute->options as $option) {
+                                                                    if ($option->sale_price && $option->sale_price < $option->price) {
+                                                                        $optionDiscount = round((($option->price - $option->sale_price) / $option->price) * 100);
+                                                                        if ($optionDiscount > $discountPercentage) {
+                                                                            $discountPercentage = $optionDiscount;
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        } elseif ($item->previous_price && $item->previous_price != 0) {
+                                                            // For regular products - use the existing DiscountPercentage method
+                                                            $discountPercentage = str_replace('%', '', PriceHelper::DiscountPercentage($item));
+                                                        }
+                                                    @endphp
+
+                                                    @if ($discountPercentage > 0)
+                                                        <div class="product-badge product-badge2 bg-info 12">-{{ $discountPercentage }}%</div>
                                                     @endif
                                                     <div class="product-thumb-image-wrapper">
                                                         <a href="{{ route('front.product', $item->slug) }}">
@@ -635,9 +652,30 @@
                                                             {{ __('out of stock') }}
                                                         </div>
                                                     @endif
-                                                    @if ($item->previous_price && $item->previous_price != 0)
-                                                        <div class="product-badge product-badge2 bg-info">
-                                                            -{{ PriceHelper::DiscountPercentage($item) }}</div>
+                                                    @php
+                                                        // Calculate discount percentage based on whether product has attributes
+                                                        $discountPercentage = 0;
+                                                        
+                                                        if (count($item->attributes) > 0) {
+                                                            // For products with attributes, find the highest discount percentage among options
+                                                            foreach ($item->attributes as $attribute) {
+                                                                foreach ($attribute->options as $option) {
+                                                                    if ($option->sale_price && $option->sale_price < $option->price) {
+                                                                        $optionDiscount = round((($option->price - $option->sale_price) / $option->price) * 100);
+                                                                        if ($optionDiscount > $discountPercentage) {
+                                                                            $discountPercentage = $optionDiscount;
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        } elseif ($item->previous_price && $item->previous_price != 0) {
+                                                            // For regular products - use the existing DiscountPercentage method
+                                                            $discountPercentage = str_replace('%', '', PriceHelper::DiscountPercentage($item));
+                                                        }
+                                                    @endphp
+
+                                                    @if ($discountPercentage > 0)
+                                                        <div class="product-badge product-badge2 bg-info 12">-{{ $discountPercentage }}%</div>
                                                     @endif
                                                     <div class="product-thumb-image-wrapper">
                                                         <a href="{{ route('front.product', $item->slug) }}">

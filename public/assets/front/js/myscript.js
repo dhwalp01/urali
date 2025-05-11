@@ -186,16 +186,16 @@ $(function ($) {
       thumbs: false,
       responsive: {
         0: {
-          items: 1,
-          margin: 0,
+          items: 2,
+          margin: 5,
         },
         576: {
-          items: 1,
-          margin: 0,
+          items: 2,
+          margin: 5,
         },
         768: {
           items: 2,
-          margin: 0,
+          margin: 5,
         },
         992: {
           items: 3,

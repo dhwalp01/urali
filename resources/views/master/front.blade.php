@@ -93,51 +93,21 @@ body_theme4 @endif
         <div class="menu-top-area">
             <div class="container">
                 <div class="row">
-                    <div class="col-6 col-md-4">
+                    {{-- <div class="col-6 col-md-4">
                         <div class="t-m-s-a">
-                            <a class="track-order-link" href="{{ route('front.order.track') }}"><i
-                                    class="icon-map-pin"></i>{{ __('Track Order') }}</a>
-                            {{-- <a class="track-order-link compare-mobile d-lg-none"
-                                href="{{ route('fornt.compare.index') }}">{{ __('Compare') }}</a> --}}
+                            <a class="track-order-link compare-mobile d-lg-none"
+                                href="{{ route('fornt.compare.index') }}">{{ __('Compare') }}</a>
                         </div>
-                    </div>
-                    <div class="col-6 col-md-8">
+                    </div> --}}
+                    <div class="col-12">
                         <div class="right-area">
-
-                            <a class="track-order-link wishlist-mobile d-inline-block d-lg-none"
-                                href="{{ route('user.wishlist.index') }}"><i
-                                    class="icon-heart"></i>{{ __('Wishlist') }}</a>
-
-                            {{-- <div class="t-h-dropdown ">
-                                <a class="main-link" href="#">{{ __('Language') }}<i
-                                        class="icon-chevron-down"></i></a>
-                                <div class="t-h-dropdown-menu">
-                                    @foreach (DB::table('languages')->whereType('Website')->get() as $language)
-                                        <a class="{{ Session::get('language') == $language->id ? 'active' : ($language->is_default == 1 && !Session::has('language') ? 'active' : '') }}"
-                                            href="{{ route('front.language.setup', $language->id) }}"><i
-                                                class="icon-chevron-right pr-2"></i>{{ $language->language }}</a>
-                                    @endforeach
-                                </div>
-                            </div> --}}
-
-
-                            {{-- <div class="t-h-dropdown ">
-                                <a class="main-link" href="#">{{ __('Currency') }}<i
-                                        class="icon-chevron-down"></i></a>
-                                <div class="t-h-dropdown-menu">
-                                    @foreach (DB::table('currencies')->get() as $currency)
-                                        <a class="{{ Session::get('currency') == $currency->id ? 'active' : ($currency->is_default == 1 && !Session::has('currency') ? 'active' : '') }}"
-                                            href="{{ route('front.currency.setup', $currency->id) }}"><i
-                                                class="icon-chevron-right pr-2"></i>{{ $currency->name }}</a>
-                                    @endforeach
-                                </div>
-                            </div> --}}
-
+                            <a class="track-order-link" href="{{ route('front.order.track') }}">
+                                <i class="icon-map-pin"></i>{{ __('Track Order') }}
+                            </a>
                             <div class="login-register ">
                                 @if (!Auth::user())
                                     <a class="track-order-link mr-0" href="{{ route('user.login') }}">
-                                        <i
-                                    class="icon-user"></i>{{ __('Login') }}
+                                        <i class="icon-user"></i>{{ __('Login') }}
                                     </a>
                                 @else
                                     <div class="t-h-dropdown">
@@ -201,19 +171,12 @@ body_theme4 @endif
                             </div>
                             <!-- Toolbar-->
                             <div class="toolbar d-flex">
-
                                 <div class="toolbar-item close-m-serch visible-on-mobile"><a href="#">
                                         <div>
                                             <i class="icon-search"></i>
                                         </div>
                                     </a>
                                 </div>
-                                <div class="toolbar-item visible-on-mobile mobile-menu-toggle"><a href="#">
-                                        <div><i class="icon-menu"></i><span
-                                                class="text-label">{{ __('Menu') }}</span></div>
-                                    </a>
-                                </div>
-
                                 @if (Auth::check())
                                     <div class="toolbar-item hidden-on-mobile"><a
                                             href="{{ route('user.wishlist.index') }}">
@@ -225,7 +188,7 @@ body_theme4 @endif
                                         </a>
                                     </div>
                                 @else
-                                    <div class="toolbar-item hidden-on-mobile"><a
+                                    <div class="toolbar-item"><a
                                             href="{{ route('user.wishlist.index') }}">
                                             <div><span class="compare-icon"><i class="icon-heart"></i></span>
                                                 {{-- <span class="text-label">{{ __('Wishlist') }}</span> --}}
@@ -243,6 +206,11 @@ body_theme4 @endif
                                     <div class="toolbar-dropdown cart-dropdown widget-cart  cart_view_header"
                                         id="header_cart_load" data-target="{{ route('front.header.cart') }}">
                                         @include('includes.header_cart')
+                                    </div>
+                                    <div class="toolbar-item visible-on-mobile mobile-menu-toggle"><a href="#">
+                                            <div><i class="icon-menu"></i><span
+                                                    class="text-label">{{ __('Menu') }}</span></div>
+                                        </a>
                                     </div>
                                 </div>
                             </div>

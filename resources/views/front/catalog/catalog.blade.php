@@ -3,7 +3,7 @@
         @if ($checkType != 'list')
             @foreach ($items as $item)
             <div class="col-xxl-3 col-md-4 col-6">
-                <div class="product-card ">
+                <div class="product-card">
                     @if (
                         count($item->attributes) > 0
                             ? $item->attributes->flatMap->options->pluck('stock')->filter(fn($stock) => $stock > 0)->count() > 0

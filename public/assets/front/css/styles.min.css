@@ -812,6 +812,15 @@ blockquote::before {
 select.form-control.input-light option {
   color: #505050 !important;
 }
+
+.site-header .menu-top-area{
+  background-color: #edeef5 !important;
+}
+.site-header .menu-top-area a{
+  color: #6f7490 !important;
+  margin-right: 10px;
+}
+
 .details-page-top-right-content .btn-outline-primary,
 .menu-top-area .t-h-dropdown .main-link:hover,
 .sb-light-skin:focus,
@@ -5566,6 +5575,7 @@ video {
   .breadcrumbs {
     padding-top: 15px;
     text-align: center;
+    display: none;
   }
   .breadcrumbs > li {
     margin-left: 3px;
@@ -6240,6 +6250,15 @@ video {
   .shopping-cart-footer > .column .btn {
     width: 100%;
     margin: 12px 0 !important;
+  } 
+
+  .product-thumb-image-wrapper {
+    height: 240px; /* Adjust as needed */
+    overflow: hidden;
+    background-color: #f9f9f9;
+    display: flex;
+    align-items: flex-start; /* align top */
+    justify-content: center;
   }
 }
 .details-page-top-right-content .p-d-f-area .mr-1,
