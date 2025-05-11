@@ -1112,6 +1112,10 @@ select.form-control {
   .register-area {
     margin-top: 30px;
   }
+  .product-main-image {
+      max-height: 300px;
+      object-fit: contain;
+   }
 }
 @media (min-width: 768px) {
   .hidden-md-up {
@@ -4339,6 +4343,10 @@ video {
   .site-header .toolbar .toolbar-item.visible-on-mobile {
     display: block;
   }
+  .product-main-image {
+      max-height: 400px;
+      object-fit: contain;
+   }
 }
 .tag,
 .tag:hover {
@@ -6478,6 +6486,10 @@ video {
   .category-card {
     padding: 15px 25px;
   }
+  .product-main-image {
+      max-height: 250px;
+      object-fit: contain;
+   }
 }
 @media screen and (-ms-high-contrast: active),
   screen and (-ms-high-contrast: none) {

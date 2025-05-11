@@ -30,9 +30,9 @@
             </div>
             @endif
             @if (
-                count($item->attributes) > 0
-                    ? $item->attributes->flatMap->options->pluck('stock')->filter(fn($stock) => $stock > 0)->count() > 0
-                    : $item->is_stock()
+               count($item->attributes) > 0
+                  ? $item->attributes->flatMap->options->pluck('stock')->filter(fn($stock) => $stock > 0)->count() > 0
+                  : $item->is_stock()
             )
             <span
                class="product-badge
@@ -72,12 +72,15 @@
             @endif
             <div class="product-thumbnails insize">
                <div class="product-details-slider owl-carousel">
-                  <div class="item"><img src="{{ url('/storage/images/' . $item->photo) }}"
-                     alt="zoom" />
+                  <div class="item">
+                     <img src="{{ url('/storage/images/' . $item->photo) }}"
+                        alt="zoom" class="product-main-image w-100" />
                   </div>
                   @foreach ($galleries as $key => $gallery)
-                  <div class="item"><img src="{{ url('/storage/images/' . $gallery->photo) }}"
-                     alt="zoom" /></div>
+                  <div class="item">
+                     <img src="{{ url('/storage/images/' . $gallery->photo) }}"
+                        alt="zoom" class="product-main-image w-100" />
+                  </div>
                   @endforeach
                </div>
             </div>
