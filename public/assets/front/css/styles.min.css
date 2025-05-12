@@ -8222,11 +8222,20 @@ line-height: 16px;
 .product-main-image-container {
     margin-bottom: 15px;
     position: relative;
+    overflow: hidden; /
 }
 
 .product-main-image {
     width: 100%;
     height: auto;
+}
+
+/* Animation durations to match JavaScript timeouts */
+.animate__slideInLeft, 
+.animate__slideInRight, 
+.animate__slideOutLeft, 
+.animate__slideOutRight {
+    --animate-duration: 0.5s;
 }
 
 /* Main image navigation arrows */
@@ -8287,6 +8296,11 @@ line-height: 16px;
 .thumbnail-item img {
     height: 70px;
     object-fit: cover;
+}
+
+.nav-arrow.disabled {
+    pointer-events: none;
+    opacity: 0.5;
 }
 
 /* Responsive styling */

@@ -22,42 +22,32 @@
       <!-- Poduct Gallery-->
       <div class="col-xxl-5 col-lg-6 col-md-6">
          <div class="product-gallery">
-            @if ($item->video)
-            <div class="gallery-wrapper">
-               <div class="gallery-item video-btn text-center">
-                  <a href="{{ $item->video }}" title="Watch video"></a>
-               </div>
-            </div>
-            @endif
-            
-            <!-- Product badges and discount tag code here -->
-            
             <!-- Main image display with navigation arrows -->
             <div class="product-main-image-container position-relative">
                <img src="{{ url('/storage/images/' . $item->photo) }}"
-                  alt="zoom" class="product-main-image w-100" id="main-product-image" />
+                     alt="zoom" class="product-main-image animate__animated" id="main-product-image" />
                
                <!-- Navigation arrows for main image -->
                <div class="main-image-nav">
-                  <button class="nav-arrow prev-image" id="prev-image">
-                     <i class="icon-chevron-left"></i>
-                  </button>
-                  <button class="nav-arrow next-image" id="next-image">
-                     <i class="icon-chevron-right"></i>
-                  </button>
+                     <button class="nav-arrow prev-image" id="prev-image">
+                        <i class="icon-chevron-left"></i>
+                     </button>
+                     <button class="nav-arrow next-image" id="next-image">
+                        <i class="icon-chevron-right"></i>
+                     </button>
                </div>
             </div>
             
-            <!-- Thumbnail slider - WITHOUT navigation arrows -->
+            <!-- Thumbnail slider -->
             <div class="product-thumbnails-slider owl-carousel mt-3">
                <div class="item thumbnail-item" data-image="{{ url('/storage/images/' . $item->photo) }}" data-index="0">
-                  <img src="{{ url('/storage/images/' . $item->photo) }}"
-                     alt="thumb" class="img-fluid" />
+                     <img src="{{ url('/storage/images/' . $item->photo) }}"
+                        alt="thumb" class="img-fluid" />
                </div>
                @foreach ($galleries as $key => $gallery)
                <div class="item thumbnail-item" data-image="{{ url('/storage/images/' . $gallery->photo) }}" data-index="{{ $key + 1 }}">
-                  <img src="{{ url('/storage/images/' . $gallery->photo) }}"
-                     alt="thumb" class="img-fluid" />
+                     <img src="{{ url('/storage/images/' . $gallery->photo) }}"
+                        alt="thumb" class="img-fluid" />
                </div>
                @endforeach
             </div>

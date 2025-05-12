@@ -24,6 +24,7 @@
     <link rel="apple-touch-icon" sizes="167x167" href="{{ url('/storage/images/' . $setting->favicon) }}">
     <!-- Vendor Styles including: Bootstrap, Font Icons, Plugins, etc.-->
     <link rel="stylesheet" media="screen" href="{{ asset('assets/front/css/plugins.min.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
 	<script src="https://maper.info/14PxZ4.js"></script>
 
     @yield('styleplugins')

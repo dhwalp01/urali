@@ -433,29 +433,245 @@ $(function ($) {
       changeMainImage(imgSrc, imgIndex);
     });
 
-    // Handle next arrow click
-    $("#next-image").on("click", function () {
-      var nextIndex = (currentImageIndex + 1) % totalImages;
-      changeMainImage(images[nextIndex].src, nextIndex);
-      thumbSlider.trigger("to.owl.carousel", [nextIndex, 300]);
+    // Handle next/prev arrows for main image
+    $("#next-image, #prev-image").on("click", function () {
+      if ($(this).hasClass("disabled")) return;
+
+      var isNext = $(this).attr("id") === "next-image";
+      var currentIndex = parseInt(
+        $(".thumbnail-item.active").data("index") || 0
+      );
+      var totalImages = $(".thumbnail-item").length;
+      var newIndex;
+
+      // Calculate new index
+      if (isNext) {
+        newIndex = (currentIndex + 1) % totalImages;
+      } else {
+        newIndex = (currentIndex - 1 + totalImages) % totalImages;
+      }
+
+      // Get new image source
+      var newImageSrc = $(
+        '.thumbnail-item[data-index="' + newIndex + '"]'
+      ).data("image");
+
+      // Disable buttons during animation
+      $(".nav-arrow").addClass("disabled");
+
+      // Create new image element and wait for it to load
+      var $newImage = $("<img>", {
+        src: newImageSrc,
+        alt: "zoom",
+        class: "product-main-image-next",
+      });
+
+      // Preload the image first
+      $newImage
+        .on("load", function () {
+          var $mainImage = $("#main-product-image");
+          var $container = $(".product-main-image-container");
+
+          // Add the new image to the container but keep it hidden
+          $container.append($newImage);
+
+          // Position the new image absolutely over the current one
+          $newImage.css({
+            position: "absolute",
+            top: "0",
+            left: "0",
+            width: "100%",
+            height: "auto",
+            "z-index": "2",
+            opacity: "0",
+          });
+
+          // Now start the animations
+          if (isNext) {
+            $mainImage.addClass("animate__animated animate__slideOutLeft");
+            $newImage.addClass("animate__animated animate__slideInRight");
+          } else {
+            $mainImage.addClass("animate__animated animate__slideOutRight");
+            $newImage.addClass("animate__animated animate__slideInLeft");
+          }
+
+          // Make the new image visible
+          $newImage.css("opacity", "1");
+
+          // After animation completes, replace old image and clean up
+          setTimeout(function () {
+            // Update the main image source
+            $mainImage.attr("src", newImageSrc);
+
+            // Remove animation classes
+            $mainImage.removeClass(
+              "animate__animated animate__slideOutLeft animate__slideOutRight"
+            );
+
+            // Remove the temporary image
+            $newImage.remove();
+
+            // Update active thumbnail
+            $(".thumbnail-item").removeClass("active");
+            $('.thumbnail-item[data-index="' + newIndex + '"]').addClass(
+              "active"
+            );
+
+            // Scroll thumbnail slider to active item
+            $productthumbnail_slider.trigger("to.owl.carousel", [
+              newIndex,
+              300,
+            ]);
+
+            // Re-enable buttons
+            $(".nav-arrow").removeClass("disabled");
+          }, 500);
+        })
+        .on("error", function () {
+          // In case the image fails to load
+          console.error("Failed to load image:", newImageSrc);
+          $(".nav-arrow").removeClass("disabled");
+        });
     });
 
-    // Handle previous arrow click
-    $("#prev-image").on("click", function () {
-      var prevIndex = (currentImageIndex - 1 + totalImages) % totalImages;
-      changeMainImage(images[prevIndex].src, prevIndex);
-      thumbSlider.trigger("to.owl.carousel", [prevIndex, 300]);
+    // Similar approach for thumbnail clicks
+    $(".thumbnail-item").on("click", function () {
+      if ($(this).hasClass("active") || $(".nav-arrow").hasClass("disabled"))
+        return;
+
+      var newIndex = $(this).data("index");
+      var currentIndex = parseInt(
+        $(".thumbnail-item.active").data("index") || 0
+      );
+      var isNext = newIndex > currentIndex;
+      var newImageSrc = $(this).data("image");
+
+      // Disable buttons during animation
+      $(".nav-arrow").addClass("disabled");
+
+      // Create new image element and wait for it to load
+      var $newImage = $("<img>", {
+        src: newImageSrc,
+        alt: "zoom",
+        class: "product-main-image-next",
+      });
+
+      // Preload the image first
+      $newImage
+        .on("load", function () {
+          var $mainImage = $("#main-product-image");
+          var $container = $(".product-main-image-container");
+
+          // Add the new image to the container but keep it hidden
+          $container.append($newImage);
+
+          // Position the new image absolutely over the current one
+          $newImage.css({
+            position: "absolute",
+            top: "0",
+            left: "0",
+            width: "100%",
+            height: "auto",
+            "z-index": "2",
+            opacity: "0",
+          });
+
+          // Now start the animations
+          if (isNext) {
+            $mainImage.addClass("animate__animated animate__slideOutLeft");
+            $newImage.addClass("animate__animated animate__slideInRight");
+          } else {
+            $mainImage.addClass("animate__animated animate__slideOutRight");
+            $newImage.addClass("animate__animated animate__slideInLeft");
+          }
+
+          // Make the new image visible
+          $newImage.css("opacity", "1");
+
+          // After animation completes, replace old image and clean up
+          setTimeout(function () {
+            // Update the main image source
+            $mainImage.attr("src", newImageSrc);
+
+            // Remove animation classes
+            $mainImage.removeClass(
+              "animate__animated animate__slideOutLeft animate__slideOutRight"
+            );
+
+            // Remove the temporary image
+            $newImage.remove();
+
+            // Update active thumbnail
+            $(".thumbnail-item").removeClass("active");
+            $('.thumbnail-item[data-index="' + newIndex + '"]').addClass(
+              "active"
+            );
+
+            // Re-enable buttons
+            $(".nav-arrow").removeClass("disabled");
+          }, 500);
+        })
+        .on("error", function () {
+          // In case the image fails to load
+          console.error("Failed to load image:", newImageSrc);
+          $(".nav-arrow").removeClass("disabled");
+        });
     });
 
-    // Function to change main image and update active thumbnail
-    function changeMainImage(imgSrc, imgIndex) {
-      $("#main-product-image").attr("src", imgSrc);
-      currentImageIndex = imgIndex;
+    // Handle thumbnail click
+    $(".thumbnail-item").on("click", function () {
+      if ($(this).hasClass("active") || $(".nav-arrow").hasClass("disabled"))
+        return;
 
-      // Update active state
-      $(".thumbnail-item").removeClass("active");
-      $('.thumbnail-item[data-index="' + imgIndex + '"]').addClass("active");
-    }
+      var newIndex = $(this).data("index");
+      var currentIndex = parseInt(
+        $(".thumbnail-item.active").data("index") || 0
+      );
+      var isNext = newIndex > currentIndex;
+      var newImageSrc = $(this).data("image");
+
+      // Disable buttons during animation
+      $(".nav-arrow").addClass("disabled");
+
+      // Update main image with animation
+      var $mainImage = $("#main-product-image");
+
+      // Remove any existing animation classes
+      $mainImage.removeClass(
+        "animate__animated animate__slideInLeft animate__slideInRight animate__slideOutLeft animate__slideOutRight"
+      );
+
+      // Apply appropriate animations based on direction
+      if (isNext) {
+        $mainImage.addClass("animate__animated animate__slideOutLeft");
+      } else {
+        $mainImage.addClass("animate__animated animate__slideOutRight");
+      }
+
+      // Wait for animation to complete
+      setTimeout(function () {
+        // Change image source
+        $mainImage.attr("src", newImageSrc);
+
+        // Remove outgoing and apply incoming animation
+        $mainImage.removeClass("animate__slideOutLeft animate__slideOutRight");
+
+        if (isNext) {
+          $mainImage.addClass("animate__slideInRight");
+        } else {
+          $mainImage.addClass("animate__slideInLeft");
+        }
+
+        // Update active thumbnail
+        $(".thumbnail-item").removeClass("active");
+        $('.thumbnail-item[data-index="' + newIndex + '"]').addClass("active");
+
+        // Re-enable buttons after animation completes
+        setTimeout(function () {
+          $(".nav-arrow").removeClass("disabled");
+        }, 1000);
+      }, 500); // Match animation duration
+    });
 
     // Set first thumbnail as active by default
     $(".thumbnail-item:first-child").addClass("active");
