@@ -350,7 +350,7 @@ body_theme4 @endif
     <!--    announcement banner section end   -->
 
     <!-- Site Footer-->
-    <footer class="site-footer">
+    <footer class="site-footer hidden-on-mobile">
         <div class="container">
             <div class="row">
                 <div class="col-lg-4 col-md-6">
@@ -441,6 +441,40 @@ body_theme4 @endif
             <!-- Copyright-->
             <p class="footer-copyright"> {{ $setting->copy_right }}</p>
         </div>
+    </footer>
+    <footer class="footer-mobile hidden-on-desktop py-3">
+        <div class="container">
+            <div class="row">
+                <div class="col-6 border-bottom">
+                    <p class="mb-1"><strong>Get Help/Support</strong> </p>
+                    <p class="mb-1"><strong>Contact Us</strong></p>
+                    <p class="mb-1"><strong>Return or Exchange</strong></p>
+                </div>
+                <div class="col-6">
+                    <a class="site-logo align-self-center" href="{{ route('front.index') }}">
+                        <img src="{{ url('/storage/images/' . $setting->logo) }}" alt="{{ $setting->title }}">
+                    </a>
+                </div>
+                <div class="col-12 my-3 border-bottom">
+                    <p class="mb-1"><strong>Nightgowns</strong> </p>
+                    <p class="mb-1"><strong>Kaftans</strong></p>
+                    <p class="mb-1"><strong>Men's Kurta</strong></p>
+                    <p class="mb-1"><strong>Men's Dhoti Pants</strong></p>
+                </div>
+                <div class="col-12 mt-3 border-bottom">
+                    <p class="mb-1"><strong>Terms</strong> </p>
+                    <p class="mb-1"><strong>Privacy Policy</strong></p>
+                    <p class="mb-1"><strong>Sales and Refund</strong></p>
+                </div>
+                <div class="col-12 mt-3">
+                    <img class="d-block gateway_image" src="{{ $setting->footer_gateway_img ? url('/storage/images/' . $setting->footer_gateway_img) : asset('system/resources/assets/images/placeholder.png') }}">
+                </div>
+                <div class="col-12 mt-3">
+                    <p>{{ $setting->copy_right }}</p>
+                </div>
+            </div>   
+        </div>
+
     </footer>
 
     <!-- Back To Top Button-->

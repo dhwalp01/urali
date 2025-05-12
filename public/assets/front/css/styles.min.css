@@ -107,6 +107,11 @@ svg {
 .tag {
   white-space: nowrap;
 }
+
+.hidden-on-desktop {
+  display: none;
+}
+
 .site-header .site-menu > ul > li .sub-menu,
 .toolbar-dropdown {
   display: none;
@@ -295,6 +300,12 @@ blockquote cite::before {
 .slideable-menu ul li a {
   line-height: 28px;
 }
+
+/* footer mobile  */
+.footer-mobile {
+  background-color: #e6eaf3;
+}
+
 .a2a_kit a:hover::before,
 .announcement-with-content .left-area img,
 .btn.btn-primary:hover::before,
@@ -4243,6 +4254,11 @@ video {
   .navbar {
     display: none !important;
   }
+
+  .hidden-on-desktop {
+    display: block;
+  }
+
   .user-info-wrapper {
     margin-bottom: 30px;
   }
@@ -5374,12 +5390,12 @@ video {
 .mobile-menu,
 .page-title,
 .site-footer {
-  background-color: #30231b;
-  color: #fff;
+  background-color: #e6eaf3;
+  color: #40455c;
 }
 
 .site-footer .widget-title {
-  color: #fff;
+  color: #40455c;
 }
 
 .site-footer .widget-title::after{
@@ -5387,7 +5403,7 @@ video {
 }
 
 .site-footer .widget-categories ul > li > a, .widget-links ul > li > a {
-  color: #fff;
+  color: #40455c;
 }
 
 .site-footer .widget-links ul > li > a:hover{
@@ -5616,7 +5632,7 @@ video {
   margin: 0;
   padding-top: 15px;
   padding-bottom: 15px;
-  color: #fff;
+  color: #40455c;
   font-size: 15px;
   font-weight: 500;
   text-align: center;
