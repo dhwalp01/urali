@@ -231,64 +231,40 @@ body_theme4 @endif
                                         aria-labelledby="mmenu-tab">
                                         <nav class="slideable-menu">
                                             <ul>
-                                                <li class="{{ request()->routeIs('front.index') ? 'active' : '' }}"><a
-                                                        href="{{ route('front.index') }}"><i
-                                                            class="icon-chevron-right"></i>{{ __('Home') }}</a>
-                                                </li>
-                                                @if ($setting->is_shop == 1)
-                                                    <li
-                                                        class="{{ request()->routeIs('front.catalog*') ? 'active' : '' }}">
-                                                        <a href="{{ route('front.catalog') }}"><i
-                                                                class="icon-chevron-right"></i>{{ __('Shop') }}</a>
-                                                    </li>
-                                                @endif
-                                                @if ($setting->is_campaign == 1)
-                                                    <li
-                                                        class="{{ request()->routeIs('front.campaign') ? 'active' : '' }}">
-                                                        <a href="{{ route('front.campaign') }}"><i
-                                                                class="icon-chevron-right"></i>{{ __('Campaign') }}</a>
-                                                    </li>
-                                                @endif
-                                                @if ($setting->is_brands == 1)
-                                                    <li
-                                                        class="{{ request()->routeIs('front.brand') ? 'active' : '' }}">
-                                                        <a href="{{ route('front.brand') }}"><i
-                                                                class="icon-chevron-right"></i>{{ __('Brand') }}</a>
-                                                    </li>
-                                                @endif
+                                                @php
+                                                    $links = json_decode($menus->menus, true);
+                                                @endphp
+                                                
+                                                @foreach ($links as $link)
+                                                    @php
+                                                        $href = Helper::getHref($link); 
+                                                    @endphp
 
-                                                @if ($setting->is_blog == 1)
-                                                    <li
-                                                        class="{{ request()->routeIs('front.blog*') ? 'active' : '' }}">
-                                                        <a href="{{ route('front.blog') }}"><i
-                                                                class="icon-chevron-right"></i>{{ __('Blog') }}</a>
-                                                    </li>
-                                                @endif
-                                                <li class="t-h-dropdown">
-                                                    <a class="" href="#"><i
-                                                            class="icon-chevron-right"></i>{{ __('Pages') }} <i
-                                                            class="icon-chevron-down"></i></a>
-                                                    <div class="t-h-dropdown-menu">
-                                                        @if ($setting->is_faq == 1)
-                                                            <a class="{{ request()->routeIs('front.faq*') ? 'active' : '' }}"
-                                                                href="{{ route('front.faq') }}"><i
-                                                                    class="icon-chevron-right pr-2"></i>{{ __('Faq') }}</a>
-                                                        @endif
-                                                        @foreach (DB::table('pages')->wherePos(0)->orwhere('pos', 2)->get() as $page)
-                                                            <a class="{{ request()->url() == route('front.page', $page->slug) ? 'active' : '' }} "
-                                                                href="{{ route('front.page', $page->slug) }}"><i
-                                                                    class="icon-chevron-right pr-2"></i>{{ $page->title }}</a>
-                                                        @endforeach
-                                                    </div>
-                                                </li>
-
-                                                @if ($setting->is_contact == 1)
-                                                    <li
-                                                        class="{{ request()->routeIs('front.contact') ? 'active' : '' }}">
-                                                        <a href="{{ route('front.contact') }}"><i
-                                                                class="icon-chevron-right"></i>{{ __('Contact') }}</a>
-                                                    </li>
-                                                @endif
+                                                    @if (!array_key_exists("children",$link))
+                                                        <li class="@if($href == URL::current() ) active @endif">
+                                                            <a href="{{ $link["href"] == null ? $href : $link["href"] }}" target="{{$link["target"]}}">
+                                                                <i class="icon-chevron-right"></i>{{$link["text"]}}
+                                                            </a>
+                                                        </li>
+                                                    @else
+                                                        <li class="t-h-dropdown">
+                                                            <a class="" href="{{$href}}" {{$link["target"]}}>
+                                                                <i class="icon-chevron-right"></i>{{$link["text"]}} <i class="icon-chevron-down"></i>
+                                                            </a>
+                                                            <div class="t-h-dropdown-menu">
+                                                                @foreach ($link["children"] as $level2)
+                                                                    @php
+                                                                        $l2Href = Helper::getHref($level2);
+                                                                    @endphp
+                                                                    
+                                                                    <a class="@if($l2Href == URL::current() ) active @endif" href="{{$l2Href}}" target="{{$level2["target"]}}">
+                                                                        <i class="icon-chevron-right pr-2"></i>{{$level2["text"]}}
+                                                                    </a>
+                                                                @endforeach
+                                                            </div>
+                                                        </li>
+                                                    @endif
+                                                @endforeach
                                             </ul>
                                         </nav>
                                     </div>
