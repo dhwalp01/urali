@@ -453,7 +453,7 @@ html * {
 }
 body {
   background-position: center;
-  background-color: #fff;
+  background-color: #f5f6fa;
   background-repeat: no-repeat;
   background-size: cover;
   font-family: "Open Sans", sans-serif;
@@ -5581,7 +5581,7 @@ video {
 }
 @media (max-width: 991px) {
   .page-title {
-    margin-bottom: 53px;
+    margin-bottom: 10px;
   }
   .page-title > .container,
   .page-title > .container-fluid {
