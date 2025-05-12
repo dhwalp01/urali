@@ -5520,8 +5520,8 @@ video {
 }
 .page-title {
   width: 100%;
-  margin-bottom: 60px;
-  padding: 3px 0;
+  margin-bottom: 20px;
+  padding: 0px 0;
   border-top: 1px solid #e5e5e5;
 }
 .page-title > .container,
