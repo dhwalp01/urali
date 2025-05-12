@@ -5434,14 +5434,14 @@ video {
 /* CSS-only solution for mobile menu animation */
 
 /* Animation for the mobile menu */
-.mobile-menu {
+/* .mobile-menu {
   transform: translateX(-100%) !important;
   transition: transform 0.3s ease-out !important;
-}
+} */
 
-.mobile-menu.open {
+/* .mobile-menu.open {
   transform: translateX(0) !important;
-}
+} */
 
 /* Make sure the menu is visible when animating */
 .mobile-menu {
@@ -5453,10 +5453,10 @@ video {
   visibility: hidden;
 }
 
-.mobile-menu.closing {
+/* .mobile-menu.closing {
   visibility: visible;
   transform: translateX(-100%) !important;
-}
+} */
 
 
 .mobile-menu.open {
