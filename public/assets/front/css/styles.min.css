@@ -828,7 +828,7 @@ select.form-control.input-light option {
   background-color: #edeef5 !important;
 }
 .site-header .menu-top-area a{
-  color: #6f7490 !important;
+  color: #40455c !important;
   margin-right: 10px;
 }
 
@@ -5544,7 +5544,7 @@ video {
 .breadcrumbs > li {
   display: inline-block;
   padding: 5px 0;
-  color: #fff;
+  color: #40455c;
   font-size: 13px;
   cursor: default;
   vertical-align: middle;
@@ -5552,14 +5552,14 @@ video {
 .breadcrumbs > li.separator {
   margin-top: 2px;
   margin-left: 3px;
-  color: #fff;
+  color: #40455c;
   font-family: feather;
   font-size: 14px;
 }
 .breadcrumbs > li > a,
 .post-meta > li > a {
   transition: color 0.25s;
-  color: #fff;
+  color: #40455c;
   text-decoration: none;
 }
 .breadcrumbs > li:first-child > a::before {
