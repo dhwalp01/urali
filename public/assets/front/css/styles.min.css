@@ -8216,3 +8216,105 @@ line-height: 16px;
   border-color: #007bff;
   background-color: #e9f5ff;
 }
+
+
+/* Product page slider css  */
+.product-main-image-container {
+    margin-bottom: 15px;
+    position: relative;
+}
+
+.product-main-image {
+    width: 100%;
+    height: auto;
+}
+
+/* Main image navigation arrows */
+.main-image-nav {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none; /* This allows clicks to pass through to the image */
+}
+
+.nav-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.7);
+    border: none;
+    border-radius: 50%;
+    font-size: 18px;
+    color: #333;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    pointer-events: auto; /* Re-enable pointer events for buttons */
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.nav-arrow:hover {
+    background: rgba(255, 255, 255, 0.9);
+}
+
+.nav-arrow.prev-image {
+    left: 10px;
+}
+
+.nav-arrow.next-image {
+    right: 10px;
+}
+
+/* Thumbnail styles */
+.thumbnail-item {
+    cursor: pointer;
+    border: 2px solid transparent;
+    opacity: 0.7;
+    transition: all 0.3s;
+}
+
+.thumbnail-item.active {
+    opacity: 1;
+    text-align: center;
+}
+
+.thumbnail-item img {
+    height: 70px;
+    object-fit: cover;
+}
+
+/* Responsive styling */
+@media (max-width: 767px) {
+    .product-main-image {
+        max-height: 300px;
+        object-fit: contain;
+    }
+    
+    .thumbnail-item img {
+        height: 50px;
+    }
+    
+    .nav-arrow {
+        width: 35px;
+        height: 35px;
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .product-main-image {
+        max-height: 250px;
+    }
+    
+    .nav-arrow {
+        width: 30px;
+        height: 30px;
+        font-size: 14px;
+    }
+}

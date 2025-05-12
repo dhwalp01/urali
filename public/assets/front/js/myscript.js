@@ -382,6 +382,84 @@ $(function ($) {
       },
     });
 
+    // productthumbnail slider
+    var $productthumbnail_slider = $(".product-thumbnails-slider");
+    $productthumbnail_slider.owlCarousel({
+      nav: false,
+      dots: true,
+      autoplay: false,
+      smartSpeed: 1200,
+      margin: 15,
+      thumbs: false,
+      responsive: {
+        0: {
+          items: 4,
+        },
+        576: {
+          items: 5,
+        },
+        768: {
+          items: 5,
+        },
+        992: {
+          items: 4,
+        },
+        1200: {
+          items: 5,
+        },
+        1400: {
+          items: 5,
+        },
+      },
+    });
+
+    // Store all images for navigation
+    var images = [];
+    $(".thumbnail-item").each(function () {
+      images.push({
+        src: $(this).data("image"),
+        index: $(this).data("index"),
+      });
+    });
+
+    var currentImageIndex = 0;
+    var totalImages = images.length;
+
+    // Handle thumbnail click to change main image
+    $(".thumbnail-item").on("click", function () {
+      var imgSrc = $(this).data("image");
+      var imgIndex = parseInt($(this).data("index"));
+
+      changeMainImage(imgSrc, imgIndex);
+    });
+
+    // Handle next arrow click
+    $("#next-image").on("click", function () {
+      var nextIndex = (currentImageIndex + 1) % totalImages;
+      changeMainImage(images[nextIndex].src, nextIndex);
+      thumbSlider.trigger("to.owl.carousel", [nextIndex, 300]);
+    });
+
+    // Handle previous arrow click
+    $("#prev-image").on("click", function () {
+      var prevIndex = (currentImageIndex - 1 + totalImages) % totalImages;
+      changeMainImage(images[prevIndex].src, prevIndex);
+      thumbSlider.trigger("to.owl.carousel", [prevIndex, 300]);
+    });
+
+    // Function to change main image and update active thumbnail
+    function changeMainImage(imgSrc, imgIndex) {
+      $("#main-product-image").attr("src", imgSrc);
+      currentImageIndex = imgIndex;
+
+      // Update active state
+      $(".thumbnail-item").removeClass("active");
+      $('.thumbnail-item[data-index="' + imgIndex + '"]').addClass("active");
+    }
+
+    // Set first thumbnail as active by default
+    $(".thumbnail-item:first-child").addClass("active");
+
     // Blog Details Slider Area Start
     var $hero_slider_main = $(".blog-details-slider");
     $hero_slider_main.owlCarousel({

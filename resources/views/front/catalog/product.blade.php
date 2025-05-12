@@ -29,60 +29,37 @@
                </div>
             </div>
             @endif
-            @if (
-               count($item->attributes) > 0
-                  ? $item->attributes->flatMap->options->pluck('stock')->filter(fn($stock) => $stock > 0)->count() > 0
-                  : $item->is_stock()
-            )
-            <span
-               class="product-badge
-               @if ($item->is_type == 'feature') bg-warning
-               @elseif($item->is_type == 'new')
-               bg-success
-               @elseif($item->is_type == 'top')
-               bg-info
-               @elseif($item->is_type == 'best')
-               bg-dark
-               @elseif($item->is_type == 'flash_deal')
-               bg-success @endif
-               ">{{ $item->is_type != 'undefine' ? ucfirst(str_replace('_', ' ', $item->is_type)) : '' }}</span>
-            @else
-            <span class="product-badge bg-secondary border-default text-body">{{ __('out of stock') }}</span>
-            @endif
-            @php
-               // Calculate discount percentage based on whether product has attributes
-               $discountPercentage = 0;
-               if (count($item->attributes) > 0) {
-                  // For products with attributes, find the first option with sale price
-                  foreach ($item->attributes as $attribute) {
-                        foreach ($attribute->options as $option) {
-                           if ($option->sale_price && $option->sale_price < $option->price) {
-                              $discountPercentage = PriceHelper::calculateDiscountPercentage($option->price, $option->sale_price);
-                              break 2;
-                           }
-                        }
-                  }
-               } elseif ($item->previous_price && $item->previous_price != 0) {
-                  // For regular products - use the existing DiscountPercentage method
-                  $discountPercentage = str_replace('%', '', PriceHelper::DiscountPercentage($item));
-               }
-            @endphp
-            @if ($discountPercentage > 0)
-               <div class="product-badge bg-goldenrod ppp-t"> -{{ $discountPercentage }}%</div>
-            @endif
-            <div class="product-thumbnails insize">
-               <div class="product-details-slider owl-carousel">
-                  <div class="item">
-                     <img src="{{ url('/storage/images/' . $item->photo) }}"
-                        alt="zoom" class="product-main-image w-100" />
-                  </div>
-                  @foreach ($galleries as $key => $gallery)
-                  <div class="item">
-                     <img src="{{ url('/storage/images/' . $gallery->photo) }}"
-                        alt="zoom" class="product-main-image w-100" />
-                  </div>
-                  @endforeach
+            
+            <!-- Product badges and discount tag code here -->
+            
+            <!-- Main image display with navigation arrows -->
+            <div class="product-main-image-container position-relative">
+               <img src="{{ url('/storage/images/' . $item->photo) }}"
+                  alt="zoom" class="product-main-image w-100" id="main-product-image" />
+               
+               <!-- Navigation arrows for main image -->
+               <div class="main-image-nav">
+                  <button class="nav-arrow prev-image" id="prev-image">
+                     <i class="icon-chevron-left"></i>
+                  </button>
+                  <button class="nav-arrow next-image" id="next-image">
+                     <i class="icon-chevron-right"></i>
+                  </button>
                </div>
+            </div>
+            
+            <!-- Thumbnail slider - WITHOUT navigation arrows -->
+            <div class="product-thumbnails-slider owl-carousel mt-3">
+               <div class="item thumbnail-item" data-image="{{ url('/storage/images/' . $item->photo) }}" data-index="0">
+                  <img src="{{ url('/storage/images/' . $item->photo) }}"
+                     alt="thumb" class="img-fluid" />
+               </div>
+               @foreach ($galleries as $key => $gallery)
+               <div class="item thumbnail-item" data-image="{{ url('/storage/images/' . $gallery->photo) }}" data-index="{{ $key + 1 }}">
+                  <img src="{{ url('/storage/images/' . $gallery->photo) }}"
+                     alt="thumb" class="img-fluid" />
+               </div>
+               @endforeach
             </div>
          </div>
       </div>
