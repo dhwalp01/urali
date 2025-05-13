@@ -264,7 +264,7 @@ body {
 .slideable-menu {
   position: relative;
   border-top: 1px solid #e5e5e5;
-  background-color: #fff;
+  background-color: #edeef5;
   overflow: hidden;
   padding: 20px 50px;
 }
@@ -5475,7 +5475,7 @@ video {
 .mobile-menu.open {
   left: 0; /* slide in */
   box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
-  background-color: #fff;
+  background-color: #edeef5;
 }
 
 .mobile-menu .mobile-search {
