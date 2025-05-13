@@ -289,9 +289,15 @@
       font-size: 20px;
   }
   .p-action-button{
-      display: block;
+      display: grid;
+      width: 100%;
       margin-top: 12px;
   }
+
+  .p-action-button .btn{
+    margin: 0px 0px 10px 0px !important;    
+  }
+  
   .details-page-top-right-content .product-quantity{
       float: none;
   }
