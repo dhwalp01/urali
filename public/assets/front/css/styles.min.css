@@ -5391,11 +5391,20 @@ video {
 }
 .mm-heading-area {
   display: flex;
-  justify-content: space-between;
+  justify-content: end;
   padding: 10px 15px;
   background: red;
   color: #fff;
 }
+
+.mobile-menu .mm-heading-area {
+  background: #edeef5 !important;
+}
+
+.mobile-menu .mm-heading-area .mm-t-two i{
+  color: #505050;
+}
+
 .mobile-menu,
 .page-title,
 .site-footer {

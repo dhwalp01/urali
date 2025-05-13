@@ -220,7 +220,7 @@ body_theme4 @endif
                             <div class="mobile-menu">
                                 <!-- Slideable (Mobile) Menu-->
                                 <div class="mm-heading-area">
-                                    <h4>{{ __('Navigation') }}</h4>
+                                    {{-- <h4>{{ __('Navigation') }}</h4> --}}
                                     <div class="toolbar-item visible-on-mobile mobile-menu-toggle mm-t-two">
                                         <a href="#">
                                             <div> <i class="icon-x"></i></div>
