@@ -266,7 +266,7 @@ body {
   border-top: 1px solid #e5e5e5;
   background-color: #fff;
   overflow: hidden;
-  padding: 10px 15px;
+  padding: 20px 50px;
 }
 .btn-outline-secondary:hover,
 .card-footer,
@@ -298,7 +298,16 @@ blockquote cite::before {
   list-style: none;
 }
 .slideable-menu ul li a {
-  line-height: 28px;
+    line-height: 28px;
+    font-weight: 600;
+    font-size: 18px;
+}
+
+.mobile-menu-sub a.login{
+  font-size: 16px;
+  font-weight: 600; 
+  color: #505050;
+  display: block;
 }
 
 /* footer mobile  */

@@ -108,7 +108,7 @@ body_theme4 @endif
                             <div class="login-register ">
                                 @if (!Auth::user())
                                     <a class="track-order-link mr-0" href="{{ route('user.login') }}">
-                                        <i class="icon-user"></i>{{ __('Login') }}
+                                        {{ __('Sign In') }} &nbsp;<i class="icon-user"></i>
                                     </a>
                                 @else
                                     <div class="t-h-dropdown">
@@ -244,7 +244,7 @@ body_theme4 @endif
                                                     @if (!array_key_exists("children",$link))
                                                         <li class="@if($href == URL::current() ) active @endif">
                                                             <a href="{{ $link["href"] == null ? $href : $link["href"] }}" target="{{$link["target"]}}">
-                                                                <i class="icon-chevron-right"></i>{{$link["text"]}}
+                                                                {{$link["text"]}}
                                                             </a>
                                                         </li>
                                                     @else
@@ -267,6 +267,35 @@ body_theme4 @endif
                                                     @endif
                                                 @endforeach
                                             </ul>
+                                            <div class="mobile-menu-sub my-4">
+                                                @if (!Auth::user())
+                                                    <a class="login  mr-0" href="{{ route('user.login') }}">
+                                                        <i class="icon-user"></i>&nbsp;{{ __('Sign In') }} 
+                                                    </a>
+                                                @else
+                                                    <div class="t-h-dropdown">
+                                                        <div class="main-link">
+                                                            <i class="icon-user pr-2"></i> <span
+                                                                class="text-label">{{ Auth::user()->first_name }}</span>
+                                                        </div>
+                                                        <div class="t-h-dropdown-menu">
+                                                            <a href="{{ route('user.dashboard') }}"><i
+                                                                    class="icon-chevron-right pr-2"></i>{{ __('Dashboard') }}</a>
+                                                            <a href="{{ route('user.logout') }}"><i
+                                                                    class="icon-chevron-right pr-2"></i>{{ __('Logout') }}</a>
+                                                        </div>
+                                                    </div>
+                                                @endif
+                                            </div>
+                                            <div class="mobile-menu-sub my-4">
+                                                <a class="login mb-2 mr-0" href="">Orders</a>
+                                                <a class="login mb-2 mr-0" href="">Return or Exchange</a>
+                                            </div>
+                                            <div class="mobile-menu-sub my-4">
+                                                <a class="login mb-2 mr-0" href="">Get Help / Support</a>
+                                                <a class="login mb-2 mr-0" href="">Contact Us</a>
+                                                <a class="login mb-2 mr-0" href="">About Us</a>
+                                            </div>
                                         </nav>
                                     </div>
                                     <div class="tab-pane fade" id="mcat" role="tabpanel"
