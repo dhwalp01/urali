@@ -5580,6 +5580,9 @@ video {
   }
 }
 @media (max-width: 991px) {
+  .site-header .site-branding {
+    padding: 5px 0;
+  }
   .page-title {
     margin-bottom: 10px;
   }
@@ -6814,7 +6817,7 @@ video {
   transition: 0.3s linear;
 }
 .section-title {
-  border-bottom: 2px solid rgba(0, 0, 0, 0.06);
+  border-bottom: 0px solid rgba(0, 0, 0, 0.06);
   padding-bottom: 0;
   margin-bottom: 25px;
   display: flex;
@@ -6829,7 +6832,7 @@ video {
   font-size: 24px;
   position: relative;
 }
-.section-title h2::before {
+/* .section-title h2::before {
   position: absolute;
   content: "";
   height: 2px;
@@ -6837,7 +6840,7 @@ video {
   bottom: -2px;
   left: 0;
   background: #377dff;
-}
+} */
 .section-title a.btn {
   margin: 0 !important;
   padding: 0 15px;

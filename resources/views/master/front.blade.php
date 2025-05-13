@@ -447,9 +447,10 @@ body_theme4 @endif
         <div class="container">
             <div class="row">
                 <div class="col-6 border-bottom">
-                    <p class="mb-1"><strong>Get Help/Support</strong> </p>
-                    <p class="mb-1"><strong>Contact Us</strong></p>
-                    <p class="mb-1"><strong>Return or Exchange</strong></p>
+                    <p class="mb-1"><strong style="font-weight: 700;">Get Help/Support</strong> </p>
+                    <p class="mb-1"><strong style="font-weight: 700;">Contact Us</strong></p>
+                    <p class="mb-1"><strong style="font-weight: 700;">Return or Exchange</strong></p>
+                    <p class="mb-1"><strong style="font-weight: 700;">About Us</strong></p>
                 </div>
                 <div class="col-6">
                     <a class="site-logo align-self-center" href="{{ route('front.index') }}">

@@ -9,7 +9,7 @@
     }
 ?>
 
-.left-category-area .category-header h4,
+<!-- .left-category-area .category-header h4,
 .section-title h2::before,
 .product-card .countdown span,
 .flash-deal-slider.owl-carousel .owl-nav div:hover,
@@ -41,7 +41,7 @@
 .a2a_kit a
 {
     background : <?php echo $color?>  !important;
-}
+} -->
 
 .site-header .toolbar .toolbar-item > a > div > .compare-icon > .count-label, .site-header .toolbar .toolbar-item > a > div > .cart-icon > .count-label,
 .btn-primary,

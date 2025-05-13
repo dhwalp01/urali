@@ -87,6 +87,14 @@ $(function ($) {
       smartSpeed: 1200,
       items: 1,
       thumbs: false,
+      margin: 15,
+      responsive: {
+        0: { items: 1 },
+        576: { items: 1 },
+        768: { items: 1 },
+        992: { items: 2 },
+        1200: { items: 2 },
+      },
     });
 
     var $category_slider_main = $(".category-slider");
