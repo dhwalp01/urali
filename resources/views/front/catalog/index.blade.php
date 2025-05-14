@@ -28,7 +28,7 @@
             <div class="col-lg-12">
                 <div class="shop-top-filter-wrapper">
                     <div class="row">
-                      <div class="col-12 mb-2 d-flex justify-content-between align-items-center text-end col-md-2 gd-text-sm-center">
+                      <div class="col-12 mb-2 d-flex justify-content-between align-items-center text-end col-md-12 gd-text-sm-center">
                           <div class="col-sm-6 col-md-6">
                             <a href="">
                               <i class="fas fa-chevron-left"></i>&nbsp;&nbsp;{{ $category->name ?? '' }}
@@ -38,12 +38,21 @@
                                 <a class="list-view {{Session::has('view_catalog') && Session::get('view_catalog') == 'list' ? 'active' : ''}}" href="javascript:;" data-step="list" data-href="{{route('front.catalog').'?view_check=list'}}"><i class="fas fa-list"></i></a>
                           </div>
                       </div>
-                      <div class="col-md-10 gd-text-sm-center">
-                        <div class="col-6"></div>
-                        <div class="col-6">
+                      <div class="d-flex justify-content-between align-items-center col-md-10 gd-text-sm-center">
+                        <div class="col-8">
+                          <div class="d-flex justify-content-betwee">
+                            <label class="" for="sorting">{{('Sort by')}}:</label>&nbsp;&nbsp;
+                            <select class="" id="sorting">
+                              <option value="">{{('All Products')}}</option>
+                              <option value="low_to_high" {{request()->input('low_to_high') ? 'selected' : ''}}>{{('Low - High Price')}}</option>
+                              <option value="high_to_low" {{request()->input('high_to_low') ? 'selected' : ''}}>{{('High - Low Price')}}</option>
+                            </select>
+                          </div>
+                        </div>
+                        <div class="col-4">
                           <div class="sptfl">
                             <!-- Mobile Filter Button (Visible only on mobile) -->
-                            <button class="mobile-filter-toggle d-lg-none btn btn-primary btn-sm mb-3">
+                            <button class="mobile-filter-toggle d-lg-none btn btn-primary btn-sm">
                                 <i class="fas fa-filter"></i> {{__('Filters & Sorting')}}
                             </button>
                         
