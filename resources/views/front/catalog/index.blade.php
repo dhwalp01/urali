@@ -28,7 +28,19 @@
             <div class="col-lg-12">
                 <div class="shop-top-filter-wrapper">
                     <div class="row">
-                        <div class="col-md-10 gd-text-sm-center">
+                      <div class="col-12 mb-2 d-flex justify-content-between align-items-center text-end col-md-2 gd-text-sm-center">
+                          <div class="col-sm-6 col-md-6">
+                            <a href="">
+                              <i class="fas fa-chevron-left"></i>&nbsp;&nbsp;{{ $category->name ?? '' }}
+                            </a>
+                          </div>
+                          <div class="col-sm-6 col-md-6 shop-view"><a class="list-view {{Session::has('view_catalog') && Session::get('view_catalog') == 'grid' ? 'active' : ''}} " data-step="grid" href="javascript:;" data-href="{{route('front.catalog').'?view_check=grid'}}"><i class="fas fa-th-large"></i></a>
+                                <a class="list-view {{Session::has('view_catalog') && Session::get('view_catalog') == 'list' ? 'active' : ''}}" href="javascript:;" data-step="list" data-href="{{route('front.catalog').'?view_check=list'}}"><i class="fas fa-list"></i></a>
+                          </div>
+                      </div>
+                      <div class="col-md-10 gd-text-sm-center">
+                        <div class="col-6"></div>
+                        <div class="col-6">
                           <div class="sptfl">
                             <!-- Mobile Filter Button (Visible only on mobile) -->
                             <button class="mobile-filter-toggle d-lg-none btn btn-primary btn-sm mb-3">
@@ -155,11 +167,8 @@
                             }
                         </style>
                         </div>
-                        <div class="col-12 text-end col-md-2 gd-text-sm-center">
-                            <div class="shop-view"><a class="list-view {{Session::has('view_catalog') && Session::get('view_catalog') == 'grid' ? 'active' : ''}} " data-step="grid" href="javascript:;" data-href="{{route('front.catalog').'?view_check=grid'}}"><i class="fas fa-th-large"></i></a>
-                                <a class="list-view {{Session::has('view_catalog') && Session::get('view_catalog') == 'list' ? 'active' : ''}}" href="javascript:;" data-step="list" data-href="{{route('front.catalog').'?view_check=list'}}"><i class="fas fa-list"></i></a>
-                            </div>
-                        </div>
+
+                      </div>
                     </div>
                 </div>
             </div>
