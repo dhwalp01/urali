@@ -196,6 +196,13 @@
   .details-page-top-right-content{
       margin-top: 30px;
   }
+  .details-page-top-right-content{
+    padding: 5px 10px 12px;
+  }
+  .product-card .product-price > del{
+    font-size: 12px;
+    margin-left:5px;
+  }
   .t-m-s-a{
       text-align: start;
   }

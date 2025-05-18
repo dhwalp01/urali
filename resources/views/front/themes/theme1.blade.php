@@ -165,11 +165,10 @@
                                                 {!! Helper::renderStarRating($compaign_item->item->reviews->avg('rating')) !!}
                                             </div> --}}
                                             <h4 class="product-price text-start">
+                                                {{ PriceHelper::grandCurrencyPrice($compaign_item->item) }}
                                                 @if ($compaign_item->item->previous_price != 0)
                                                     <del>{{ PriceHelper::setPreviousPrice($compaign_item->item->previous_price) }}</del>
                                                 @endif
-
-                                                {{ PriceHelper::grandCurrencyPrice($compaign_item->item) }}
                                             </h4>
 
                                         </div>
@@ -301,10 +300,10 @@
                                                 {!! Helper::renderStarRating($popular_category_item->reviews->avg('rating')) !!}
                                             </div> --}}
                                             <h4 class="product-price text-start">
+                                                {{ PriceHelper::grandCurrencyPrice($popular_category_item) }}
                                                 @if ($popular_category_item->previous_price != 0)
                                                     <del>{{ PriceHelper::setPreviousPrice($popular_category_item->previous_price) }}</del>
                                                 @endif
-                                                {{ PriceHelper::grandCurrencyPrice($popular_category_item) }}
                                             </h4>
                                         </div>
                                     </div>
@@ -465,16 +464,16 @@
                                                         
                                                         @if ($hasAttributesWithStock)
                                                             @if ($minSalePrice)
-                                                                <del>{{PriceHelper::setCurrencyPrice($minPrice)}}</del>
                                                                 {{PriceHelper::setCurrencyPrice($minSalePrice)}}
+                                                                <del>{{PriceHelper::setCurrencyPrice($minPrice)}}</del>
                                                             @else
                                                                 {{PriceHelper::setCurrencyPrice($minPrice)}}
                                                             @endif
                                                         @else
+                                                            {{PriceHelper::grandCurrencyPrice($item)}}
                                                             @if ($item->previous_price != 0)
                                                                 <del>{{PriceHelper::setPreviousPrice($item->previous_price)}}</del>
                                                             @endif
-                                                            {{PriceHelper::grandCurrencyPrice($item)}}
                                                         @endif
                                                     </h4>
                                                 </div>
@@ -592,16 +591,16 @@
                                                             
                                                             @if ($hasAttributesWithStock)
                                                                 @if ($minSalePrice)
-                                                                    <del>{{PriceHelper::setCurrencyPrice($minPrice)}}</del>
                                                                     {{PriceHelper::setCurrencyPrice($minSalePrice)}}
+                                                                    <del>{{PriceHelper::setCurrencyPrice($minPrice)}}</del>
                                                                 @else
                                                                     {{PriceHelper::setCurrencyPrice($minPrice)}}
                                                                 @endif
                                                             @else
+                                                                {{PriceHelper::grandCurrencyPrice($item)}}
                                                                 @if ($item->previous_price != 0)
                                                                     <del>{{PriceHelper::setPreviousPrice($item->previous_price)}}</del>
                                                                 @endif
-                                                                {{PriceHelper::grandCurrencyPrice($item)}}
                                                             @endif
                                                         </h4>
                                                         {{-- @if (date('d-m-y') != \Carbon\Carbon::parse($item->date)->format('d-m-y'))
@@ -730,16 +729,16 @@
                                                             
                                                             @if ($hasAttributesWithStock)
                                                                 @if ($minSalePrice)
-                                                                    <del>{{PriceHelper::setCurrencyPrice($minPrice)}}</del>
                                                                     {{PriceHelper::setCurrencyPrice($minSalePrice)}}
+                                                                    <del>{{PriceHelper::setCurrencyPrice($minPrice)}}</del>
                                                                 @else
                                                                     {{PriceHelper::setCurrencyPrice($minPrice)}}
                                                                 @endif
                                                             @else
+                                                                {{PriceHelper::grandCurrencyPrice($item)}}
                                                                 @if ($item->previous_price != 0)
                                                                     <del>{{PriceHelper::setPreviousPrice($item->previous_price)}}</del>
                                                                 @endif
-                                                                {{PriceHelper::grandCurrencyPrice($item)}}
                                                             @endif
                                                         </h4>
                                                         {{-- @if (date('d-m-y') != \Carbon\Carbon::parse($item->date)->format('d-m-y'))
@@ -799,10 +798,10 @@
                                                             {!! Helper::renderStarRating($two_column_category_item->reviews->avg('rating')) !!}
                                                         </div> --}}
                                                         <h4 class="product-price text-start">
+                                                            {{ PriceHelper::grandCurrencyPrice($two_column_category_item) }}
                                                             @if ($two_column_category_item->previous_price != 0)
                                                                 <del>{{ PriceHelper::setPreviousPrice($two_column_category_item->previous_price) }}</del>
                                                             @endif
-                                                            {{ PriceHelper::grandCurrencyPrice($two_column_category_item) }}
                                                         </h4>
                                                     </div>
                                                 </div>
@@ -920,10 +919,10 @@
                                         {!! Helper::renderStarRating($feature_category_item->reviews->avg('rating')) !!}
                                     </div> --}}
                                     <h4 class="product-price text-start">
+                                        {{ PriceHelper::grandCurrencyPrice($feature_category_item) }}
                                         @if ($feature_category_item->previous_price != 0)
                                             <del>{{ PriceHelper::setPreviousPrice($feature_category_item->previous_price) }}</del>
                                         @endif
-                                        {{ PriceHelper::grandCurrencyPrice($feature_category_item) }}
                                     </h4>
                                 </div>
 

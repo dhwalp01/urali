@@ -399,13 +399,17 @@ $(function ($) {
       margin: 15,
       thumbs: false,
       responsive: {
-        0: { items: 4 },
+        0: { items: 5 },
         576: { items: 5 },
         768: { items: 5 },
         992: { items: 4 },
         1200: { items: 5 },
         1400: { items: 5 },
       },
+    });
+
+    $("#main-product-image").on("click", function () {
+      $(this).toggleClass("zoomed");
     });
 
     // grab the carousel API

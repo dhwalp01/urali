@@ -38,7 +38,7 @@
                                 <a class="list-view {{Session::has('view_catalog') && Session::get('view_catalog') == 'list' ? 'active' : ''}}" href="javascript:;" data-step="list" data-href="{{route('front.catalog').'?view_check=list'}}"><i class="fas fa-list"></i></a>
                           </div>
                       </div>
-                      <div class="col-12 mb-4 rounded p-2 catalog" style="background:#e6f7fd;">
+                      <div class="col-12 mb-4 rounded p-2 catalog hidden-on-desktop" style="background:#e6f7fd;">
                         <div class="row">
                           <div class="col-6">
                             <div class="single-service single-service2">

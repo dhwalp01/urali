@@ -2741,6 +2741,7 @@ a.alert {
   overflow: hidden;
   border-radius: 6px;
   background: #fff;
+  font-size: 13px;
 }
 .nav-pills .nav-link {
   margin-right: 5px;
@@ -7011,6 +7012,12 @@ video {
   margin-top: 4px;
   padding: 3px 0;
 }
+
+span.h3.d-block.price-area small{
+  font-size: 18px;
+  margin-left: 10px;
+}
+
 .flash-deal .product-card .product-price {
   font-size: 20px;
 }
@@ -8276,6 +8283,15 @@ line-height: 16px;
 .product-main-image {
     width: 100%;
     height: auto;
+    transition: transform 0.3s ease;
+    cursor: zoom-in;
+}
+
+.product-main-image.zoomed {
+  transform: scale(2);
+  cursor: zoom-out;
+  /* if you want to pan around, make sure the container is overflow-hidden: */
+  /* .product-main-image-container { overflow: hidden; } */
 }
 
 /* Animation durations to match JavaScript timeouts */
@@ -8421,6 +8437,13 @@ line-height: 16px;
 }
 
 .flash-deal-slider .owl-stage {
+  /* match your smartSpeed (1200 ms) */
+  transition-duration: 1.2s !important;
+  /* pick a gentle ease-in-out curve */
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.relatedproductslider .owl-stage {
   /* match your smartSpeed (1200 ms) */
   transition-duration: 1.2s !important;
   /* pick a gentle ease-in-out curve */

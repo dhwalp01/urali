@@ -114,16 +114,16 @@
                         
                         @if ($hasAttributesWithStock)
                             @if ($minSalePrice)
-                                <del>{{PriceHelper::setCurrencyPrice($minPrice)}}</del>
                                 {{PriceHelper::setCurrencyPrice($minSalePrice)}}
+                                <del>{{PriceHelper::setCurrencyPrice($minPrice)}}</del>
                             @else
                                 {{PriceHelper::setCurrencyPrice($minPrice)}}
                             @endif
                         @else
+                            {{PriceHelper::grandCurrencyPrice($item)}}
                             @if ($item->previous_price != 0)
                                 <del>{{PriceHelper::setPreviousPrice($item->previous_price)}}</del>
                             @endif
-                            {{PriceHelper::grandCurrencyPrice($item)}}
                         @endif
                     </h4>
                 </div>

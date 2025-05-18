@@ -208,14 +208,14 @@
                   </div>
                </div>
                <div class="div">
-                  <div class="t-c-b-area">
+                  {{-- <div class="t-c-b-area">
                      @if ($item->brand_id)
                      <div class="pt-1 mb-1"><span class="text-medium">{{ __('Brand') }}:</span>
                         <a
                            href="{{ route('front.catalog') . '?brand=' . $item->brand->slug }}">{{ $item->brand->name }}</a>
                      </div>
                      @endif
-                     {{-- 
+                     
                      <div class="pt-1 mb-1"><span class="text-medium">{{ __('Categories') }}:</span>
                         <a
                            href="{{ route('front.category', $item->category->slug) }}">{{ $item->category->name }}</a>
@@ -230,8 +230,6 @@
                         <a
                            href="{{ route('front.catalog') . '?childcategory=' . $item->childcategory->slug }}">{{ $item->childcategory->name }}</a>
                      </div>
-                     --}}
-                     {{-- 
                      <div class="pt-1 mb-1"><span class="text-medium">{{ __('Tags') }}:</span>
                         @if ($item->tags)
                         @foreach (explode(',', $item->tags) as $tag)
@@ -245,13 +243,13 @@
                         @endforeach
                         @endif
                      </div>
-                     --}}
+                    
                      @if ($item->item_type == 'normal')
                         <div class="pt-1 mb-4"><span class="text-medium">{{ __('SKU') }}:</span>
                            <span class="sku-display">#{{ $item->sku }}</span>
                         </div>
                      @endif
-                  </div>
+                  </div> --}}
                   <div class="mt-4 p-d-f-area">
                      <div class="left">
                         <a class="btn btn-primary btn-sm wishlist_store wishlist_text"
@@ -562,10 +560,10 @@
                         </a>
                      </h3>
                      <h4 class="product-price text-start">
-                        @if ($related->previous_price != 0)
-                        <del>{{ PriceHelper::setPreviousPrice($related->previous_price) }}</del>
-                        @endif
                         {{ PriceHelper::grandCurrencyPrice($related) }}
+                        @if ($related->previous_price != 0)
+                           <del>{{ PriceHelper::setPreviousPrice($related->previous_price) }}</del>
+                        @endif
                      </h4>
                   </div>
                </div>
@@ -687,8 +685,8 @@
             let priceHtml = '';
             if (hasSale) {
                 if (direction === '1') {
-                    priceHtml = `<small class="d-inline-block"><del>${currency}${finalTotal.toFixed(2)}</del></small>
-                                <span class="main-price">${currency}${finalSaleTotal.toFixed(2)}</span>`;
+                    priceHtml = `<span class="main-price">${currency}${finalSaleTotal.toFixed(2)}</span>  <small class="d-inline-block"><del>${currency}${finalTotal.toFixed(2)}</del></small>
+                                `;
                 } else {
                     priceHtml = `<small class="d-inline-block"><del>${finalTotal.toFixed(2)}${currency}</del></small>
                                 <span class="main-price">${finalSaleTotal.toFixed(2)}${currency}</span>`;
@@ -738,5 +736,15 @@
         updatePriceAndStock();
     }
 });
+
+const img = document.querySelector('#main-product-image');
+  const panzoom = Panzoom(img, {
+    maxScale: 3,
+    contain: 'outside'
+  });
+  // enable mouse wheel zoom
+  img.parentElement.addEventListener('wheel', panzoom.zoomWithWheel);
+  // toggle on tap
+  img.addEventListener('click', () => panzoom.toggleZoom());
 </script>
 @endsection
