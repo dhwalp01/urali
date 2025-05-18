@@ -185,7 +185,7 @@ $(function ($) {
     var $flash_deal_slider = $(".flash-deal-slider");
     $flash_deal_slider.owlCarousel({
       navText: [],
-      nav: true,
+      nav: false,
       dots: false,
       autoplay: true,
       autoplayTimeout: 3000,
@@ -390,9 +390,8 @@ $(function ($) {
       },
     });
 
-    // productthumbnail slider
-    var $productthumbnail_slider = $(".product-thumbnails-slider");
-    $productthumbnail_slider.owlCarousel({
+    // product thumnail slider
+    var $thumbSlider = $(".product-thumbnails-slider").owlCarousel({
       nav: false,
       dots: true,
       autoplay: false,
@@ -400,146 +399,83 @@ $(function ($) {
       margin: 15,
       thumbs: false,
       responsive: {
-        0: {
-          items: 4,
-        },
-        576: {
-          items: 5,
-        },
-        768: {
-          items: 5,
-        },
-        992: {
-          items: 4,
-        },
-        1200: {
-          items: 5,
-        },
-        1400: {
-          items: 5,
-        },
+        0: { items: 4 },
+        576: { items: 5 },
+        768: { items: 5 },
+        992: { items: 4 },
+        1200: { items: 5 },
+        1400: { items: 5 },
       },
     });
 
-    // Store all images for navigation
-    var images = [];
-    $(".thumbnail-item").each(function () {
-      images.push({
-        src: $(this).data("image"),
-        index: $(this).data("index"),
-      });
-    });
+    // grab the carousel API
+    var owl = $thumbSlider.data("owl.carousel");
 
-    var currentImageIndex = 0;
-    var totalImages = images.length;
+    // 2) helper to swap main image without flash
+    function changeMainImage(newSrc, newIndex) {
+      var $main = $("#main-product-image"),
+        $cont = $(".product-main-image-container"),
+        oldIdx = parseInt($(".thumbnail-item.active").data("index")) || 0,
+        isNext = newIndex > oldIdx;
 
-    // Handle thumbnail click to change main image
-    $(".thumbnail-item").on("click", function () {
-      var imgSrc = $(this).data("image");
-      var imgIndex = parseInt($(this).data("index"));
+      // create incoming
+      var $inc = $("<img>", {
+        src: newSrc,
+        class: "product-main-image-next animate__animated",
+        css: { opacity: 0 },
+      }).appendTo($cont);
 
-      changeMainImage(imgSrc, imgIndex);
-    });
+      // push old behind + animate out
+      $main.addClass(
+        "ani-out animate__animated " +
+          (isNext ? "animate__slideOutLeft" : "animate__slideOutRight")
+      );
 
-    // Handle next/prev arrows for main image
+      // animate incoming
+      $inc
+        .css("opacity", 1)
+        .addClass(isNext ? "animate__slideInRight" : "animate__slideInLeft");
+
+      // cleanup after 500ms
+      setTimeout(function () {
+        $main
+          .attr("src", newSrc)
+          .removeClass(
+            "ani-out animate__animated animate__slideOutLeft animate__slideOutRight"
+          );
+        $inc.remove();
+
+        // update thumbnail highlight
+        $(".thumbnail-item").removeClass("active");
+        $('.thumbnail-item[data-index="' + newIndex + '"]').addClass("active");
+      }, 500);
+    }
+
+    // 3) arrow clicks
     $("#next-image, #prev-image").on("click", function () {
       if ($(this).hasClass("disabled")) return;
 
-      var isNext = $(this).attr("id") === "next-image";
-      var currentIndex = parseInt(
-        $(".thumbnail-item.active").data("index") || 0
-      );
-      var totalImages = $(".thumbnail-item").length;
-      var newIndex;
+      var isNext = this.id === "next-image",
+        curr = parseInt($(".thumbnail-item.active").data("index")) || 0,
+        total = $(".thumbnail-item").length,
+        newIdx = isNext ? (curr + 1) % total : (curr - 1 + total) % total,
+        newSrc = $('.thumbnail-item[data-index="' + newIdx + '"]').data(
+          "image"
+        );
 
-      // Calculate new index
-      if (isNext) {
-        newIndex = (currentIndex + 1) % totalImages;
-      } else {
-        newIndex = (currentIndex - 1 + totalImages) % totalImages;
+      // swap the main image
+      changeMainImage(newSrc, newIdx);
+
+      // now only scroll carousel if newIdx is out of view
+      var width = $(window).width(),
+        opts = owl.options.responsive[width] || owl.options.responsive[0],
+        perPage = opts.items,
+        firstVisible = owl.current(),
+        lastVisible = firstVisible + perPage - 1;
+
+      if (newIdx < firstVisible || newIdx > lastVisible) {
+        $thumbSlider.trigger("to.owl.carousel", [newIdx, 300]);
       }
-
-      // Get new image source
-      var newImageSrc = $(
-        '.thumbnail-item[data-index="' + newIndex + '"]'
-      ).data("image");
-
-      // Disable buttons during animation
-      $(".nav-arrow").addClass("disabled");
-
-      // Create new image element and wait for it to load
-      var $newImage = $("<img>", {
-        src: newImageSrc,
-        alt: "zoom",
-        class: "product-main-image-next",
-      });
-
-      // Preload the image first
-      $newImage
-        .on("load", function () {
-          var $mainImage = $("#main-product-image");
-          var $container = $(".product-main-image-container");
-
-          // Add the new image to the container but keep it hidden
-          $container.append($newImage);
-
-          // Position the new image absolutely over the current one
-          $newImage.css({
-            position: "absolute",
-            top: "0",
-            left: "0",
-            width: "100%",
-            height: "auto",
-            "z-index": "2",
-            opacity: "0",
-          });
-
-          // Now start the animations
-          if (isNext) {
-            $mainImage.addClass("animate__animated animate__slideOutLeft");
-            $newImage.addClass("animate__animated animate__slideInRight");
-          } else {
-            $mainImage.addClass("animate__animated animate__slideOutRight");
-            $newImage.addClass("animate__animated animate__slideInLeft");
-          }
-
-          // Make the new image visible
-          $newImage.css("opacity", "1");
-
-          // After animation completes, replace old image and clean up
-          setTimeout(function () {
-            // Update the main image source
-            $mainImage.attr("src", newImageSrc);
-
-            // Remove animation classes
-            $mainImage.removeClass(
-              "animate__animated animate__slideOutLeft animate__slideOutRight"
-            );
-
-            // Remove the temporary image
-            $newImage.remove();
-
-            // Update active thumbnail
-            $(".thumbnail-item").removeClass("active");
-            $('.thumbnail-item[data-index="' + newIndex + '"]').addClass(
-              "active"
-            );
-
-            // Scroll thumbnail slider to active item
-            $productthumbnail_slider.trigger("to.owl.carousel", [
-              newIndex,
-              300,
-            ]);
-
-            // Re-enable buttons
-            $(".nav-arrow").removeClass("disabled");
-          }, 500);
-        })
-        .on("error", function () {
-          // In case the image fails to load
-          console.error("Failed to load image:", newImageSrc);
-          $(".nav-arrow").removeClass("disabled");
-        });
     });
 
     // Similar approach for thumbnail clicks

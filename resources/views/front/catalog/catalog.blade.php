@@ -61,9 +61,9 @@
                     }
                 @endphp
             
-                @if($discountPercentage)
+                {{-- @if($discountPercentage)
                     <div class="product-badge product-badge2 bg-info">-{{$discountPercentage}}%</div>
-                @endif
+                @endif --}}
                 <div class="product-thumb">
                     <a href="{{route('front.product',$item->slug)}}">
                         <div class="product-thumb-image-wrapper">
@@ -81,15 +81,15 @@
                     </a>
                 </div>
                 <div class="product-card-body">
-                    <div class="product-category">
+                    {{-- <div class="product-category">
                         <a href="{{route('front.category', $item->category->slug)}}">{{$item->category->name}}</a>
-                    </div>                    
+                    </div>                     --}}
                     <h3 class="product-title"><a href="{{route('front.product',$item->slug)}}">
                         {{ Str::limit($item->name, 38) }}
                     </a></h3>
-                    <div class="rating-stars">
+                    {{-- <div class="rating-stars">
                         {!! Helper::renderStarRating($item->reviews->avg('rating'))!!}
-                    </div>
+                    </div> --}}
                     <h4 class="product-price text-start">
                         @php
                             $hasAttributesWithStock = count($item->attributes) > 0 && 
@@ -179,9 +179,9 @@
                                     <h3 class="product-title"><a href="{{route('front.product',$item->slug)}}">
                                         {{ Str::limit($item->name, 52) }}
                                     </a></h3>
-                                    <div class="rating-stars">
+                                    {{-- <div class="rating-stars">
                                         {!! Helper::renderStarRating($item->reviews->avg('rating')) !!}
-                                    </div>
+                                    </div> --}}
                                     <h4 class="product-price text-start">
                                         @if ($item->previous_price !=0)
                                         <del>{{PriceHelper::setPreviousPrice($item->previous_price)}}</del>

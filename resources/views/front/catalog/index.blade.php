@@ -28,9 +28,9 @@
             <div class="col-lg-12">
                 <div class="shop-top-filter-wrapper">
                     <div class="row">
-                      <div class="col-12 mb-2 d-flex justify-content-between align-items-center text-end col-md-12 gd-text-sm-center">
+                      <div class="col-12 mb-2 d-flex justify-content-between align-items-center gd-text-sm-center">
                           <div class="col-sm-6 col-md-6">
-                            <a href="">
+                            <a class="category-name" href="{{ url()->previous() }}">
                               <i class="fas fa-chevron-left"></i>&nbsp;&nbsp;{{ $category->name ?? '' }}
                             </a>
                           </div>
@@ -38,87 +38,64 @@
                                 <a class="list-view {{Session::has('view_catalog') && Session::get('view_catalog') == 'list' ? 'active' : ''}}" href="javascript:;" data-step="list" data-href="{{route('front.catalog').'?view_check=list'}}"><i class="fas fa-list"></i></a>
                           </div>
                       </div>
+                      <div class="col-12 mb-4 rounded p-2 catalog" style="background:#e6f7fd;">
+                        <div class="row">
+                          <div class="col-6">
+                            <div class="single-service single-service2">
+                                  <img src="/storage/images/162196463701.png" alt="Shipping">
+                                  <div class="content">
+                                      <h6 class="mb-2">Premium 100% Cotton</h6>
+                                      
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="col-6">
+                            <div class="single-service single-service2">
+                                  <img src="/storage/images/162196463701.png" alt="Shipping">
+                                  <div class="content">
+                                      <h6 class="mb-2">Long-lasting colours</h6>
+                                      
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="col-6">
+                            <div class="single-service single-service2">
+                                  <img src="/storage/images/162196463701.png" alt="Shipping">
+                                  <div class="content">
+                                      <h6 class="mb-2">Long-length Gown</h6>
+                                      
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="col-6">
+                            <div class="single-service single-service2">
+                                  <img src="/storage/images/162196463701.png" alt="Shipping">
+                                  <div class="content">
+                                      <h6 class="mb-2">Durable, Resilient</h6>
+                                      
+                                  </div>
+                              </div>
+                          </div>
+                        </div>
+                      </div>
                       <div class="d-flex justify-content-between align-items-center col-md-10 gd-text-sm-center">
-                        <div class="col-8">
-                          <div class="d-flex justify-content-betwee">
+                        <div class="col-7">
+                          <div class="d-flex align-items-center">
                             <label class="" for="sorting">{{('Sort by')}}:</label>&nbsp;&nbsp;
-                            <select class="" id="sorting">
+                            <select class="sorting form-select w-auto d-inline-block" id="sorting">
                               <option value="">{{('All Products')}}</option>
+                              <option value="high_to_low" {{request()->input('high_to_low') ? 'selected' : ''}}>{{('New Arrival')}}</option>
                               <option value="low_to_high" {{request()->input('low_to_high') ? 'selected' : ''}}>{{('Low - High Price')}}</option>
                               <option value="high_to_low" {{request()->input('high_to_low') ? 'selected' : ''}}>{{('High - Low Price')}}</option>
                             </select>
                           </div>
                         </div>
                         <div class="col-4">
-                          <div class="sptfl">
+                          <div class="sidebar-open">
                             <!-- Mobile Filter Button (Visible only on mobile) -->
-                            <button class="mobile-filter-toggle d-lg-none btn btn-primary btn-sm">
-                                <i class="fas fa-filter"></i> {{__('Filters & Sorting')}}
+                            <button class="sidebar-open mobile-filter-toggle d-lg-none btn btn-primary btn-sm">
+                                <i class="fas fa-filter"></i> {{__('Filters')}}
                             </button>
-                        
-                            <div class="filter-container">
-                                <!-- Mobile/Responsive Filter Section -->
-                                <div class="mobile-filter-section d-lg-none">
-                                    <!-- Quick Filter Section -->
-                                    <div class="quickFilter">
-                                        <h4 class="quickFilter-title">
-                                            <i class="fas fa-filter"></i>{{__('Quick filter')}}
-                                            <span class="mobile-close-filter d-lg-none"><i class="icon-x"></i></span>
-                                        </h4>
-                                        <ul id="quick_filter">
-                                            <li><a href="javascript:;" data-href=""><i class="icon-chevron-right pr-2"></i>{{__('All products')}}</a></li>
-                                            <li><a href="javascript:;" data-href="feature"><i class="icon-chevron-right pr-2"></i>{{__('Featured products')}}</a></li>
-                                            <li><a href="javascript:;" data-href="best"><i class="icon-chevron-right pr-2"></i>{{__('Best sellers')}}</a></li>
-                                            <li><a href="javascript:;" data-href="top"><i class="icon-chevron-right pr-2"></i>{{__('Top rated')}}</a></li>
-                                            <li><a href="javascript:;" data-href="new"><i class="icon-chevron-right pr-2"></i>{{__('New Arrival')}}</a></li>
-                                        </ul>
-                                    </div>
-                        
-                                    <!-- Shop Sorting Section -->
-                                    <div class="shop-sorting">
-                                        <h4 class="quickFilter-title d-lg-none">
-                                            <i class="fas fa-sort-amount-down"></i>{{__('Sorting')}}
-                                            <span class="mobile-close-filter"><i class="icon-x"></i></span>
-                                        </h4>
-                                        <div class="sorting-options">
-                                            <div class="form-group">
-                                                <label for="sorting">{{__('Sort by')}}:</label>
-                                                <select class="form-control" id="sorting">
-                                                    <option value="">{{__('All Products')}}</option>
-                                                    <option value="low_to_high" {{request()->input('low_to_high') ? 'selected' : ''}}>{{__('Low - High Price')}}</option>
-                                                    <option value="high_to_low" {{request()->input('high_to_low') ? 'selected' : ''}}>{{__('High - Low Price')}}</option>
-                                                </select>
-                                            </div>
-                                            <div class="showing-count">
-                                                <span class="text-muted">{{__('Showing')}}:</span>
-                                                <span>1 - {{$setting->view_product}} {{__('items')}}</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                        
-                                <!-- Desktop Filter Section -->
-                                <div class="sptfl d-sm-none desktop-filter-section">
-                                  <div class="quickFilter">
-                                      <h4 class="quickFilter-title"><i class="fas fa-filter"></i>{{('Quick filter')}}</h4>
-                                      <ul id="quick_filter">
-                                          <li><a datahref=""><i class="icon-chevron-right pr-2"></i>{{('All products')}} </a></li>
-                                          <li class=""><a href="javascript:;" data-href="feature"><i class="icon-chevron-right pr-2"></i>{{('Featured products')}} </a></li>
-                                          <li class=""><a href="javascript:;" data-href="best"><i class="icon-chevron-right pr-2"></i>{{('Best sellers')}} </a></li>
-                                          <li class=""><a href="javascript:;" data-href="top"><i class="icon-chevron-right pr-2"></i>{{('Top rated')}} </a></li>
-                                          <li class=""><a href="javascript:;" data-href="new"><i class="icon-chevron-right pr-2"></i>{{('New Arrival')}} </a></li>
-                                      </ul>
-                                  </div>
-                                  <div class="shop-sorting">
-                                      <label for="sorting">{{('Sort by')}}:</label>
-                                      <select class="form-control" id="sorting">
-                                      <option value="">{{('All Products')}}</option>
-                                      <option value="low_to_high" {{request()->input('low_to_high') ? 'selected' : ''}}>{{('Low - High Price')}}</option>
-                                      <option value="high_to_low" {{request()->input('high_to_low') ? 'selected' : ''}}>{{('High - Low Price')}}</option>
-                                      </select><span class="text-muted">{{('Showing')}}:</span><span>1 - {{$setting->view_product}} {{('items')}}</span>
-                                  </div>
-                              </div>
-                            </div>
                         </div>
                         <style>
                             
@@ -190,10 +167,10 @@
 
           <!-- Sidebar          -->
           <div class="col-lg-3 order-lg-1">
-            <div class="sidebar-toggle position-left"><i class="icon-filter"></i></div>
+            {{-- <div class="sidebar-toggle position-left"><i class="icon-filter"></i></div> --}}
             <aside class="sidebar sidebar-offcanvas position-left"><span class="sidebar-close"><i class="icon-x"></i></span>
               <!-- Widget Categories-->
-              <section class="widget widget-categories card rounded p-4">
+              {{-- <section class="widget widget-categories card rounded p-4">
                 <h3 class="widget-title">{{__('Shop Categories')}}</h3>
                 <ul id="category_list" class="category-scroll">
                     @foreach ($categories as $getcategory)
@@ -229,7 +206,7 @@
                       </li>
                     @endforeach
                 </ul>
-              </section>
+              </section> --}}
 
               @if ($setting->is_range_search == 1)
                    <!-- Widget Price Range-->

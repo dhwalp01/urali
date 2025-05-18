@@ -40,7 +40,7 @@
                         <div class="hero-slider">
                             <div class="hero-slider-main owl-carousel dots-inside">
                                 @foreach ($sliders as $slider)
-                                    <div class="item
+                                    <div class="hero-slider-item item
                                     @if (DB::table('languages')->where('is_default', 1)->first()->rtl == 1) d-flex justify-content-end @endif
                                     "
                                         style="background: url('{{ url('/storage/images/' . $slider->photo) }}')">
@@ -154,16 +154,16 @@
                                         </div>
                                         <div class="product-card-body">
 
-                                            <div class="product-category"><a
+                                            {{-- <div class="product-category"><a
                                                     href="{{ route('front.catalog') . '?category=' . $compaign_item->item->category->slug }}">{{ $compaign_item->item->category->name }}</a>
-                                            </div>
+                                            </div> --}}
                                             <h3 class="product-title"><a
                                                     href="{{ route('front.product', $compaign_item->item->slug) }}">
                                                     {{ Str::limit($compaign_item->item->name, 35) }}
                                                 </a></h3>
-                                            <div class="rating-stars">
+                                            {{-- <div class="rating-stars">
                                                 {!! Helper::renderStarRating($compaign_item->item->reviews->avg('rating')) !!}
-                                            </div>
+                                            </div> --}}
                                             <h4 class="product-price text-start">
                                                 @if ($compaign_item->item->previous_price != 0)
                                                     <del>{{ PriceHelper::setPreviousPrice($compaign_item->item->previous_price) }}</del>
@@ -290,16 +290,16 @@
                                             </div>
                                         </div>
                                         <div class="product-card-body">
-                                            <div class="product-category"><a
+                                            {{-- <div class="product-category"><a
                                                     href="{{ route('front.catalog') . '?category=' . $popular_category_item->category->slug }}">{{ $popular_category_item->category->name }}</a>
-                                            </div>
+                                            </div> --}}
                                             <h3 class="product-title"><a
                                                     href="{{ route('front.product', $popular_category_item->slug) }}">
                                                     {{ Str::limit($popular_category_item->name, 35) }}
                                                 </a></h3>
-                                            <div class="rating-stars">
+                                            {{-- <div class="rating-stars">
                                                 {!! Helper::renderStarRating($popular_category_item->reviews->avg('rating')) !!}
-                                            </div>
+                                            </div> --}}
                                             <h4 class="product-price text-start">
                                                 @if ($popular_category_item->previous_price != 0)
                                                     <del>{{ PriceHelper::setPreviousPrice($popular_category_item->previous_price) }}</del>
@@ -431,16 +431,16 @@
                                             </div>
                                             <div class="product-card-inner">
                                                 <div class="product-card-body">
-                                                    <div class="product-category"><a
+                                                    {{-- <div class="product-category"><a
                                                             href="{{ route('front.category', $cat->slug) }}">{{ $item->category->name }}</a>
-                                                    </div>
+                                                    </div> --}}
                                                     <h3 class="product-title"><a
                                                             href="{{ route('front.product', $item->slug) }}">
                                                             {{ Str::limit($item->name, 35) }}
                                                         </a></h3>
-                                                    <div class="rating-stars">
+                                                    {{-- <div class="rating-stars">
                                                         {!! Helper::renderStarRating($item->reviews->avg('rating')) !!}
-                                                    </div>
+                                                    </div> --}}
                                                     <h4 class="product-price text-start">
                                                         @php
                                                             $hasAttributesWithStock = count($item->attributes) > 0 && 
@@ -495,9 +495,10 @@
         <div class="flash-sell-new-section mt-50">
             <div class="container">
                 <div class="row">
-                    <div class="col-lg-12 ">
-                        <div class="section-title">
+                    <div class="col-lg-12">
+                        <div class="section-title d-flex justify-content-between align-items-center">
                             <h2 class="h3">{{ __('Explore') }}</h2>
+                            <button class="show-btn"><a href="{{ url('/catalog') }}">Show all</a></button>
                         </div>
                     </div>
                 </div>
@@ -537,9 +538,9 @@
                                                         }
                                                     @endphp
 
-                                                    @if ($discountPercentage > 0)
+                                                    {{-- @if ($discountPercentage > 0)
                                                         <div class="product-badge product-badge2 bg-info 12">-{{ $discountPercentage }}%</div>
-                                                    @endif
+                                                    @endif --}}
                                                     <div class="product-thumb-image-wrapper">
                                                         <a href="{{ route('front.product', $item->slug) }}">
                                                             <img class="lazy" data-src="{{ url('/storage/images/' . $item->thumbnail) }}" alt="Product">
@@ -557,16 +558,16 @@
                                                 <div class="product-card-inner">
                                                     <div class="product-card-body">
 
-                                                        <div class="product-category"><a
+                                                        {{-- <div class="product-category"><a
                                                                 href="{{ route('front.category', $cat->slug) }}">{{ $item->category->name }}</a>
-                                                        </div>
+                                                        </div> --}}
                                                         <h3 class="product-title"><a
                                                                 href="{{ route('front.product', $item->slug) }}">
                                                                 {{ Str::limit($item->name, 50) }}
                                                             </a></h3>
-                                                        <div class="rating-stars">
+                                                        {{-- <div class="rating-stars">
                                                             {!! Helper::renderStarRating($item->reviews->avg('rating')) !!}
-                                                        </div>
+                                                        </div> --}}
                                                         <h4 class="product-price text-start">
                                                             @php
                                                                 $hasAttributesWithStock = count($item->attributes) > 0 && 
@@ -628,8 +629,9 @@
             <div class="container">
                 <div class="row">
                     <div class="col-lg-12 ">
-                        <div class="section-title">
+                        <div class="section-title d-flex justify-content-between align-items-center">
                             <h2 class="h3">{{ __('Best Seller') }}</h2>
+                            <button class="show-btn"><a href="{{ url('/catalog') }}">Show all</a></button>
                         </div>
                     </div>
                 </div>
@@ -674,9 +676,9 @@
                                                         }
                                                     @endphp
 
-                                                    @if ($discountPercentage > 0)
+                                                    {{-- @if ($discountPercentage > 0)
                                                         <div class="product-badge product-badge2 bg-info 12">-{{ $discountPercentage }}%</div>
-                                                    @endif
+                                                    @endif --}}
                                                     <div class="product-thumb-image-wrapper">
                                                         <a href="{{ route('front.product', $item->slug) }}">
                                                             <img class="lazy" data-src="{{ url('/storage/images/' . $item->thumbnail) }}" alt="Product">
@@ -694,16 +696,16 @@
                                                 <div class="product-card-inner">
                                                     <div class="product-card-body">
 
-                                                        <div class="product-category"><a
+                                                        {{-- <div class="product-category"><a
                                                                 href="{{ route('front.category', $cat->slug) }}">{{ $item->category->name }}</a>
-                                                        </div>
+                                                        </div> --}}
                                                         <h3 class="product-title"><a
                                                                 href="{{ route('front.product', $item->slug) }}">
                                                                 {{ Str::limit($item->name, 50) }}
                                                             </a></h3>
-                                                        <div class="rating-stars">
+                                                        {{-- <div class="rating-stars">
                                                             {!! Helper::renderStarRating($item->reviews->avg('rating')) !!}
-                                                        </div>
+                                                        </div> --}}
                                                         <h4 class="product-price text-start">
                                                             @php
                                                                 $hasAttributesWithStock = count($item->attributes) > 0 && 
@@ -793,9 +795,9 @@
                                                                 href="{{ route('front.product', $two_column_category_item->slug) }}">
                                                                 {{ Str::limit($two_column_category_item->name, 40) }}
                                                             </a></h3>
-                                                        <div class="rating-stars">
+                                                        {{-- <div class="rating-stars">
                                                             {!! Helper::renderStarRating($two_column_category_item->reviews->avg('rating')) !!}
-                                                        </div>
+                                                        </div> --}}
                                                         <h4 class="product-price text-start">
                                                             @if ($two_column_category_item->previous_price != 0)
                                                                 <del>{{ PriceHelper::setPreviousPrice($two_column_category_item->previous_price) }}</del>
@@ -907,16 +909,16 @@
                                     </div>
                                 </div>
                                 <div class="product-card-body">
-                                    <div class="product-category"><a
+                                    {{-- <div class="product-category"><a
                                             href="{{ route('front.catalog') . '?category=' . $feature_category_item->category->slug }}">{{ $feature_category_item->category->name }}</a>
-                                    </div>
+                                    </div> --}}
                                     <h3 class="product-title"><a
                                             href="{{ route('front.product', $feature_category_item->slug) }}">
                                             {{ Str::limit($feature_category_item->name, 35) }}
                                         </a></h3>
-                                    <div class="rating-stars">
+                                    {{-- <div class="rating-stars">
                                         {!! Helper::renderStarRating($feature_category_item->reviews->avg('rating')) !!}
-                                    </div>
+                                    </div> --}}
                                     <h4 class="product-price text-start">
                                         @if ($feature_category_item->previous_price != 0)
                                             <del>{{ PriceHelper::setPreviousPrice($feature_category_item->previous_price) }}</del>

@@ -295,11 +295,11 @@
       <div class=" padding-top-3x mb-3" id="details">
          <div class="col-lg-12">
             <ul class="nav nav-tabs" role="tablist">
-               <li class="nav-item" role="presentation">
+               {{-- <li class="nav-item" role="presentation">
                   <a class="nav-link rounded active" id="description-tab" data-bs-toggle="tab"
                      data-bs-target="#description" type="button" role="tab" aria-controls="description"
                      aria-selected="true">{{ __('Descriptions') }}</a>
-               </li>
+               </li> --}}
                {{-- 
                <li class="nav-item" role="presentation">
                   <a class="nav-link rounded" id="specification-tab" data-bs-toggle="tab"

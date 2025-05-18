@@ -307,6 +307,7 @@ body_theme4 @endif
                                     </div>
                                 </div>
                             </div>
+                            <div class="mobile-menu-backdrop"></div>
                         </div>
                     </div>
                 </div>
