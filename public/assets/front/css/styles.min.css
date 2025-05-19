@@ -8498,6 +8498,7 @@ a.category-name {
 select.sorting {
     padding: 2px 10px;
     font-size: 14px;
+    background-color:transparent;
 }
 
 .catalog .single-service.single-service2 {
