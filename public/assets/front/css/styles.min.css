@@ -8254,8 +8254,8 @@ line-height: 16px;
 }
 
 .option-box.selected {
-  border-color: #007bff;
-  background-color: #e9f5ff;
+  border-color: #d4d5df;
+  background-color: #dddfe8;
 }
 
 
@@ -8444,6 +8444,13 @@ line-height: 16px;
 }
 
 .relatedproductslider .owl-stage {
+  /* match your smartSpeed (1200 ms) */
+  transition-duration: 1.2s !important;
+  /* pick a gentle ease-in-out curve */
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.category-slider .owl-stage {
   /* match your smartSpeed (1200 ms) */
   transition-duration: 1.2s !important;
   /* pick a gentle ease-in-out curve */
