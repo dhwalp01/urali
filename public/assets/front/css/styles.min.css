@@ -6319,6 +6319,18 @@ video {
     justify-content: center;
   }
 }
+
+@media (max-width: 576px) {
+  .product-thumb-image-wrapper {
+      height: 230px;
+      overflow: hidden;
+      background-color: #f9f9f9;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+  }
+}
+
 .details-page-top-right-content .p-d-f-area .mr-1,
 .left-category-area .category-list .sub-c-box .child-category a i,
 .post-meta > li > i {
