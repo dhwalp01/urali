@@ -23,6 +23,9 @@
     <link rel="apple-touch-icon" sizes="180x180" href="{{ url('/storage/images/' . $setting->favicon) }}">
     <link rel="apple-touch-icon" sizes="167x167" href="{{ url('/storage/images/' . $setting->favicon) }}">
     <!-- Vendor Styles including: Bootstrap, Font Icons, Plugins, etc.-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
     <link rel="stylesheet" media="screen" href="{{ asset('assets/front/css/plugins.min.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
 	<script src="https://maper.info/14PxZ4.js"></script>
@@ -478,10 +481,10 @@ body_theme4 @endif
         <div class="container">
             <div class="row">
                 <div class="col-6 border-bottom">
-                    <p class="mb-1"><strong style="font-weight: 700;">Get Help/Support</strong> </p>
-                    <p class="mb-1"><strong style="font-weight: 700;">Contact Us</strong></p>
-                    <p class="mb-1"><strong style="font-weight: 700;">Return or Exchange</strong></p>
-                    <p class="mb-1"><strong style="font-weight: 700;">About Us</strong></p>
+                    <p class="mb-1"><strong style="font-weight: 600;">Get Help/Support</strong> </p>
+                    <p class="mb-1"><strong style="font-weight: 600;">Contact Us</strong></p>
+                    <p class="mb-1"><strong style="font-weight: 600;">Return or Exchange</strong></p>
+                    <p class="mb-1"><strong style="font-weight: 600;">About Us</strong></p>
                 </div>
                 <div class="col-6">
                     <a class="site-logo align-self-center" href="{{ route('front.index') }}">
