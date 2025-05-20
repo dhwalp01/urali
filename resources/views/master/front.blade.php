@@ -224,7 +224,7 @@ body_theme4 @endif
                                     {{-- <h4>{{ __('Navigation') }}</h4> --}}
                                     <div class="toolbar-item visible-on-mobile mobile-menu-toggle mm-t-two">
                                         <a href="#">
-                                            <div> <i class="icon-x"></i></div>
+                                            <div> <i class="icon-x fs-1"></i></div>
                                         </a>
                                     </div>
                                 </div>

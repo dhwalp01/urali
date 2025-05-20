@@ -837,8 +837,8 @@ select.form-control.input-light option {
   background-color: #edeef5 !important;
 }
 .site-header .menu-top-area a{
-  color: #40455c !important;
-  margin-right: 10px;
+  color: #6f7490 !important;
+  margin-left: 20px;
 }
 
 .details-page-top-right-content .btn-outline-primary,
@@ -6311,7 +6311,7 @@ video {
   } 
 
   .product-thumb-image-wrapper {
-    height: 240px; /* Adjust as needed */
+    height: 290px; /* Adjust as needed */
     overflow: hidden;
     background-color: #f9f9f9;
     display: flex;
@@ -6968,10 +6968,10 @@ video {
   margin-bottom: 10px;
 }
 .single-service:hover {
-  -webkit-box-shadow: 0 10px 20px 0 rgba(0, 0, 0, 0.05);
-  -moz-box-shadow: 0 10px 20px 0 rgba(0, 0, 0, 0.05);
-  -ms-box-shadow: 0 10px 20px 0 rgba(0, 0, 0, 0.05);
-  box-shadow: 0 10px 20px 0 rgba(0, 0, 0, 0.05);
+  /* -webkit-box-shadow: 0 10px 20px 0 rgba(0, 0, 0, 0.05); */
+  /* -moz-box-shadow: 0 10px 20px 0 rgba(0, 0, 0, 0.05); */
+  /* -ms-box-shadow: 0 10px 20px 0 rgba(0, 0, 0, 0.05); */
+  /* box-shadow: 0 10px 20px 0 rgba(0, 0, 0, 0.05); */
 }
 .flash-deal .product-card.product-list {
   padding: auto !important;
@@ -8463,15 +8463,18 @@ line-height: 16px;
   top: 0; left: 0;
   width: 100%;
   height: 100%;
-  background: rgb(0 0 0 / 55%); /* fully transparent but still catches clicks */
+  background: rgba(0, 0, 0, 0.55);
   z-index: 1000;
   display: none;
-  transition: color 0.3s;
+  opacity: 0;
+  transition: opacity .25s ease, visibility 0s ease;
 }
-/* when active, show it */
+
 .mobile-menu-backdrop.active {
+  /* show it and fade it in */
   display: block;
-  transition: color 0.3s;
+  opacity: 1;
+  transition: opacity .25s ease, visibility 0s ease .25s;
 }
 /* make sure the menu itself is above it */
 .mobile-menu {

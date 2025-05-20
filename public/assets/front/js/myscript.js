@@ -84,7 +84,7 @@ $(function ($) {
       loop: true,
       autoplay: true,
       autoplayTimeout: 5000,
-      smartSpeed: 1200,
+      smartSpeed: 300,
       items: 1,
       thumbs: false,
       margin: 15,
@@ -107,6 +107,7 @@ $(function ($) {
       margin: 15,
       autoplay: true,
       autoplayTimeout: 4000,
+      smartSpeed: 300,
       responsive: {
         0: { items: 2 },
         576: { items: 3 },
@@ -189,21 +190,24 @@ $(function ($) {
       dots: false,
       autoplay: true,
       autoplayTimeout: 3000,
-      smartSpeed: 1200,
+      smartSpeed: 300,
       margin: 15,
       thumbs: false,
       responsive: {
         0: {
           items: 2,
-          margin: 5,
+          margin: 10,
+          dots: true,
         },
         576: {
           items: 2,
-          margin: 5,
+          margin: 10,
+          dots: true,
         },
         768: {
           items: 2,
-          margin: 5,
+          margin: 10,
+          dots: true,
         },
         992: {
           items: 3,
@@ -365,7 +369,7 @@ $(function ($) {
       dots: true,
       autoplay: true,
       autoplayTimeout: 3000,
-      smartSpeed: 1200,
+      smartSpeed: 300,
       margin: 15,
       thumbs: false,
       responsive: {
