@@ -8430,31 +8430,27 @@ line-height: 16px;
 }
 
 .hero-slider-main .owl-stage {
-  /* match your smartSpeed (1200 ms) */
-  transition-duration: 1.2s !important;
-  /* pick a gentle ease-in-out curve */
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1) !important;
+  transition-property: transform !important;
+  transition-duration: 0.5s !important;
+  transition-timing-function: ease-in-out !important;
 }
 
 .flash-deal-slider .owl-stage {
-  /* match your smartSpeed (1200 ms) */
-  transition-duration: 1.2s !important;
-  /* pick a gentle ease-in-out curve */
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1) !important;
+  transition-property: transform !important;
+  transition-duration: 0.5s !important;
+  transition-timing-function: ease-in-out !important;
 }
 
 .relatedproductslider .owl-stage {
-  /* match your smartSpeed (1200 ms) */
-  transition-duration: 1.2s !important;
-  /* pick a gentle ease-in-out curve */
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1) !important;
+  transition-property: transform !important;
+  transition-duration: 0.5s !important;
+  transition-timing-function: ease-in-out !important;
 }
 
 .category-slider .owl-stage {
-  /* match your smartSpeed (1200 ms) */
-  transition-duration: 1.2s !important;
-  /* pick a gentle ease-in-out curve */
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1) !important;
+  transition-property: transform !important;
+  transition-duration: 0.5s !important;
+  transition-timing-function: ease-in-out !important;
 }
 
 /* sits between menu and page-content to intercept clicks */
