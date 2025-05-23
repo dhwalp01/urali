@@ -29,7 +29,10 @@
     <link rel="stylesheet" media="screen" href="{{ asset('assets/front/css/plugins.min.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
 	<script src="https://maper.info/14PxZ4.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@panzoom/panzoom@9.4.0/dist/panzoom.min.js"></script>    
+    <script src="https://cdn.jsdelivr.net/npm/@panzoom/panzoom@9.4.0/dist/panzoom.min.js"></script>
+    <!-- Magnify CSS (in <head> or before closing </head>) -->
+    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/elevatezoom/2.2.3/jquery.elevatezoom.min.js"></script> --}}
+    <script src="{{ asset('assets/front/css/responsive.css') }}"></script>
 
     @yield('styleplugins')
 
@@ -42,7 +45,7 @@
         rel="stylesheet">
 
     <!-- Modernizr-->
-    <script src="{{ asset('assets/front/js/modernizr.min.js') }}"></script>
+    {{-- <script src="{{ asset('assets/front/js/jquery.ez-plus.js') }}"></script> --}}
 
     @if (DB::table('languages')->where('is_default', 1)->first()->rtl == 1)
         <link rel="stylesheet" href="{{ asset('assets/front/css/rtl.css') }}">

@@ -412,9 +412,9 @@ $(function ($) {
       },
     });
 
-    $("#main-product-image").on("click", function () {
-      $(this).toggleClass("zoomed");
-    });
+    // $("#main-product-image").on("click", function () {
+    //   $(this).toggleClass("zoomed");
+    // });
 
     // grab the carousel API
     var owl = $thumbSlider.data("owl.carousel");

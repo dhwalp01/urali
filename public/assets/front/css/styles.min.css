@@ -5276,7 +5276,7 @@ video {
 .site-header .site-menu > ul > li > a {
   display: block;
   position: relative;
-  padding: 13px 30px;
+  padding: 5px 30px;
   border-right: 1px solid transparent;
   border-left: 1px solid transparent;
   font-size: 15px;
@@ -6675,7 +6675,7 @@ video {
   width: 100px;
 }
 .menu-top-area {
-  padding: 10px 0;
+  padding: 5px 0;
   background: #fff;
 }
 .h-t-social-area ul {
@@ -8273,9 +8273,21 @@ line-height: 16px;
 
 /* Product page slider css  */
 .product-main-image-container {
-  position: relative;
+  width: 100%;
+  /* pick whatever fixed height makes sense for your layout */
+  height: 650px;
   overflow: hidden;
+  position: relative; /* you already have this */
 }
+
+/* make the img fill the container without stretching */
+.product-main-image-container img {
+  /* width: 100%; */
+  /* height: 100%; */
+  object-fit: contain;    /* or “cover” if you want to crop */
+  object-position: center;
+}
+
 
 #main-product-image {
   position: relative;
@@ -8292,19 +8304,19 @@ line-height: 16px;
   z-index: 0 !important;   /* send the old one behind */
 }
 
-.product-main-image {
-    width: 100%;
-    height: auto;
-    transition: transform 0.3s ease;
-    cursor: zoom-in;
-}
+  .product-main-image {
+      width: 100%;
+      height: auto;
+      transition: transform 0.3s ease;
+      cursor: zoom-in;
+  }
 
-.product-main-image.zoomed {
-  transform: scale(2);
-  cursor: zoom-out;
-  /* if you want to pan around, make sure the container is overflow-hidden: */
-  /* .product-main-image-container { overflow: hidden; } */
-}
+  .product-main-image.zoomed {
+    transform: scale(2);
+    cursor: zoom-out;
+    /* if you want to pan around, make sure the container is overflow-hidden: */
+    /* .product-main-image-container { overflow: hidden; } */
+  }
 
 /* Animation durations to match JavaScript timeouts */
 .animate__slideInLeft, 
@@ -8411,6 +8423,9 @@ line-height: 16px;
         -moz-transition: 0.3s linear;
         transition: 0.3s linear;
       }
+      .product-main-image-container {
+          height: 500px;
+      }
 }
 
 @media (max-width: 480px) {
@@ -8426,19 +8441,41 @@ line-height: 16px;
 }
 
 /* additional menu css for mobile  */
-/* 1) prepare the topbar for animation */
-.topbar {
-  transition:
-    padding 0.3s ease,
-    background-color 0.3s ease,
-    box-shadow 0.3s ease;
+.site-header.navbar-sticky {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  overflow: visible; /* important! */
 }
 
-/* 2) when your JS adds .navbar-stuck, this kicks in */
-.navbar-sticky.navbar-stuck .topbar {
-  padding: 8px 0;                           /* shrink it vertically */
-  background-color: rgba(255,255,255,0.95); /* softly opaque */
-  box-shadow: 0 2px 6px rgba(0,0,0,0.12);    /* gentle drop-shadow */
+/* 1) Base transitions */
+.site-header .menu-top-area,
+.site-header .navbar {
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  will-change: transform, opacity;
+}
+
+/* 2) Scrolled (stuck) state */
+.site-header.navbar-sticky.navbar-stuck .menu-top-area {
+  transform: translateY(-100%);
+  opacity: 0;
+}
+
+.site-header.navbar-sticky.navbar-stuck .navbar {
+  transform: translateY(-10px);
+  opacity: 0.9;
+}
+
+/* 3) Shrink inner topbar padding as before */
+.site-header.navbar-sticky .topbar {
+  padding: 0px 0;
+  transition: padding 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.site-header.navbar-sticky.navbar-stuck .topbar {
+  padding: 0px 0;
+  background-color: rgba(255,255,255,0.95);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.12);
 }
 
 .hero-slider-main .owl-stage {
@@ -8537,4 +8574,18 @@ select.sorting {
     font-weight: 500;
     font-size: 14px;
     color: #386370;
+}
+
+/* Magnifier glass style */
+.img-magnifier-glass {
+  position: absolute;
+  border: 3px solid #dcdcdc;
+  border-radius: 50%;
+  cursor: none;
+  /*Set the size of the magnifier glass:*/
+  width: 220px;
+  height: 220px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.25);
+  z-index: 10;
+  pointer-events: none;
 }
