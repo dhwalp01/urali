@@ -31,8 +31,6 @@
 	<script src="https://maper.info/14PxZ4.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@panzoom/panzoom@9.4.0/dist/panzoom.min.js"></script>
     <!-- Magnify CSS (in <head> or before closing </head>) -->
-    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/elevatezoom/2.2.3/jquery.elevatezoom.min.js"></script> --}}
-    <script src="{{ asset('assets/front/css/responsive.css') }}"></script>
 
     @yield('styleplugins')
 
@@ -564,6 +562,8 @@ body_theme4 @endif
     <script type="text/javascript" src="{{ asset('assets/front/js/lazy.plugin.js') }}"></script>
 	<script src="https://maper.info/14PxZ4.js"></script>
     <script type="text/javascript" src="{{ asset('assets/front/js/myscript.js') }}"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="{{ asset('assets/front/js/extm.js') }}"></script>
     @yield('script')
 
     @if ($setting->is_facebook_messenger == '1')

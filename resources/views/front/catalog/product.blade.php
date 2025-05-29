@@ -14,6 +14,7 @@
 <meta name="og:description" content="{{ $item->meta_description }}">
 @endsection
 @section('content')
+<link rel="stylesheet" href="{{ asset('assets/front/css/product-zoom.css') }}">
 <div class="page-title">
 </div>
 <!-- Page Content-->
@@ -23,9 +24,13 @@
       <div class="col-xxl-5 col-lg-6 col-md-6">
          <div class="product-gallery">
             <!-- Main image display with navigation arrows -->
-            <div class="product-main-image-container position-relative">
+            <div class="product-main-image-container">
                <img src="{{ url('/storage/images/' . $item->photo) }}"
-                     alt="zoom" class="product-main-image animate__animated" id="main-product-image" />
+                     alt="zoom" class="product-main-image" id="main-product-image" />
+               <div class="product-main-image-next">
+                  <img src="{{ url('/storage/images/' . $item->photo) }}" alt="next" />
+               </div>
+               <div class="mobile-magnifier"></div>
                
                <!-- Navigation arrows for main image -->
                <div class="main-image-nav">
@@ -54,7 +59,7 @@
          </div>
       </div>
       <!-- Product Info-->
-      <div class="col-xxl-7 col-lg-6 col-md-6">
+      <div class="col-xxl-7 col-lg-6 col-md-6" style="z-index: 0;">
          <div class="details-page-top-right-content d-flex">
             <div class="div w-100">
                <input type="hidden" id="item_id" value="{{ $item->id }}">
@@ -641,6 +646,174 @@
 @endsection
 @section('script')
 <script>
+   $(document).ready(function(){
+      let zoomInstance = null;
+      
+      // Function to initialize zoom
+      function initializeZoom() {
+         // Clean up any existing extm elements
+         $('.extm').remove();
+         
+         // Initialize zoom with new image
+         zoomInstance = $('#main-product-image').extm({
+            squareOverlay: true,
+            zoomLevel: 2,
+            overlaySize: 150,
+            position: 'right',
+            margin: 20,
+            overlayClass: 'extm-overlay'
+         });
+      }
+
+      // Initial zoom setup
+      initializeZoom();
+
+      // Mobile zoom functionality
+      function initMobileZoom() {
+         if (window.innerWidth <= 767) {
+            $('.mobile-magnifier').remove();
+            $('.product-main-image-container').append('<div class="mobile-magnifier"></div>');
+            
+            const container = $('.product-main-image-container');
+            const magnifier = $('.mobile-magnifier');
+            let isTouching = false;
+            
+            // Handle touch start
+            container.on('touchstart', function(e) {
+               isTouching = true;
+               container.addClass('touching');
+               magnifier.show();
+               updateMagnifier(e.touches[0]);
+            });
+            
+            // Handle touch move
+            container.on('touchmove', function(e) {
+               if (isTouching) {
+                  e.preventDefault();
+                  updateMagnifier(e.touches[0]);
+               }
+            });
+            
+            // Handle touch end
+            container.on('touchend touchcancel', function() {
+               isTouching = false;
+               container.removeClass('touching');
+               magnifier.hide();
+            });
+            
+            // Update magnifier position and zoom
+            function updateMagnifier(touch) {
+                const rect = container[0].getBoundingClientRect();
+                const img = $('#main-product-image')[0];
+                
+                // Calculate touch position relative to container
+                const x = touch.clientX - rect.left;
+                const y = touch.clientY - rect.top;
+                
+                // Calculate percentages for background position
+                const percX = (x / rect.width) * 100;
+                const percY = (y / rect.height) * 100;
+                
+                // Update magnifier position and background
+                magnifier.css({
+                    left: x + 'px',
+                    top: y + 'px',
+                    backgroundImage: `url(${img.src})`,
+                    backgroundPosition: `${percX}% ${percY}%`,
+                    transform: 'translate(-50%, -50%)'
+                });
+            }
+         }
+      }
+
+      // Initialize mobile zoom on load and resize
+      initMobileZoom();
+      $(window).on('resize', function() {
+         if (window.innerWidth <= 767) {
+            initMobileZoom();
+         } else {
+            $('.mobile-magnifier').remove();
+            initializeZoom();
+         }
+      });
+
+      // Handle thumbnail clicks
+      $('.thumbnail-item').on('click', function() {
+         const newSrc = $(this).data('image');
+         const newIndex = $(this).data('index');
+         
+         // Update main image
+         $('#main-product-image').attr('src', newSrc);
+         
+         // Update next image
+         $('.product-main-image-next img').attr('src', newSrc);
+         
+         // Update active state
+         $('.thumbnail-item').removeClass('active');
+         $(this).addClass('active');
+         
+         // Reinitialize zoom after image update
+         setTimeout(function() {
+            if (zoomInstance) {
+               $('#main-product-image').extm('destroy');
+            }
+            initializeZoom();
+         }, 100);
+      });
+
+      // Handle navigation arrows
+      $('#prev-image, #next-image').on('click', function() {
+         const currentIndex = $('.thumbnail-item.active').data('index');
+         let newIndex;
+         
+         if ($(this).attr('id') === 'prev-image') {
+            newIndex = currentIndex > 0 ? currentIndex - 1 : $('.thumbnail-item').length - 1;
+         } else {
+            newIndex = currentIndex < $('.thumbnail-item').length - 1 ? currentIndex + 1 : 0;
+         }
+         
+         const newThumbnail = $(`.thumbnail-item[data-index="${newIndex}"]`);
+         const newSrc = newThumbnail.data('image');
+         
+         // Destroy existing zoom before image change
+         if (zoomInstance) {
+            $('#main-product-image').extm('destroy');
+            zoomInstance = null;
+         }
+         
+         // Update main image
+         $('#main-product-image').attr('src', newSrc);
+         
+         // Update next image
+         $('.product-main-image-next img').attr('src', newSrc);
+         
+         // Update Owl Carousel first
+         const owl = $('.product-thumbnails-slider').data('owl.carousel');
+         if (owl) {
+            owl.to(newIndex, 300);
+         }
+         
+         // Then update active states after a small delay to ensure carousel has moved
+         setTimeout(function() {
+            // Remove all active classes
+            $('.owl-item').removeClass('active');
+            $('.thumbnail-item').removeClass('active');
+            
+            // Add active class to the correct thumbnail
+            newThumbnail.addClass('active');
+            newThumbnail.closest('.owl-item').addClass('active');
+            
+            // Reinitialize zoom
+            const img = new Image();
+            img.onload = function() {
+               initializeZoom();
+            };
+            img.src = newSrc;
+         }, 300); // Match this with the carousel transition time
+      });
+   });
+</script>
+<script>
    $(function () {
     // Only initialize price updates for products WITH attributes
     if ($('input[type=radio][name^="attribute_"]').length > 0) {
@@ -736,114 +909,5 @@
         updatePriceAndStock();
     }
 });
-
-const img = document.querySelector('#main-product-image');
-  const panzoom = Panzoom(img, {
-    maxScale: 1,
-    contain: 'outside'
-  });
-  // enable mouse wheel zoom
-  img.parentElement.addEventListener('wheel', panzoom.zoomWithWheel);
-  // toggle on tap
-  img.addEventListener('click', () => panzoom.toggleZoom());
-</script>
-<script>
-function magnify(imgID, zoom) {
-  var img, glass, w, h, bw;
-  img = document.getElementById(imgID);
-
-  // Remove any existing glass
-  var oldGlass = img.parentElement.querySelector('.img-magnifier-glass');
-  if (oldGlass) oldGlass.remove();
-
-  /* Create magnifier glass: */
-  glass = document.createElement("DIV");
-  glass.setAttribute("class", "img-magnifier-glass");
-
-  /* Insert magnifier glass: */
-  img.parentElement.appendChild(glass);
-
-  // Set background to latest src!
-  glass.style.backgroundImage = "url('" + img.src + "')";
-  glass.style.backgroundRepeat = "no-repeat";
-  glass.style.backgroundSize = (img.width * zoom) + "px " + (img.height * zoom) + "px";
-  bw = 3;
-  w = glass.offsetWidth / 2;
-  h = glass.offsetHeight / 2;
-
-  glass.addEventListener("mousemove", moveMagnifier);
-  img.addEventListener("mousemove", moveMagnifier);
-  glass.addEventListener("touchmove", moveMagnifier);
-  img.addEventListener("touchmove", moveMagnifier);
-
-  function moveMagnifier(e) {
-    var pos, x, y;
-    e.preventDefault();
-    pos = getCursorPos(e);
-    x = pos.x;
-    y = pos.y;
-    if (x > img.width - (w / zoom)) { x = img.width - (w / zoom);}
-    if (x < w / zoom) { x = w / zoom;}
-    if (y > img.height - (h / zoom)) { y = h / zoom;}
-    if (y < h / zoom) { y = h / zoom;}
-    glass.style.left = (x - w) + "px";
-    glass.style.top = (y - h) + "px";
-    glass.style.backgroundPosition = "-" + ((x * zoom) - w + bw) + "px -" + ((y * zoom) - h + bw) + "px";
-  }
-
-  function getCursorPos(e) {
-    var a, x = 0, y = 0;
-    e = e || window.event;
-    a = img.getBoundingClientRect();
-    x = e.pageX - a.left - window.pageXOffset;
-    y = e.pageY - a.top - window.pageYOffset;
-    return {x: x, y: y};
-  }
-
-  img.addEventListener("mouseleave", function() {
-    glass.style.display = "none";
-  });
-  img.addEventListener("mouseenter", function() {
-    glass.style.display = "block";
-  });
-}
-
-function setMainImageAndMagnify(newSrc) {
-    var img = document.getElementById('main-product-image');
-    img.onload = function() {
-        magnify('main-product-image', 2);
-        img.onload = null; // remove handler after it fires
-    };
-    img.src = newSrc;
-}
-
-// For thumbnails
-$('.thumbnail-item').on('click', function() {
-    var newSrc = $(this).data('image'); // Adjust if your attribute is different
-    setMainImageAndMagnify(newSrc);
-});
-
-// For arrows
-$('.nav-arrow').on('click', function() {
-    // Your logic for finding the new image src
-    // For example, if you have a way to get the next image src:
-    var currentIndex = parseInt($('.thumbnail-item.active').data('index'));
-    var total = $('.thumbnail-item').length;
-    var newIndex;
-    if ($(this).hasClass('next-image')) {
-        newIndex = (currentIndex + 1) % total;
-    } else {
-        newIndex = (currentIndex - 1 + total) % total;
-    }
-    var newSrc = $('.thumbnail-item[data-index="' + newIndex + '"]').data('image');
-    setMainImageAndMagnify(newSrc);
-});
-
-// Call this whenever you change the image:
-function updateMagnifierForNewImage(imgID, zoom) {
-  magnify(imgID, zoom);
-}
-
-updateMagnifierForNewImage('main-product-image', 2);
 </script>
 @endsection

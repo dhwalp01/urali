@@ -8575,17 +8575,3 @@ select.sorting {
     font-size: 14px;
     color: #386370;
 }
-
-/* Magnifier glass style */
-.img-magnifier-glass {
-  position: absolute;
-  border: 3px solid #dcdcdc;
-  border-radius: 50%;
-  cursor: none;
-  /*Set the size of the magnifier glass:*/
-  width: 220px;
-  height: 220px;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.25);
-  z-index: 10;
-  pointer-events: none;
-}

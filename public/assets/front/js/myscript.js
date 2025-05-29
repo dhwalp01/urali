@@ -84,7 +84,7 @@ $(function ($) {
       loop: true,
       autoplay: true,
       autoplayTimeout: 5000,
-      smartSpeed: 300,
+      smartSpeed: 100,
       items: 1,
       thumbs: false,
       margin: 15,
@@ -107,7 +107,7 @@ $(function ($) {
       margin: 15,
       autoplay: true,
       autoplayTimeout: 4000,
-      smartSpeed: 300,
+      smartSpeed: 100,
       responsive: {
         0: { items: 2 },
         576: { items: 3 },
@@ -190,7 +190,7 @@ $(function ($) {
       dots: false,
       autoplay: true,
       autoplayTimeout: 3000,
-      smartSpeed: 300,
+      smartSpeed: 100,
       margin: 15,
       thumbs: false,
       responsive: {
@@ -369,7 +369,7 @@ $(function ($) {
       dots: true,
       autoplay: true,
       autoplayTimeout: 3000,
-      smartSpeed: 300,
+      smartSpeed: 100,
       margin: 15,
       thumbs: false,
       responsive: {
@@ -421,42 +421,32 @@ $(function ($) {
 
     // 2) helper to swap main image without flash
     function changeMainImage(newSrc, newIndex) {
-      var $main = $("#main-product-image"),
-        $cont = $(".product-main-image-container"),
-        oldIdx = parseInt($(".thumbnail-item.active").data("index")) || 0,
-        isNext = newIndex > oldIdx;
+      const mainImage = $("#main-product-image");
+      const nextImage = $(".product-main-image-next");
 
-      // create incoming
-      var $inc = $("<img>", {
-        src: newSrc,
-        class: "product-main-image-next animate__animated",
-        css: { opacity: 0 },
-      }).appendTo($cont);
+      // Preload the new image
+      const img = new Image();
+      img.src = newSrc;
 
-      // push old behind + animate out
-      $main.addClass(
-        "ani-out animate__animated " +
-          (isNext ? "animate__slideOutLeft" : "animate__slideOutRight")
-      );
+      img.onload = function () {
+        // Set the next image source
+        nextImage.find("img").attr("src", newSrc);
 
-      // animate incoming
-      $inc
-        .css("opacity", 1)
-        .addClass(isNext ? "animate__slideInRight" : "animate__slideInLeft");
+        // Start the transition
+        nextImage.css("transform", "translateX(0)");
+        mainImage.addClass("ani-out");
 
-      // cleanup after 500ms
-      setTimeout(function () {
-        $main
-          .attr("src", newSrc)
-          .removeClass(
-            "ani-out animate__animated animate__slideOutLeft animate__slideOutRight"
-          );
-        $inc.remove();
+        // After animation completes, update main image and reset
+        setTimeout(() => {
+          mainImage.attr("src", newSrc);
+          mainImage.removeClass("ani-out");
+          nextImage.css("transform", "translateX(100%)");
 
-        // update thumbnail highlight
-        $(".thumbnail-item").removeClass("active");
-        $('.thumbnail-item[data-index="' + newIndex + '"]').addClass("active");
-      }, 500);
+          // Update active state of thumbnails
+          $(".thumbnail-item").removeClass("active");
+          $(`.thumbnail-item[data-index="${newIndex}"]`).addClass("active");
+        }, 300);
+      };
     }
 
     // 3) arrow clicks
