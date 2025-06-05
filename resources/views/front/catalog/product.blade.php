@@ -14,7 +14,6 @@
 <meta name="og:description" content="{{ $item->meta_description }}">
 @endsection
 @section('content')
-<link rel="stylesheet" href="{{ asset('assets/front/css/product-zoom.css') }}">
 <div class="page-title">
 </div>
 <!-- Page Content-->
@@ -37,6 +36,10 @@
                         class="product-main-image"
                         id="main-product-image" />
                </a>
+               <!-- Zoom Icon (only shown on mobile, style with CSS) -->
+               <button type="button" class="zoom-icon-btn" id="open-pswp">
+                  <i class="icon-zoom-in"></i> <!-- or any zoom SVG/icon you use -->
+               </button>
                <div class="main-image-nav">
                   <button class="nav-arrow prev-image" id="prev-image">
                      <i class="icon-chevron-left"></i>
@@ -668,6 +671,31 @@
 document.addEventListener('DOMContentLoaded', function() {
     let currentImageIndex = 0;
     let isImageLoading = false;
+
+    // 1. Remove or prevent default PhotoSwipe link open on mobile
+    const isMobile = window.innerWidth < 768;
+
+    // Disable default PhotoSwipe open on image click (on mobile only)
+    if (isMobile) {
+        const mainImageLink = document.querySelector('.product-main-image-container a');
+        if (mainImageLink) {
+            mainImageLink.addEventListener('click', function(e) {
+                e.preventDefault(); // Prevent PhotoSwipe default trigger
+            });
+        }
+    }
+
+    // 2. Add manual trigger to the zoom icon (mobile only)
+    document.getElementById('open-pswp').addEventListener('click', function(e) {
+        e.preventDefault();
+        // Open the lightbox via JS
+        if (window.PhotoSwipeLightbox && window.PhotoSwipe) {
+            // You must ensure the lightbox instance is available!
+            // .loadAndOpen() is supported in PSWP 5.x+
+            lightbox.loadAndOpen(currentImageIndex);
+        }
+    });
+
     
     // Initialize PhotoSwipe Lightbox
     const lightbox = new PhotoSwipeLightbox({
@@ -836,39 +864,40 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Handle navigation arrows (use fast update to prevent white space)
-    document.getElementById('prev-image').addEventListener('click', navigateGallery(-1));
-    document.getElementById('next-image').addEventListener('click', navigateGallery(1));
+   document.getElementById('prev-image').addEventListener('click', navigateGallery(-1));
+   document.getElementById('next-image').addEventListener('click', navigateGallery(1));
 
-    function navigateGallery(direction) {
-        return function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            
-            if (isImageLoading) return;
-            
-            const thumbnails = Array.from(document.querySelectorAll('.thumbnail-item'));
-            const currentIndex = thumbnails.findIndex(el => el.classList.contains('active'));
-            let newIndex = currentIndex + direction;
-            
-            if (newIndex < 0) newIndex = thumbnails.length - 1;
-            if (newIndex >= thumbnails.length) newIndex = 0;
-            
-            const newSrc = thumbnails[newIndex].dataset.image;
-            currentImageIndex = newIndex;
-            
-            // Use fast update for arrow navigation
-            updateMainImageFast(newSrc, () => {
-                thumbnails.forEach(el => el.classList.remove('active'));
-                thumbnails[newIndex].classList.add('active');
-                
-                // Update carousel position if using Owl Carousel
-                const owl = $('.product-thumbnails-slider').data('owl.carousel');
-                if (owl) {
-                    owl.to(newIndex, 300);
-                }
-            });
-        }
-    }
+   // Update navigateGallery function:
+   function navigateGallery(direction) {
+      return function(e) {
+         e.preventDefault();
+         e.stopPropagation();
+
+         if (isImageLoading) return;
+
+         const thumbnails = Array.from(document.querySelectorAll('.thumbnail-item'));
+         const currentIndex = thumbnails.findIndex(el => el.classList.contains('active'));
+         let newIndex = currentIndex + direction;
+
+         if (newIndex < 0) newIndex = thumbnails.length - 1;
+         if (newIndex >= thumbnails.length) newIndex = 0;
+
+         const newSrc = thumbnails[newIndex].dataset.image;
+         currentImageIndex = newIndex;
+
+         // <<< USE THIS LINE: crossfade for arrows, not fast update >>>
+         updateMainImageCrossfade(newSrc, () => {
+               thumbnails.forEach(el => el.classList.remove('active'));
+               thumbnails[newIndex].classList.add('active');
+
+               // Sync carousel, if using Owl
+               const owl = $('.product-thumbnails-slider').data('owl.carousel');
+               if (owl) {
+                  owl.to(newIndex, 300);
+               }
+         });
+      }
+   }
 
     // Preload all gallery images on page load
     function preloadAllImages() {
