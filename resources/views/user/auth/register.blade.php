@@ -96,7 +96,7 @@
                         @endif
 
                         <div class="col-lg-12 mb-4">
-                          <p>{{ __("Already have an account ?") }} <a class="text-base-color" href="{{ route("user.login") }}">{{ __('Login now') }}</a></p>
+                          <p>{{ __("Already have an account ?") }} <a class="text-base-color" href="{{ route("user.login") }}">{{ __('Sign in now') }}</a></p>
                         </div>
           
                         <div class="col-12 text-center">

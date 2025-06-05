@@ -71,7 +71,7 @@ class CartController extends Controller
         } else {
             Session::forget('cart');
         }
-        Session::flash('success', __('Cart item remove successfully.'));
+        Session::flash('success', __('Cart item removed successfully.'));
         return back();
     }
 
@@ -136,7 +136,7 @@ class CartController extends Controller
     public function cartClear()
     {
         Session::forget('cart');
-        Session::flash('success', __('Cart clear successfully'));
+        Session::flash('success', __('Cart cleared successfully'));
         return back();
     }
 

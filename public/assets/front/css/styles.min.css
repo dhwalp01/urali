@@ -7337,14 +7337,14 @@ span.h3.d-block.price-area small{
   padding: 20px !important;
   border: 0 !important;
   box-shadow: 2px 2px 5px 0 rgb(0 0 0 / 20%);
-  background-color: rgba(255, 255, 255, 0.7) !important;
+  background-color: #fff !important;
 }
 .col-10.col-xs-11.col-sm-4.alert.animated.fadeInDown .close {
   top: -3px !important;
   right: 4px !important;
 }
 .col-10.col-xs-11.col-sm-4.alert.alert-success.animated.fadeInDown {
-  background-color: rgba(255, 255, 255, 0.7) !important;
+  background-color: #fff !important;
 }
 .slider-area-wrapper .item-inner {
   max-width: 50%;

@@ -32,11 +32,11 @@
 
 </div>
   @else
-  <div class="container">
+  <div class="container my-3">
     <div class="card text-center">
       <div class="card-body">
         <h3 class="card-title">{{__('Your shopping cart is empty.')}}</h3>
-       <a class="btn btn-outline-primary m-4" href="{{route('front.catalog')}}"><i class="icon-package pr-2"></i>{{__('View our products')}}</a></div>
+       <a class="btn btn-outline-primary m-4" href="{{route('front.catalog')}}"><i class="icon-package pr-2"></i> {{__('View our products')}}</a></div>
       </div>
     </div>
   @endif

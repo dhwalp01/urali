@@ -578,9 +578,9 @@
                      </div>
                   </div>
                   <div class="product-card-body">
-                     <div class="product-category">
+                     {{-- <div class="product-category">
                         <a href="{{route('front.category', $item->category->slug)}}">{{$item->category->name}}</a>
-                     </div>
+                     </div> --}}
                      <h3 class="product-title"><a
                         href="{{ route('front.product', $related->slug) }}">
                         {{ Str::limit($related->name, 35) }}
