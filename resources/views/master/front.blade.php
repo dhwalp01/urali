@@ -28,8 +28,12 @@
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
     <link rel="stylesheet" media="screen" href="{{ asset('assets/front/css/plugins.min.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <!-- PhotoSwipe CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/5.4.4/photoswipe.min.css" />
+
+
 	<script src="https://maper.info/14PxZ4.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@panzoom/panzoom@9.4.0/dist/panzoom.min.js"></script>
+    {{-- <script src="https://cdn.jsdelivr.net/npm/@panzoom/panzoom@9.4.0/dist/panzoom.min.js"></script> --}}
     <!-- Magnify CSS (in <head> or before closing </head>) -->
 
     @yield('styleplugins')
@@ -563,7 +567,10 @@ body_theme4 @endif
 	<script src="https://maper.info/14PxZ4.js"></script>
     <script type="text/javascript" src="{{ asset('assets/front/js/myscript.js') }}"></script>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <script src="{{ asset('assets/front/js/extm.js') }}"></script>
+    {{-- <script src="{{ asset('assets/front/js/extm.js') }}"></script> --}}
+    <!-- Add these before closing body tag -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/5.4.4/umd/photoswipe.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/5.4.4/umd/photoswipe-lightbox.umd.min.js"></script>
     @yield('script')
 
     @if ($setting->is_facebook_messenger == '1')
