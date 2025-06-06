@@ -14,6 +14,18 @@
 <meta name="og:description" content="{{ $item->meta_description }}">
 @endsection
 @section('content')
+@php
+    $hasAttributes = isset($item->attributes) && count($item->attributes) > 0;
+    $firstOptionStock = 0;
+    if ($hasAttributes) {
+        foreach ($item->attributes as $attribute) {
+            if ($attribute->options->count()) {
+                $firstOptionStock = (int) $attribute->options->first()->stock;
+                break; // Only check the first attribute with options
+            }
+        }
+    }
+@endphp
 <div class="page-title">
 </div>
 <!-- Page Content-->
@@ -184,6 +196,9 @@
                                               <span class="box-label">{{ $option->name }}</span>
                                           </label>
                                       @endforeach
+                                      <div class="">
+                                          <span class="align-middle size-guide" style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#sizeGuideModal">Size Guide</span>
+                                      </div>
                                   </div>
                               </div>
                           </div>
@@ -192,16 +207,16 @@
               </div>
                <div class="row align-items-end pb-4">
                   <div class="col-sm-12">
-                     @if ($item->item_type == 'normal')
-                     <div class="form-group product-quantity mb-3 align-items-center gap-1">
-                        <label for="quantity" class="form-label d-block">{{ __('Quantity') }}</label>
-                        <select class="form-select w-auto d-inline-block" id="quantity" name="quantity">
-                           @for ($i = 1; $i <= $item->stock; $i++)
-                           <option value="{{ $i }}">{{ $i }}</option>
-                           @endfor
-                        </select>
-                        <input type="hidden" value="{{ $item->stock }}" id="current_stock">
-                     </div>
+                     @if ($item->item_type == 'normal' && (!$hasAttributes && $item->is_stock() || $hasAttributes && $firstOptionStock > 0))
+                        <div class="form-group product-quantity mb-3 align-items-center gap-1">
+                           <label for="quantity" class="form-label d-block">{{ __('Quantity') }}</label>
+                           <select class="form-select w-auto d-inline-block" id="quantity" name="quantity">
+                              @for ($i = 1; $i <= ($hasAttributes ? $firstOptionStock : $item->stock); $i++)
+                              <option value="{{ $i }}">{{ $i }}</option>
+                              @endfor
+                           </select>
+                           <input type="hidden" value="{{ $hasAttributes ? $firstOptionStock : $item->stock }}" id="current_stock">
+                        </div>
                      @endif
                      <div class="p-action-button">
                         @if ($item->item_type != 'affiliate')
@@ -665,6 +680,37 @@
    </div>
 </form>
 @endauth
+<!-- Size Guide Modal -->
+<div class="modal fade" id="sizeGuideModal" tabindex="-1" aria-labelledby="sizeGuideModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header py-2">
+        <h5 class="modal-titl text-center m-0 p-0" id="sizeGuideModalLabel">Size Guide</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        {{-- You can put your size guide image or table here --}}
+        <div class="mb-1">
+            <img src="{{ asset('images/size-guide.jpg') }}" alt="Size Guide" class="img-fluid" />
+        </div>
+        <div class="mb-1">
+            <img src="{{ asset('images/size-guide.jpg') }}" alt="Size Guide" class="img-fluid" />
+        </div>
+        <div class="mb-1">
+         <a href="" class="model-close" data-bs-dismiss="modal" >Close</a>
+        </div>
+        {{-- Or put a size guide table here --}}
+        {{-- 
+        <table class="table table-bordered">
+            <tr><th>Size</th><th>Bust</th><th>Waist</th><th>Hip</th></tr>
+            <tr><td>S</td><td>32"</td><td>24"</td><td>34"</td></tr>
+            <!-- more rows -->
+        </table>
+        --}}
+      </div>
+    </div>
+  </div>
+</div>
 @endsection
 @section('script')
 <script>
