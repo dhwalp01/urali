@@ -112,6 +112,11 @@ svg {
   display: none;
 }
 
+.sidebar-open.mobile-filter-toggle {
+    background: #DCDEEA !important;
+    color: #212529 !important;
+}
+
 .site-header .site-menu > ul > li .sub-menu,
 .toolbar-dropdown {
   display: none;

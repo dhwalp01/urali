@@ -84,9 +84,9 @@
                             <label class="" for="sorting">{{('Sort by')}}:</label>&nbsp;&nbsp;
                             <select class="sorting form-select w-auto d-inline-block" id="sorting">
                               <option value="">{{('All Products')}}</option>
-                              <option value="high_to_low" {{request()->input('high_to_low') ? 'selected' : ''}}>{{('New Arrival')}}</option>
-                              <option value="low_to_high" {{request()->input('low_to_high') ? 'selected' : ''}}>{{('Low - High Price')}}</option>
-                              <option value="high_to_low" {{request()->input('high_to_low') ? 'selected' : ''}}>{{('High - Low Price')}}</option>
+                              <option value="high_to_low" {{request()->input('high_to_low') ? 'selected' : ''}}>{{('New Arrivals')}}</option>
+                              <option value="low_to_high" {{request()->input('low_to_high') ? 'selected' : ''}}>{{('Low to High Price')}}</option>
+                              <option value="high_to_low" {{request()->input('high_to_low') ? 'selected' : ''}}>{{('High to Low Price')}}</option>
                             </select>
                           </div>
                         </div>
